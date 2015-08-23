@@ -1,0 +1,54 @@
+﻿@import "../_variables.scss";
+
+.home {
+    overflow: hidden;
+    position: relative;
+
+    h1 {
+        position: absolute;
+        z-index: 1;
+        color: #FFF;
+        font-size: 46pt;
+        top: 50%;
+        font-family: 'Open Sans', sans-serif;
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -o-transform: translateX(-50%) translateY(-50%);
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        left: 50%;
+        width: 600px;
+        height: auto;
+        letter-spacing: 5pt;
+        text-transform: uppercase;
+        padding: 2%;
+        text-shadow: 1px 1px 0 #1d1c1c;
+        font-weight: 800;
+        line-height: 45pt;
+        display: block;
+        margin: 0;
+
+        span {
+            font-weight: 100;
+            font-size: 31pt;
+            text-align: center;            
+            display: block;
+        }
+    }
+}
+
+.show-full {
+    height: 100vh;
+    -moz-transition: height 1s $easeOutBack;
+    -o-transition: height 1s $easeOutBack;
+    -webkit-transition: height 1s $easeOutBack;
+    transition: height 1s $easeOutBack;
+}
+
+.show-min {
+    height: 250px;
+    -moz-transition: height 1s $easeOutBack;
+    -o-transition: height 1s $easeOutBack;
+    -webkit-transition: height 1s $easeOutBack;
+    transition: height 1s $easeOutBack;
+}

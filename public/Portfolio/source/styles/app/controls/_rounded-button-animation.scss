@@ -1,0 +1,64 @@
+﻿@import "../_variables.scss";
+
+.draw-in {
+    opacity: 1;
+    -moz-transition: opacity 0s .5s;
+    -o-transition: opacity 0s .5s;
+    -webkit-transition: opacity 0s .5s;
+    transition: opacity 0s .5s;
+
+    .path {
+        -moz-animation: draw 2s .5s .5 forwards;
+        -o-animation: draw 2s .5s .5 forwards;
+        -webkit-animation: draw 2s .5s .5 forwards;
+        animation: draw 2s .5s .5 forwards;
+    }
+
+    .arrow {
+        opacity: 0;
+        -moz-animation: showArrow 1s .6s 1 forwards;
+        -o-animation: showArrow 1s .6s 1 forwards;
+        -webkit-animation: showArrow 1s .6s 1 forwards;
+        animation: showArrow 1s .6s 1 forwards;
+    }
+}
+
+@-moz-keyframes draw {
+    50% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@-webkit-keyframes draw {
+    50% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes draw {
+    50% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes showArrow {
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#de132d">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="application-name" content="Portfolio of Ion Drimba Filho">
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- IE cleartype -->
+    <meta http-equiv="cleartype" content="on">
+
+    <!-- Social: Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="musicbattl">
+    <meta name="twitter:creator" content="Music Battl">
+    <meta name="twitter:title" content="@title">
+    <meta name="twitter:description" content="@description">
+    <meta name="twitter:image:src" content="https://dl.dropboxusercontent.com/u/4633623/twitter.jpg">
+
+    <!-- Social: Facebook  -->
+    <meta property="og:url" content="http://musicbattl.com">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@title">
+    <meta property="og:image" content="https://dl.dropboxusercontent.com/u/4633623/facebook.jpg" />
+    <meta property="og:description" content="@description">
+    <meta property="og:site_name" content="Music Battl">
+    <meta property="article:author" content="https://www.facebook.com/musicbattl">
+    <meta property="article:publisher" content="https://www.facebook.com/musicbattl">
+
+    <!-- Social: Google+ / Schema.org  -->
+    <meta itemprop="name" content="@title">
+    <meta itemprop="description" content="@description">
+    <meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/googleplus.jpg">
+    <title>Portfolio of Ion Drimba Filho</title>
+    <link href="/build/css/main.css" rel="stylesheet" />
+    <script defer>
+        window.onload = function () {
+            var loading = document.getElementById('loading-arrow'),
+                 hanldetimeout;
+
+            hanldetimeout = setInterval(function () {
+                loading.className = loading.className.replace(/animate-in/, '');
+                loading.style.display = 'none';
+                loading.offsetHeight;
+                loading.style.display = 'block';
+                loading.className += ' animate-in';
+
+                if (window.app.home.completed) {
+                    clearTimeout(hanldetimeout);
+                }
+
+            }, 2200);
+            loading.className += ' animate-in';
+        }
+    </script>
+</head>
+
+<body>
+    <div class="arrow-full loading-arrow" id="loading-arrow"></div>
+    <main class="hidden">
+        <div class="home hidden clearfix">
+            <a href="/"><h1>Web Developer <span>JAVASCRIPT &amp;&amp; CSHARP</span></h1></a>
+
+            <div id="grid3d"></div>
+        </div>
+        <div class="content clearfix">
+            <nav class="clearfix">
+                <div class="arrows">
+                    <a href="/work" class="rounded-button scroll-down-button">
+                        <div class="svg-ph">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">
+                                <path class="path" stroke="#fff" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>
+                            </svg>
+                        </div>
+                        <i class="arrow" title="arrow icon"></i>
+                    </a>
+                    <div class="arrow-full main-arrow"></div>
+                    <div class="arrow-half-down first"></div>
+                    <div class="arrow-half-down second"></div>
+                    <div class="arrow-half-down third"></div>
+                    <div class="arrow-full second"></div>
+                    <div class="arrow-full third"></div>
+                    <div class="arrow-full fourth"></div>
+                    <div class="arrow-full fifth"></div>
+                    <div class="arrow-full sixth"></div>
+                    <div class="arrow-half-up first"></div>
+                </div>
+                <div class="menu">
+                    <a href="/work" class="btn-work text-animation">
+                        <div class="line-ph">
+                            <i></i>
+                        </div>
+                        <div class="text-ph">
+                            <span>Latest Work</span>
+                        </div>
+                    </a>
+                    <a href="/about" class="btn-about text-animation">
+                        <div class="line-ph">
+                            <i></i>
+                        </div>
+                        <div class="text-ph">
+                            <span>About</span>
+                        </div>
+                    </a>
+                </div>
+            </nav>
+            <div class="work hidden clearfix">
+                <div class="project musicbattl clearfix" id="musicbattl">
+                    <div class="column infos">
+                        <a class="btn" href="/work/musicbattl/info">
+                            <div class="line-ph">
+                                <i class=""></i>
+                            </div>
+                            <h2>music battl</h2>
+                        </a>
+                        <p class="opacity">Personal project I developed for research. It uses SignalR for the realtime voting system, WebApi for the service layer and SoundCloud API. Future plans for this project is to develop the mobile version.</p>
+                        <div class="work-infos">
+                            <a class="tech" href="/work/musicbattl/tech">
+                                <div class="line-ph">
+                                    <i class=""></i>
+                                </div>
+                                <span>TECH</span>
+                                <i class="sprite sprite-tech"></i>
+                            </a>
+                            <a class="gallery" href="/work/musicbattl/gallery">
+                                <div class="line-ph">
+                                    <i class=""></i>
+                                </div>
+                                <span>IMAGES</span>
+                                <i class="sprite sprite-images"></i>
+                            </a>
+                            <a class="external" href="http://musicbattl.azurewebsites.net/" target="_blank">
+                                <div class="line-ph">
+                                    <i class=""></i>
+                                </div>
+                                <span>LAUNCH</span>
+                                <i class="sprite sprite-external"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="column views">
+                        <div class="info view hidden">
+                            <div class="preview">
+                                <div class="picture-mask picture-one">
+                                    <img src="/images/gallery1.jpg" />
+                                </div>
+                                <div class="picture-mask picture-two">
+                                    <img src="/images/gallery1.jpg" />
+                                </div>
+                                <div class="picture-mask picture-tree">
+                                    <img src="/images/gallery1.jpg" />
+                                </div>
+                                <div class="picture-mask picture-four">
+                                    <img src="/images/gallery1.jpg" />
+                                </div>
+                                <div class="picture-mask picture-five">
+                                    <img src="/images/gallery1.jpg" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tech view hidden">                            
+                            <a class="close" href="/work/musicbattl/info"><label>✕</label></a>
+                            <fieldset class="front-end">                                
+                                <legend>
+                                    Front-End:
+                                </legend>
+                                <div class="line-ph">
+                                    <i></i>
+                                </div>
+                                <ul>
+                                    <li>Javascript/jQuery</li>
+                                    <li>Sass</li>
+                                    <li>Handlebars</li>
+                                    <li>Backbone</li>
+                                    <li>Grunt</li>
+                                    <li>SoundCloud API</li>
+                                    <li>Design</li>
+                                </ul>
+                            </fieldset>
+                            <fieldset class="back-end">
+                                <legend>Back-End:</legend>
+                                <div class="line-ph">
+                                    <i></i>
+                                </div>
+                                <ul>
+                                    <li>C#</li>
+                                    <li>WEBAPI</li>
+                                    <li>DI (Ninject)</li>
+                                    <li>SQL Server</li>
+                                    <li>SignalR</li>
+                                    <li>Azure</li>
+                                </ul>
+                            </fieldset>
+                        </div>
+                        <div class="gallery view hidden">
+                            <a class="close" href="/work/musicbattl/info">✕</a>
+                            <div class="images-ph">
+                                <a class="rounded-button prev">
+                                    <div class="svg-ph">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">
+                                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>
+                                        </svg>
+                                    </div>
+                                    <i class="arrow" title="arrow icon"></i>
+                                </a>
+                                <div class="image-list">
+                                    <div class="line-ph">
+                                        <i class=""></i>
+                                    </div>
+                                    <div class="ph">
+                                        <img src="/images/gallery1.jpg" />
+                                        <img src="/images/musicbattl2.jpg" />
+                                        <img src="/images/musicbattl3.jpg" />
+                                        <img src="/images/musicbattl4.jpg" />
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <a class="rounded-button next">
+                                    <div class="svg-ph">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">
+                                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>
+                                        </svg>
+                                    </div>
+                                    <i class="arrow" title="arrow icon"></i>
+                                </a>
+                                <div class="images-menu">
+                                    <a class="images-menu-item"></a>
+                                    <a class="images-menu-item"></a>
+                                    <a class="images-menu-item"></a>
+                                    <a class="images-menu-item"></a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project sbp clearfix" id="sbp">
+                    <div class="column infos">
+                        <a class="btn" href="/work/sbp/info">
+                            <div class="line-ph">
+                                <i class=""></i>
+                            </div>
+                            <h2>30° CONGRESSO BRASILEIRO DE PATOLOGIA</h2>
+                        </a>
+                        <p class="opacity">Website + Voting system (restricted) for the 30º Brazilian Pathology Congress.</p>
+                        <div class="work-infos">
+                            <a class="tech" href="/work/sbp/tech">
+                                <div class="line-ph">
+                                    <i class=""></i>
+                                </div>
+                                <span>TECH</span>
+                                <i class="sprite sprite-tech"></i>
+                            </a>
+                            <a class="gallery" href="/work/sbp/gallery">
+                                <div class="line-ph">
+                                    <i class=""></i>
+                                </div>
+                                <span>IMAGES</span>
+                                <i class="sprite sprite-images"></i>
+                            </a>
+                            <a class="external" href="http://congressodepatologia.org.br/" target="_blank">
+                                <div class="line-ph">
+                                    <i class=""></i>
+                                </div>
+                                <span>LAUNCH</span>
+                                <i class="sprite sprite-external"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="column views">
+                        <div class="info view hidden">
+                            <div class="preview">
+                                <div class="picture-mask picture-one">
+                                    <img src="/images/sbp.jpg" />
+                                </div>
+                                <div class="picture-mask picture-two">
+                                    <img src="/images/sbp.jpg" />
+                                </div>
+                                <div class="picture-mask picture-tree">
+                                    <img src="/images/sbp.jpg" />
+                                </div>
+                                <div class="picture-mask picture-four">
+                                    <img src="/images/sbp.jpg" />
+                                </div>
+                                <div class="picture-mask picture-five">
+                                    <img src="/images/sbp.jpg" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tech view hidden">                            
+                            <a class="close" href="/work/sbp/info"><label>✕</label></a>
+                            <fieldset class="front-end">                                
+                                <legend>
+                                    Front-End:
+                                </legend>
+                                <div class="line-ph">
+                                    <i></i>
+                                </div>
+                                <ul>
+                                    <li>Javascript/jQuery</li>
+                                    <li>Sass</li>                                    
+                                    <li>Backbone</li>
+                                    <li>Grunt</li>
+                                    <li>Foundation</li>
+                                </ul>
+                            </fieldset>
+                            <fieldset class="back-end">
+                                <legend>Back-End:</legend>
+                                <div class="line-ph">
+                                    <i></i>
+                                </div>
+                                <ul>
+                                    <li>C#</li>
+                                    <li>MVC (.NET)</li>
+                                    <li>SQL Server</li>                                    
+                                    <li>Azure (hosting)</li>
+                                </ul>
+                            </fieldset>
+                        </div>
+                        <div class="gallery view hidden">
+                            <a class="close" href="/work/sbp/info">✕</a>
+                            <div class="images-ph">
+                                <a class="rounded-button prev">
+                                    <div class="svg-ph">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">
+                                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>
+                                        </svg>
+                                    </div>
+                                    <i class="arrow" title="arrow icon"></i>
+                                </a>
+
+                                <div class="image-list">
+                                    <div class="line-ph">
+                                        <i class=""></i>
+                                    </div>
+                                    <div class="ph">
+                                        <img src="/images/sbp.jpg" />
+                                        <img src="/images/congresso2.jpg" />
+                                        <img src="/images/congresso3.jpg" />
+                                        <img src="/images/congresso4.jpg" />
+                                    </div>
+                                    <div class="line-ph">
+                                        <i class=""></i>
+                                    </div>
+                                </div>
+                                <a class="rounded-button next">
+                                    <div class="svg-ph">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">
+                                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>
+                                        </svg>
+                                    </div>
+                                    <i class="arrow" title="arrow icon"></i>
+                                </a>
+                                <div class="images-menu">
+                                    <a class="images-menu-item"></a>
+                                    <a class="images-menu-item"></a>
+                                    <a class="images-menu-item"></a>
+                                    <a class="images-menu-item"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="about hidden">
+                <p>
+                    Hi, my name is Ion Drimba Filho, I'm a Web Developer based in Brazil.<br />
+                    I'm focused on front-end development with javascript and back-end development with C#(.NET).<br />
+                    In my 9+ years of experienece, I worked on many kinds of projects from casual games, single page applications, small local business websites to large companies systems.<br />
+                    For the past 4+ years I've been working on heavy javascript enterprise applications.<br />
+                    Currently looking for work opportunities.<br /><br />
+                    Thanks for stopping by =]
+                </p>
+                <div class="skills-set">
+                    <fieldset>
+                        <legend>Front-End:</legend>
+                        <div class="line-ph">
+                            <i></i>
+                        </div>
+                        <ul>
+                            <li>Javascript/jQuery</li>
+                            <li>Sass/Less</li>
+                            <li>Handlebars</li>
+                            <li>Backbone</li>
+                            <li>Grunt/Gulp/npm</li>
+                            <li>CSS3</li>
+                            <li>HTML5</li>
+                            <li>Bootstrap</li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Back-End:</legend>
+                        <div class="line-ph">
+                            <i></i>
+                        </div>
+                        <ul>
+                            <li>C#</li>
+                            <li>MVC (.NET)</li>
+                            <li>WEBAPI (.NET)</li>
+                            <li>Web Forms (.NET)</li>
+                            <li>WPF (.NET)</li>
+                            <li>SQL Server</li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Design:</legend>
+                        <div class="line-ph">
+                            <i></i>
+                        </div>
+                        <ul>
+                            <li>Photoshop</li>
+                            <li>Flash</li>
+                        </ul>
+                    </fieldset>
+                </div><br /><br />
+                <div class="about-project">
+                    <strong>About this project:</strong>
+                    <p>
+                        No jQuery<br />
+                        CSS3 animations<br />
+                        Html5 Pushstate<br />
+                        Responsive<br />
+                        3D Grid: ThreeJs + TweenMax<br />
+                        Routing system: Page.Js
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="hidden clearfix">
+        <div class="arrows-ph">
+            <div class="arrows">
+                <div class="arrow-half-up first"></div>
+                <div class="arrow-half-up second"></div>
+                <div class="arrow-half-down first"></div>
+                <div class="arrow-full second"></div>
+                <div class="arrow-full third"></div>
+                <div class="arrow-full fourth"></div>
+                <div class="arrow-full fifth"></div>
+                <div class="arrow-half-up third"></div>
+                <div class="arrow-half-down second"></div>
+            </div>
+            <div class="social-icons">
+                <a target="_blank" href="https://github.com/iondrimba" class="sprite github"></a>
+                <a target="_blank" href="https://coderwall.com/iondrimba" class="sprite coderwall"></a>
+                <a target="_blank" href="https://www.linkedin.com/in/iondrimbafilho" class="sprite linkedin"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script data-main="/build/scripts/main.js" src="/build/scripts/require.js"></script>
+</body>

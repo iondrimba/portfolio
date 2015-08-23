@@ -1,0 +1,104 @@
+﻿@import "../_variables.scss";
+
+.tech.view {
+    display: flex;
+    padding-top: 18%;
+        will-change: transform;
+
+    .close {
+        top: -40px;
+        position: relative;
+        height:20px;
+        left: 35px;
+
+        label {
+            cursor: pointer;
+            padding: 11px;
+            left: 0;
+            position: relative;
+        }
+    }
+
+        .close:hover {
+            label {
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+                -moz-transform-origin: center center;
+                -ms-transform-origin: center center;
+                -o-transform-origin: center center;
+                -webkit-transform-origin: center center;
+                transform-origin: center center;
+                -moz-transition: all .5s ease-in-out;
+                -o-transition: all .5s ease-in-out;
+                -webkit-transition: all .5s ease-in-out;
+                transition: all .5s ease-in-out;
+            }
+        }
+
+    .line-ph i {
+        top: 5%;
+    }
+
+    fieldset {
+        position: relative;
+
+        ul {
+            opacity: 0;
+        }
+    }
+
+    legend {
+        opacity: 0;
+    }
+
+    fieldset:first-child {
+        width: 20%;
+        margin-left: 10%;
+    }
+
+    fieldset:last-child {
+        margin-left: 10%;
+    }
+
+    .animate-in-legend-left {
+        .line-ph i {
+            -moz-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+            -o-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+            -webkit-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+        }
+
+        legend {
+            -moz-animation: fadeIn .5s .7s 1 forwards;
+            -o-animation: fadeIn .5s .7s 1 forwards;
+            -webkit-animation: fadeIn .5s .7s 1 forwards;
+            animation: fadeIn .5s .7s 1 forwards;
+        }
+    }
+
+    .animate-in-legend-right {
+        .line-ph i {
+            -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
+            -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
+            -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
+            animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
+        }
+
+        legend {
+            -moz-animation: fadeIn .5s 1.2s 1 forwards;
+            -o-animation: fadeIn .5s 1.2s 1 forwards;
+            -webkit-animation: fadeIn .5s 1.2s 1 forwards;
+            animation: fadeIn .5s 1.2s 1 forwards;
+        }
+    }
+
+    .animate-text {
+        -moz-animation: fadeIn .2s 0s 1 forwards;
+        -o-animation: fadeIn .2s 0s 1 forwards;
+        -webkit-animation: fadeIn .2s 0s 1 forwards;
+        animation: fadeIn .2s 0s 1 forwards;
+    }
+}

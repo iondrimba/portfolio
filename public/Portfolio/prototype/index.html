@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="container"></div>
+    <script src="three.min.js"></script>
+    <script src="Detector.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <script>
+
+        if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+        var container, stats;
+
+        var camera, scene, renderer;
+
+        var mesh, group1, group2, group3, light, cube, triangleMesh, clock;
+
+        var mouseX = 0, mouseY = 0;
+
+        var windowHalfX = window.innerWidth / 2;
+        var windowHalfY = window.innerHeight / 2;
+
+        init();
+        animate();
+
+        function init() {
+
+            clock = new THREE.Clock();
+
+            container = document.getElementById('container');
+
+            camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 10000);
+            camera.position.z = 1000;
+
+            scene = new THREE.Scene();
+
+            var sphere = new THREE.SphereGeometry(0.5, 16, 8);
+
+            light = new THREE.DirectionalLight(0xffffff);
+            light.position.set(0, 0, 1).normalize();
+            scene.add(light);
+
+            var canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            var context = canvas.getContext('2d');
+            var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+            gradient.addColorStop(0.1, 'rgba(210,210,210,1)');
+            gradient.addColorStop(1, 'rgba(255,255,255,1)');
+
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });            
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+
+            var triangleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, vertexColors: THREE.VertexColors});
+
+            var triangleGeometry = exampleTriangle(-50, 50, 0);
+
+            triangleMesh = new THREE.Mesh(triangleGeometry, triangleMaterial)
+            
+            var triangleGeometry1 = exampleTriangle(50, -50, 0);
+            var triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+
+            var triangleGeometry2 = exampleTriangle(50, -50, 0);
+            var triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            var triangleMesh3 = new THREE.Mesh(triangleGeometry, triangleMaterial);
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            
+            var triangleMesh4 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            var triangleMesh5 = new THREE.Mesh(triangleGeometry, triangleMaterial);
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            var obj = new THREE.Object3D();
+            obj.add(triangleMesh)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+            scene.add(obj);
+
+            for (var i = 0; i < 20; i++) {
+                var obj = new THREE.Object3D();
+                obj.add(triangleMesh.clone())
+                .add(triangleMesh1.clone())
+                .add(triangleMesh2.clone())
+                .add(triangleMesh3.clone())
+                .add(triangleMesh4.clone())
+                .add(triangleMesh5.clone());
+
+
+                var px = -(window.innerWidth / 4) - 119;
+                var py = (window.innerHeight / 4) + 30;
+
+                obj.position.x = Math.round(px + (i*100));
+                obj.position.y = Math.round(py);
+
+                //scene.add(obj);
+            }
+
+            
+            //obj.rotation.z = 50;
+       
+
+            window.addEventListener('resize', onWindowResize, false);
+
+        }
+
+        function exampleTriangle(pos, pos1, pos2) {
+            // This code demonstrates how to draw a triangle
+            var triangle = new THREE.Geometry();
+
+            triangle.vertices.push(new THREE.Vector3(pos, pos2, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, pos1, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, pos, pos2));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function onWindowResize() {
+
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            render();
+        }
+
+        function render() {
+
+            var time = Date.now() * 0.0005;
+            var delta = clock.getDelta();
+
+
+            renderer.render(scene, camera);
+
+        }
+    </script>
+</body>
+</html>

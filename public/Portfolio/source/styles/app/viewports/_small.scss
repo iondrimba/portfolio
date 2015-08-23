@@ -1,0 +1,92 @@
+﻿@import "../_variables.scss";
+
+@media only screen and (max-width:480px) {
+    .content {
+        width: 91%;
+    }
+
+    .home {
+        h1 {
+            font-size: 1.4rem;
+            text-align: center;
+            line-height: 25pt;
+
+            span {
+                font-size: .8rem;
+            }
+        }
+    }
+
+    .work-infos {
+        width: 170%;
+    }
+
+    .about .skills-set fieldset:not(:first-child) {
+        margin-left: 0;
+    }
+
+    .about .skills-set {
+        display: block;
+    }
+
+    .gallery .prev {
+        left: 1%;
+        z-index: 1;
+    }
+
+    .tech.view:not(.hidden) {
+        background-color: #fff;
+        width: 240%;
+        left: -100%;
+        position: relative;
+        margin-top: 50px;
+        margin-left: -40px;
+    }
+
+    .preview {
+        display: none !important;
+    }
+
+    .infos p {
+        width: 200%;
+    }
+
+    .work .btn {
+        h2 {
+            width: 190%;
+        }
+    }
+
+    .gallery .next {
+        right: 1%;
+        z-index: 2;
+    }
+
+    .prev, .next {
+        display: none;
+    }
+
+    .gallery .image-list {
+        height: 100%;
+    }
+
+        .gallery .image-list .ph {
+            position: relative;
+        }
+
+    .gallery .images-ph {
+        width: 200%;
+    }
+
+    .ph img {
+        width: 100%;
+    }
+
+    @-moz-document url-prefix() {
+        .animate-in-link-tech, .animate-in-link-gallery, .animate-in-link-external, .animate-in-legend-left, .animate-in-legend-right {
+            .line-ph i {
+                top: -11% !important;
+            }
+        }
+    }
+}

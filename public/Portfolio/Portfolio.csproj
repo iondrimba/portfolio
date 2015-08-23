@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4B7A45B3-4715-43D5-9328-65DDDCE8CE48}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Portfolio</RootNamespace>
+    <AssemblyName>Portfolio</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="android-chrome-144x144.png" />
+    <Content Include="android-chrome-192x192.png" />
+    <Content Include="android-chrome-36x36.png" />
+    <Content Include="android-chrome-48x48.png" />
+    <Content Include="android-chrome-72x72.png" />
+    <Content Include="android-chrome-96x96.png" />
+    <Content Include="apple-touch-icon-114x114.png" />
+    <Content Include="apple-touch-icon-120x120.png" />
+    <Content Include="apple-touch-icon-144x144.png" />
+    <Content Include="apple-touch-icon-152x152.png" />
+    <Content Include="apple-touch-icon-180x180.png" />
+    <Content Include="apple-touch-icon-57x57.png" />
+    <Content Include="apple-touch-icon-60x60.png" />
+    <Content Include="apple-touch-icon-72x72.png" />
+    <Content Include="apple-touch-icon-76x76.png" />
+    <Content Include="apple-touch-icon-precomposed.png" />
+    <Content Include="apple-touch-icon.png" />
+    <Content Include="browserconfig.xml" />
+    <Content Include="favicon-16x16.png" />
+    <Content Include="favicon-32x32.png" />
+    <Content Include="favicon-96x96.png" />
+    <Content Include="favicon.ico" />
+    <Content Include="favicons\android-chrome-144x144.png" />
+    <Content Include="favicons\android-chrome-192x192.png" />
+    <Content Include="favicons\android-chrome-36x36.png" />
+    <Content Include="favicons\android-chrome-48x48.png" />
+    <Content Include="favicons\android-chrome-72x72.png" />
+    <Content Include="favicons\android-chrome-96x96.png" />
+    <Content Include="favicons\apple-touch-icon-114x114.png" />
+    <Content Include="favicons\apple-touch-icon-120x120.png" />
+    <Content Include="favicons\apple-touch-icon-144x144.png" />
+    <Content Include="favicons\apple-touch-icon-152x152.png" />
+    <Content Include="favicons\apple-touch-icon-180x180.png" />
+    <Content Include="favicons\apple-touch-icon-57x57.png" />
+    <Content Include="favicons\apple-touch-icon-60x60.png" />
+    <Content Include="favicons\apple-touch-icon-72x72.png" />
+    <Content Include="favicons\apple-touch-icon-76x76.png" />
+    <Content Include="favicons\apple-touch-icon-precomposed.png" />
+    <Content Include="favicons\apple-touch-icon.png" />
+    <Content Include="favicons\browserconfig.xml" />
+    <Content Include="favicons\favicon-16x16.png" />
+    <Content Include="favicons\favicon-32x32.png" />
+    <Content Include="favicons\favicon-96x96.png" />
+    <Content Include="favicons\favicon.ico" />
+    <Content Include="favicons\mstile-144x144.png" />
+    <Content Include="favicons\mstile-150x150.png" />
+    <Content Include="favicons\mstile-310x150.png" />
+    <Content Include="favicons\mstile-310x310.png" />
+    <Content Include="favicons\mstile-70x70.png" />
+    <Content Include="gulpfile.js" />
+    <Content Include="images\congresso2.jpg" />
+    <Content Include="images\congresso3.jpg" />
+    <Content Include="images\congresso4.jpg" />
+    <Content Include="images\download1.jpg" />
+    <Content Include="images\download2.jpg" />
+    <Content Include="images\download3.jpg" />
+    <Content Include="images\External Link-50.png" />
+    <Content Include="images\gallery1.jpg" />
+    <Content Include="images\images-icon.jpg" />
+    <Content Include="images\landing1.jpg" />
+    <Content Include="images\musicbattl-info.jpg" />
+    <Content Include="images\musicbattl2.jpg" />
+    <Content Include="images\musicbattl3.jpg" />
+    <Content Include="images\musicbattl4.jpg" />
+    <Content Include="images\sbp.jpg" />
+    <Content Include="images\social.png" />
+    <Content Include="images\sprite.png" />
+    <Content Include="images\tech-icon.jpg" />
+    <Content Include="index.html" />
+    <Content Include="favicons\manifest.json" />
+    <Content Include="manifest.json" />
+    <None Include="package.json" />
+    <Content Include="mstile-144x144.png" />
+    <Content Include="mstile-150x150.png" />
+    <Content Include="mstile-310x150.png" />
+    <Content Include="mstile-310x310.png" />
+    <Content Include="mstile-70x70.png" />
+    <Content Include="prototype\grid-animation-color-refactored.html" />
+    <Content Include="prototype\three.js" />
+    <Content Include="r.js" />
+    <Content Include="source\scripts\app\lib\navigator.js" />
+    <Content Include="source\scripts\app\lib\NoJQuery.js" />
+    <Content Include="source\scripts\app\main.js" />
+    <Content Include="source\scripts\app\routers\router.js" />
+    <Content Include="source\scripts\app\views\gallery.js" />
+    <Content Include="source\scripts\app\views\about.js" />
+    <Content Include="source\scripts\app\views\animateColors.js" />
+    <Content Include="source\scripts\app\views\grid3d.js" />
+    <Content Include="source\scripts\app\views\home.js" />
+    <Content Include="prototype\grid-animation-color.html" />
+    <Content Include="prototype\grid-animation.html" />
+    <Content Include="prototype\colors.html" />
+    <Content Include="prototype\grid.html" />
+    <Content Include="PSD\Portfolio.psd" />
+    <Content Include="PSD\Portfolio1.psd" />
+    <Content Include="source\scripts\app\views\menu.js" />
+    <Content Include="source\scripts\app\views\project.js" />
+    <Content Include="source\scripts\app\views\info.js" />
+    <Content Include="source\scripts\app\views\tech.js" />
+    <Content Include="source\scripts\app\views\work.js" />
+    <Content Include="source\scripts\vendors\Detector.js" />
+    <Content Include="source\scripts\vendors\easing\EasePack.js" />
+    <Content Include="source\scripts\vendors\OrbitControls.js" />
+    <Content Include="source\scripts\vendors\page.js" />
+    <Content Include="source\scripts\vendors\plugins\AttrPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\BezierPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\ColorPropsPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\CSSPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\CSSRulePlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\DirectionalRotationPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\EaselPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\EndArrayPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\KineticPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\RaphaelPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\RoundPropsPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\ScrollToPlugin.js" />
+    <Content Include="source\scripts\vendors\plugins\TEMPLATE_Plugin.js" />
+    <Content Include="source\scripts\vendors\plugins\TextPlugin.js" />
+    <Content Include="source\scripts\vendors\pubsub.js" />
+    <Content Include="source\scripts\vendors\three.js" />
+    <Content Include="source\scripts\vendors\TweenLite.js" />
+    <Content Include="source\scripts\vendors\TweenMax.js" />
+    <Content Include="source\styles\app\main.scss" />
+    <Content Include="source\styles\app\views\_footer.scss" />
+    <Content Include="source\styles\app\controls\_loading-landing-animation.scss" />
+    <Content Include="source\styles\app\controls\_lines.scss" />
+    <Content Include="source\styles\app\controls\_opacity.scss" />
+    <None Include="source\styles\app\controls\_rounded-button-animation.scss" />
+    <Content Include="source\styles\app\views\_work.scss" />
+    <Content Include="source\styles\app\views\_about.scss" />
+    <Content Include="source\styles\app\controls\_nav.scss" />
+    <None Include="source\styles\app\_global.scss" />
+    <Content Include="source\styles\app\_helpers.scss" />
+    <Content Include="source\styles\app\views\_home.scss" />
+    <Content Include="source\styles\app\controls\_buttons.scss" />
+    <Content Include="source\styles\app\controls\_arrows.scss" />
+    <Content Include="source\styles\app\_variables.scss" />
+    <Content Include="fonts\DXI1ORHCpsQm3Vp6mXoaTegdm0LZdjqr5-oayXSOefg.woff2" />
+    <Content Include="fonts\EInbV5DfGHOiMmvb1Xr-hugdm0LZdjqr5-oayXSOefg.woff2" />
+    <Content Include="source\styles\app\views\_gallery.scss" />
+    <Content Include="source\styles\app\views\_tech.scss" />
+    <Content Include="source\styles\app\controls\_project-preview-animations.scss" />
+    <Content Include="source\styles\app\views\_info.scss" />
+    <Content Include="Web.config" />
+    <Content Include="source\styles\app\viewports\_small.scss" />
+    <Content Include="source\styles\app\viewports\_medium.scss" />
+    <Content Include="source\styles\app\viewports\_large.scss" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="prototype\ConvexGeometry.js" />
+    <Content Include="prototype\Detector.js" />
+    <Content Include="prototype\easing\EasePack.min.js" />
+    <Content Include="prototype\index.html" />
+    <Content Include="prototype\animation.html" />
+    <Content Include="prototype\jquery.gsap.min.js" />
+    <Content Include="prototype\materials.html" />
+    <Content Include="prototype\OrbitControls.js" />
+    <Content Include="prototype\plugins\AttrPlugin.min.js" />
+    <Content Include="prototype\plugins\BezierPlugin.min.js" />
+    <Content Include="prototype\plugins\ColorPropsPlugin.min.js" />
+    <Content Include="prototype\plugins\CSSPlugin.min.js" />
+    <Content Include="prototype\plugins\CSSRulePlugin.min.js" />
+    <Content Include="prototype\plugins\DirectionalRotationPlugin.min.js" />
+    <Content Include="prototype\plugins\EaselPlugin.min.js" />
+    <Content Include="prototype\plugins\EndArrayPlugin.min.js" />
+    <Content Include="prototype\plugins\KineticPlugin.min.js" />
+    <Content Include="prototype\plugins\RaphaelPlugin.min.js" />
+    <Content Include="prototype\plugins\RoundPropsPlugin.min.js" />
+    <Content Include="prototype\plugins\ScrollToPlugin.min.js" />
+    <Content Include="prototype\plugins\TextPlugin.min.js" />
+    <Content Include="prototype\TimelineLite.min.js" />
+    <Content Include="prototype\TimelineMax.min.js" />
+    <Content Include="prototype\TweenLite.min.js" />
+    <Content Include="prototype\TweenMax.min.js" />
+    <Content Include="prototype\utils\Draggable.min.js" />
+    <Content Include="screenshots\about.jpg" />
+    <Content Include="screenshots\home.jpg" />
+    <Content Include="screenshots\work-details.jpg" />
+    <Content Include="screenshots\work-gallery.jpg" />
+    <Content Include="screenshots\work.jpg" />
+    <None Include="source\styles\vendors\_normalize.scss" />
+    <Content Include="source\styles\vendors\_gfont.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>61926</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:61926/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

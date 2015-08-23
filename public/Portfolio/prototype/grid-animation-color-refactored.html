@@ -1,0 +1,602 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body onload="onload()">
+    <div id="container"></div>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script src="Detector.js"></script>
+    <script src="TweenMax.min.js"></script>
+    <script src="plugins/CSSPlugin.min.js"></script>
+    <style>
+        body {            
+            border-bottom-color: #094AAE;/*materialColor*/
+            border-bottom-color:#1BE4DC;/*specularColor*/
+
+            border-bottom-color: #094AAE;/*materialColor*/
+            border-bottom-color:#ff0000;/*specularColor*/
+
+            border-bottom-color: #01052e;/*materialColor*/
+            border-bottom-color:#094AAE;/*specularColor*/
+
+            border-bottom-color: #240058;/*materialColor*/
+            border-bottom-color:#ff7c0d;/*specularColor*/
+
+            border-bottom-color: #240058;/*materialColor*/
+            border-bottom-color:#4cff00;/*specularColor*/
+
+            border-bottom-color: #000;/*materialColor*/
+            border-bottom-color:#4e4e4e;/*specularColor*/
+
+            border-bottom-color: #01273d;/*materialColor*/
+            border-bottom-color:#8500fa;/*specularColor*/
+        }
+    </style>
+    <script>
+
+        if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+        var container,
+            camera, scene, renderer, mouseX = 0, mouseY = 0, ambient, materials, light, objPlain, objUp, objDown, gridGroup,
+            windowHalfX = window.innerWidth / 2,
+            windowHalfY = window.innerHeight / 2,
+
+            baseColor = '#03162D',
+            ambientColor = '#000',
+            directionalColor = '#fff',
+            materialColor = '#094AAE',
+            specularColor = '#1BE4DC';
+
+            colors = [];
+            colors[0] = { baseColor: '#000', ambientColor: '#000', directionalColor: '#fff', materialColor: '#000', specularColor: '#4e4e4e' };
+
+            baseColor = this.colors[0].baseColor;
+            ambientColor = this.colors[0].ambientColor;
+            directionalColor = this.colors[0].directionalColor;
+            materialColor = this.colors[0].materialColor;
+            specularColor = this.colors[0].specularColor;
+
+        window.addEventListener('mousemove', onMouseMove, false);
+
+        window.addEventListener('resize', onWindowResize, false);
+
+        container = document.getElementById('container');
+
+        gridGroup = new THREE.Object3D();
+
+        function onMouseMove(ev) {
+            mouseX = (event.clientX - windowHalfX) * 10;
+            mouseY = (event.clientY - windowHalfY) * 10;
+        }
+
+        function onWindowResize() {
+
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function init() {
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setClearColor(baseColor, 0);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+            camera.position.set(0, 0, 500);
+
+            camera.target = new THREE.Vector3();
+
+            ambient = new THREE.AmbientLight(ambientColor);
+            scene.add(ambient);
+
+            light = new THREE.DirectionalLight(directionalColor, .3);
+            light.position.set(0, 200, 500);
+            scene.add(light);
+
+            materials = [];
+
+            materials.push(new THREE.MeshPhongMaterial({ color: materialColor, specular: specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
+
+            objPlain = addPlainObj(scene, materials);
+
+            objUp = addExtrudeUpObj(scene, materials);
+
+            objDown = addExtrudeDownObj(scene, materials);
+
+        }
+
+        function addExtrudeUpObj(scene, materials) {
+
+            var triangleMaterial = materials[0],
+                triangleGeometry,
+                triangleGeometry1,
+                triangleGeometry2,
+                triangleGeometry3,
+                triangleGeometry4,
+                triangleGeometry5,
+                obj;
+
+            triangleGeometry = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -52.5, 0)]);
+            triangleGeometry1 = positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -52.5, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry2 = positionVertices([new THREE.Vector3(0, -48, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(53.9, 0, 0)]);
+            triangleGeometry3 = positionVertices([new THREE.Vector3(-53.9, 0, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(0, -48, 0)]);
+            triangleGeometry4 = positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 52.5, 0)]);            
+            triangleGeometry5 = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 52.5, 0), new THREE.Vector3(0, -50, 0)]);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial)
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            obj = new THREE.Object3D();
+            obj.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+            scene.add(obj);
+
+            obj.position.x = -150;
+
+            return obj;
+        }
+        function addExtrudeDownObj(scene, materials) {
+
+            var triangleMaterial = materials[0],
+                triangleGeometry,
+                triangleGeometry1,
+                triangleGeometry2,
+                triangleGeometry3,
+                triangleGeometry4,
+                triangleGeometry5,
+                obj,
+                triangleMesh0,
+                triangleMesh1,
+                triangleMesh2,
+                triangleMesh3,
+                triangleMesh4,
+                triangleMesh5;
+
+            triangleGeometry = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -52.5, 0)]);
+            triangleGeometry1 = positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -52.5, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry2 = positionVertices([new THREE.Vector3(0, -48, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(53.9, 0, 0)]);
+            triangleGeometry3 = positionVertices([new THREE.Vector3(-53.9, 0, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(0, -48, 0)]);
+            triangleGeometry4 = positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 52.5, 0)]);
+            triangleGeometry5 = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 52.5, 0), new THREE.Vector3(0, -50, 0)]);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial)
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            obj = new THREE.Object3D();
+            obj.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+            scene.add(obj);
+
+            obj.position.x = -250;
+
+            return obj;
+        }
+        function addPlainObj(scene, materials) {
+            var triangleMaterial = materials[0],
+                triangleGeometry,
+                triangleGeometry1,
+                triangleGeometry2,
+                triangleGeometry3,
+                triangleGeometry4,
+                triangleGeometry5,
+                group,
+                obj;
+
+            triangleGeometry = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
+            triangleGeometry1 = positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry2 = positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry3 = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
+            triangleGeometry4 = positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry5 = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial)
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            group = new THREE.Object3D();
+            group.name = 'group';
+            group.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+
+            obj = new THREE.Object3D();
+            obj.add(group);
+            scene.add(obj);
+            obj.position.x = -49;
+
+            return obj;
+        }
+
+        function positionVertices(vector3dList) {
+            var triangle = new THREE.Geometry();
+
+            triangle.vertices.push(vector3dList[0]);
+            triangle.vertices.push(vector3dList[1]);
+            triangle.vertices.push(vector3dList[2]);
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }      
+
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        function render() {
+
+            camera.position.x = (mouseX - camera.position.x) * .02;
+            camera.position.y = (-mouseY - camera.position.y) * .05;
+
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        function showValXUp(obj, index, value) {
+            obj.children[index].rotation.x = value;
+        }
+        function showValYUp(obj, index, value) {
+            obj.children[index].rotation.y = value;
+        }
+        function showValPXUp(obj, index, value) {
+            obj.children[index].position.x = value;
+        }
+        function showValPYUp(obj, index, value) {
+            obj.children[index].position.z = value;
+        }
+        function showValPZUp(obj, index, value) {
+            obj.children[index].position.y = value;
+        }
+
+        function animateFaceDown(target) {
+            var i = 0,
+                total = target.children.length,
+                targetChild,
+                rotation,
+                position,
+                childDown;
+
+            target.position.z = -30;
+            target.position.y = 5;
+
+            for (i; i < total; i++) {
+
+                targetChild = target.children[i];
+
+                rotation = targetChild.rotation;
+                position = targetChild.position;
+                childDown = objDown.children[i];
+
+                rotation.x = childDown.rotation.x;
+                rotation.y = childDown.rotation.y;
+                rotation.z = childDown.rotation.z;
+
+                position.x = childDown.position.x;
+                position.y = childDown.position.y;
+                position.z = childDown.position.z;
+            }
+
+        }
+
+        function animateFaceUp(target) {
+            var i = 0,
+                rotation,
+                position,
+                childUp,
+                total = target.children.length,
+                targetChild;
+
+            for (i; i < total; i++) {
+
+                targetChild = target.children[i];
+                childUp = objUp.children[i];
+
+                rotation = targetChild.rotation,
+                position = targetChild.position;
+
+                rotation.x = childUp.rotation.x;
+                rotation.y = childUp.rotation.y;
+                rotation.z = childUp.rotation.z;
+
+                position.x = childUp.position.x;
+                position.y = childUp.position.y;
+                position.z = childUp.position.z;
+
+                targetChild.geometry.vertices[0].x = childUp.geometry.vertices[0].x;
+                targetChild.geometry.vertices[0].y = childUp.geometry.vertices[0].y;
+                targetChild.geometry.vertices[0].z = childUp.geometry.vertices[0].z;
+
+                targetChild.geometry.vertices[1].x = childUp.geometry.vertices[1].x;
+                targetChild.geometry.vertices[1].y = childUp.geometry.vertices[1].y;
+                targetChild.geometry.vertices[1].z = childUp.geometry.vertices[1].z;
+
+                targetChild.geometry.vertices[2].x = childUp.geometry.vertices[2].x;
+                targetChild.geometry.vertices[2].y = childUp.geometry.vertices[2].y;
+                targetChild.geometry.vertices[2].z = childUp.geometry.vertices[2].z;
+
+                targetChild.geometry.verticesNeedUpdate = true;
+
+            }
+        }
+
+        function prepareGrid() {
+            var groudSource = new THREE.Object3D();
+
+            groudSource.add(objDown)
+            .add(objUp)
+            .add(objPlain);
+
+            scene.add(groudSource);
+
+            groudSource.position.x = -1000;
+        }
+
+        function montarGrid() {
+            var posAnterior = 0,
+                anchorY = 1000,
+                i = 0,
+                cols = 13,
+                lines = 25,
+                objY;
+
+            for (i; i < cols; i++) {
+
+                posAnterior = -((195) * i) + anchorY;
+
+                if (i > 0) {
+                    if ((i % 2 == 0)) {
+                        posAnterior = -((196) * i) + anchorY;
+                    }
+                }
+
+                for (var j = 0; j < lines; j++) {
+
+                    objY = objPlain.clone();
+                    objY.position.x = -(1150) + 99 * j;
+
+                    if (i % 2) {
+                        objY.animated = 'up';
+                        animateFaceUp(objY.children[0]);
+                    } else {
+                        objY.animated = 'down';
+                        animateFaceDown(objY.children[0]);
+                    }
+
+                    addAuxiliares(objY);
+
+                    objY.position.y = posAnterior;
+
+                    gridGroup.add(objY);
+                }
+            }
+
+            scene.add(gridGroup);
+
+            gridGroup.rotateZ(-.4);
+        }
+
+        function addAuxiliares(pai) {
+            var material,
+                triangleGeometry,
+                auxmesh,
+                aux,
+                triangleGeometryDown,
+                auxmeshDown,
+                auxDown;
+
+            material = new THREE.MeshPhongMaterial({ color: materialColor, specular: specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide });
+
+            triangleGeometry = positionVertices([new THREE.Vector3(50, 0, 0),new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 51, 0)]);
+            auxmesh = new THREE.Mesh(triangleGeometry, material);
+            auxmesh.name = 'auxmesh';
+            aux = new THREE.Object3D();
+            aux.add(auxmesh);
+
+            triangleGeometryDown = positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -51, 0)]);
+            auxmeshDown = new THREE.Mesh(triangleGeometryDown, material);
+            auxmeshDown.name = 'auxmeshDown';
+            auxDown = new THREE.Object3D();
+            auxDown.add(auxmeshDown);
+
+            if (pai.animated == 'down') {
+                aux.position.y = -143;
+                aux.position.x = -49.5;
+                aux.position.z = -15;
+                aux.rotation.x = -0.18;
+
+                auxDown.position.y = 53;
+                auxDown.position.x = -49.5;
+                auxDown.rotation.x = 0.18;
+                auxDown.position.z = aux.position.z;
+
+            } else if (pai.animated == 'up') {
+                aux.position.y = -148;
+                aux.position.x = -49.5;
+                aux.position.z = -15;
+                aux.rotation.x = 0.18;
+
+                auxDown.position.y = 48;
+                auxDown.position.x = -49.5;
+                auxDown.rotation.x = -0.18;
+                auxDown.position.z = aux.position.z;
+
+            } else {
+                aux.position.y = -150;
+                aux.position.x = -50;
+
+                auxDown.position.y = 50;
+                auxDown.position.x = -50;
+            }
+
+            pai.add(aux);
+            pai.add(auxDown);
+
+        }
+
+        function onload() {
+
+            init();
+
+            animate();
+
+            showValXUp(objUp, 0, -0.3);
+            showValYUp(objUp, 0, -0.13);
+
+            showValXUp(objUp, 1, -0.3);
+            showValYUp(objUp, 1, 0.13);
+
+            showValYUp(objUp, 2, -0.41);
+            showValPXUp(objUp, 2, -49.61);
+            showValPYUp(objUp, 2, -6);
+
+            showValXUp(objUp, 4, 0.3);
+            showValYUp(objUp, 4, 0.13);
+
+            showValYUp(objUp, 3, 0.41);
+            showValPXUp(objUp, 3, 49.61);
+            showValPYUp(objUp, 3, -6);
+
+            showValXUp(objUp, 5, 0.3);
+            showValYUp(objUp, 5, -0.13);
+
+            /*--------------------------------*/
+
+            showValXUp(objDown, 0, 0.3);
+            showValYUp(objDown, 0, 0.13);
+
+            showValXUp(objDown, 1, 0.3);
+            showValYUp(objDown, 1, -0.13);
+
+            showValYUp(objDown, 2, 0.41);
+            showValPXUp(objDown, 2, -49.61);
+            showValPYUp(objDown, 2, 6);
+
+            showValXUp(objDown, 4, -0.3);
+            showValYUp(objDown, 4, -0.13);
+
+            showValYUp(objDown, 3, -0.41);
+            showValPXUp(objDown, 3, 49.61);
+            showValPYUp(objDown, 3, 6);
+
+            showValXUp(objDown, 5, -0.3);
+            showValYUp(objDown, 5, 0.13);
+
+            prepareGrid();
+
+            montarGrid();
+
+            ////ANIMATION COLORS
+            // TweenLite.to(materials[0].color, 100, { r: 1, g: 0, b: 255, onUpdate: function (material) {material.verticesNeedUpdate = true;}, onUpdateParams: [materials[0]]
+            // });
+            // TweenLite.to(materials[0].specular, 10, {
+            //     r: 1, g: 0, b: 255, onUpdate: function (material) {
+            //         material.needsUpdate = true;
+
+            //     }, onUpdateParams: [materials[0]]
+            // });
+
+            // TweenLite.to(document.body, 1, { backgroundColor: "#0000ff" });
+
+            //TweenLite.to(ambient.color, 100, { color: 255, g: 0, b: 255 });
+
+            // TweenLite.to(renderer, 1000, {
+            //     r: 255, g: 0, b: 255, onUpdate: function (material) {
+            //         material.verticesNeedUpdate = true;
+
+            //     }, onUpdateParams: [materials[0]]
+            // });
+        }
+    </script>
+</body>
+</html>

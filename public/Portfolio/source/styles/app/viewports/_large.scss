@@ -1,0 +1,29 @@
+﻿@import "../_variables.scss";
+
+@media only screen and (max-width:1160px) and (min-width:769px) {
+    .work .btn {
+        h2 {
+            width: 190%;
+        }
+    }
+
+    .gallery .image-list {
+        height: 100%;
+    }
+
+        .gallery .image-list .ph {
+            position: relative;
+        }
+
+    .gallery .images-ph {
+        width: 200%;
+    }
+
+    .prev, .next {
+        display: none;
+    }
+
+    .ph img {
+        width: 100%;
+    }
+}

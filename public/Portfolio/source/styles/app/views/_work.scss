@@ -1,0 +1,126 @@
+﻿@import "../_variables.scss";
+@import "../controls/_project-preview-animations.scss";
+
+@import "../views/_gallery.scss";
+@import "_tech.scss";
+@import "_info.scss";
+
+@-moz-document url-prefix() {
+    .animate-in-link-tech, .animate-in-link-gallery, .animate-in-link-external {
+        .line-ph i {
+            top:16%!important;
+        }
+    }
+}
+
+.work {
+    float: left;
+    height: auto;
+
+    h2 {
+        font-size: 1.3rem;
+        text-transform: uppercase;
+    }
+
+    .btn {
+        display: block;
+        position: relative;
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+
+        h2 {
+            opacity: 0;
+        }
+
+        i {
+            width: 90%;
+        }
+    }
+
+    .views {
+        position: relative;
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+    }
+
+    .project {
+        margin-bottom: 100px;
+    }
+}
+
+.animate-in-title {
+    .line-ph i {
+        -moz-animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s;
+        -o-animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s;
+        -webkit-animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s;
+        animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s;
+    }
+
+    p {
+        -moz-animation: fadeIn .5s .5s;
+        -o-animation: fadeIn .5s .5s;
+        -webkit-animation: fadeIn .5s .5s;
+        animation: fadeIn .5s .5s;
+    }
+}
+
+.animate-text-opacity {
+    -moz-animation: fadeIn .5s 1s 1 forwards;
+    -o-animation: fadeIn .5s 1s 1 forwards;
+    -webkit-animation: fadeIn .5s 1s 1 forwards;
+    animation: fadeIn .5s 1s 1 forwards;
+}
+
+.animate-in-link-tech {
+    .line-ph i {
+        -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+        -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+        -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+        animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+    }
+}
+
+.animate-in-link-external {
+    .line-ph i {
+        -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+        -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+        -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+        animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
+    }
+}
+
+.animate-in-link-gallery {
+    .line-ph i {
+        -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards;
+        -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards;
+        -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards;
+        animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards;
+    }
+}
+
+.animate-span {
+    -moz-animation: fadeIn .2s 0s 1 forwards;
+    -o-animation: fadeIn .2s 0s 1 forwards;
+    -webkit-animation: fadeIn .2s 0s 1 forwards;
+    animation: fadeIn .2s 0s 1 forwards;
+}
+
+.animate-title-opacity {
+    -moz-animation: fadeIn .2s 0s 1 forwards;
+    -o-animation: fadeIn .2s 0s 1 forwards;
+    -webkit-animation: fadeIn .2s 0s 1 forwards;
+    animation: fadeIn .2s 0s 1 forwards;
+}
+
+.animate-sprite {
+    -moz-animation: fadeIn .5s .2s 1 forwards;
+    -o-animation: fadeIn .5s .2s 1 forwards;
+    -webkit-animation: fadeIn .5s .2s 1 forwards;
+    animation: fadeIn .5s .2s 1 forwards;
+}

@@ -1,0 +1,780 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body onload="onload()">
+    <div id="container"></div>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script src="Detector.js"></script>
+    <script src="TweenMax.min.js"></script>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,600,700,800,300);
+
+        body {
+            font-family: Monospace;
+            font-size: 13px;
+            text-align: center;
+            background-color: #fff;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .controls {
+            position: absolute;
+            top: 0;
+            color: white;
+            visibility: hidden;
+        }
+
+        h1 {
+            position: absolute;
+            z-index: 1;
+            color: #FFF;
+            font-size: 46pt;
+            top: 50%;
+            font-family: 'Open Sans', sans-serif;
+            -moz-transform: translateX(-50%) translateY(-50%);
+            -ms-transform: translateX(-50%) translateY(-50%);
+            -o-transform: translateX(-50%) translateY(-50%);
+            -webkit-transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%);
+            left: 50%;
+            min-width: 600px;
+            height: 140px;
+            /*background-color: #F00;*/
+            letter-spacing: 5pt;
+            text-transform: uppercase;
+            padding: 2%;
+            text-shadow: 1px 3px 0 #021443;
+            font-weight: 800;
+            line-height: 45pt;
+            display: block;
+            margin:0;
+        }
+
+            h1 span {
+                font-weight: 100;
+                font-size: 31pt;
+            }
+    </style>
+    <script>
+
+        if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+        var container, stats;
+
+        var camera, scene, renderer, fov = 45;
+        var FLOOR = -250;
+
+        var mesh, light, cube, objPlain, objUp, objDown, particleLight, controls, triangleMesh, obj, triangleMesh0, triangleMesh1, triangleMesh2, triangleMesh3, triangleMesh4, triangleMesh5;
+
+        var animateUp = true;
+        var animateUpY = true;
+        var mouseX = 0, mouseY = 0;
+
+        var windowHalfX = window.innerWidth / 2;
+        var windowHalfY = window.innerHeight / 2;
+
+        var elementos = [];
+        var mouse = [.5, .5];
+
+        container = document.getElementById('container');
+
+        var baseColor = '#03162D';
+        var ambientColor = '#000';
+        var directionalColor = '#fff';
+        var materialColor = '#094AAE';
+        var specularColor = '#1BE4DC';
+        var gridGroup = new THREE.Object3D();
+        var animationVelocity = 0;
+
+        window.addEventListener('mousemove', onMouseMove, false);
+        function onMouseMove(ev) {
+            mouseX = (event.clientX - windowHalfX) * 10;
+            mouseY = (event.clientY - windowHalfY) * 10;
+        }
+        function init() {
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor(baseColor);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+            camera.position.set(0, 0, 500);
+
+            camera.target = new THREE.Vector3();
+
+            //controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+            var ambient = new THREE.AmbientLight(ambientColor);
+            scene.add(ambient);
+
+            var light = new THREE.DirectionalLight(directionalColor, .3);
+            light.position.set(0, 200, 500);
+            scene.add(light);
+
+            cube = new THREE.Mesh(new THREE.CubeGeometry(50, 50, 50), new THREE.MeshPhongMaterial({ color: 0xCC0000 }));
+            cube.position.x = 100;
+
+            var materials = [];
+
+            materials.push(new THREE.MeshPhongMaterial({ color: materialColor, specular: specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
+
+            objPlain = addPlainObj(scene, materials);
+
+            objUp = addExtrudeUpObj(scene, materials);
+
+            objDown = addExtrudeDownObj(scene, materials);
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function addExtrudeUpObj(scene, materials) {
+
+            var triangleMaterial = materials[0];
+            var triangleGeometry = exampleTriangle0(-50, 50, 0);
+            var triangleGeometry1 = exampleTriangle1(50, -50, 0);
+            var triangleGeometry2 = exampleTriangle2(50, -50, 0);
+            var triangleGeometry3 = exampleTriangle3(50, -50, 0);
+            var triangleGeometry4 = exampleTriangle4(50, -50, 0);
+            var triangleGeometry5 = exampleTriangle5(-50, 50, 0);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial)
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            obj = new THREE.Object3D();
+            obj.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+            scene.add(obj);
+
+            obj.position.x = -150;
+
+            return obj;
+        }
+
+        function addExtrudeDownObj(scene, materials) {
+
+            var triangleMaterial = materials[0];
+            var triangleGeometry = exampleTriangle0(-50, 50, 0);
+            var triangleGeometry1 = exampleTriangle1(50, -50, 0);
+            var triangleGeometry2 = exampleTriangle2(50, -50, 0);
+            var triangleGeometry3 = exampleTriangle3(50, -50, 0);
+            var triangleGeometry4 = exampleTriangle4(50, -50, 0);
+            var triangleGeometry5 = exampleTriangle5(-50, 50, 0);
+
+            var triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial)
+            triangleMesh0.name = 'triangleMesh0';
+
+            var triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            var triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            var triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            var triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            var triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            obj = new THREE.Object3D();
+            obj.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+            scene.add(obj);
+
+            obj.position.x = -250;
+
+            return obj;
+        }
+
+        function addPlainObj(scene, materials) {
+            var triangleMaterial = materials[0];
+            var triangleGeometry = exampleTrianglePlain(-50, 50, 0);
+            var triangleGeometry1 = exampleTrianglePlain(50, -50, 0);
+            var triangleGeometry2 = exampleTrianglePlain(50, -50, 0);
+            var triangleGeometry3 = exampleTrianglePlain(-50, 50, 0);
+            var triangleGeometry4 = exampleTrianglePlain(50, -50, 0);
+            var triangleGeometry5 = exampleTrianglePlain(-50, 50, 0);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial)
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            var group = new THREE.Object3D();
+            group.name = 'group';
+            group.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+
+            obj = new THREE.Object3D();
+            obj.add(group);
+            scene.add(obj);
+            obj.position.x = -49;
+            //obj.position.z = -12;
+
+            return obj;
+        }
+
+        function exampleTrianglePlain(pos, pos1, pos2) {
+            var triangle = new THREE.Geometry();
+
+            triangle.vertices.push(new THREE.Vector3(pos, pos2, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, pos1, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, pos, pos2));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function exampleTriangle0(pos, pos1, pos2) {
+            var triangle = new THREE.Geometry();
+
+            var triangle = new THREE.Geometry();
+            triangle.vertices.push(new THREE.Vector3(-50, 0, 0));
+            triangle.vertices.push(new THREE.Vector3(0, 50, 0));
+            triangle.vertices.push(new THREE.Vector3(0, -52.5, 0));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function exampleTriangle1(pos, pos1, pos2) {
+            var triangle = new THREE.Geometry();
+
+            var triangle = new THREE.Geometry();
+            triangle.vertices.push(new THREE.Vector3(50, 0, 0));
+            triangle.vertices.push(new THREE.Vector3(0, -52.5, 0));
+            triangle.vertices.push(new THREE.Vector3(0, 50, 0));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function exampleTriangle2(pos, pos1, pos2) {
+            var triangle = new THREE.Geometry();
+
+            var triangle = new THREE.Geometry();
+            triangle.vertices.push(new THREE.Vector3(0, -48, 0));
+            triangle.vertices.push(new THREE.Vector3(0, 48, 0));
+            triangle.vertices.push(new THREE.Vector3(53.9, 0, 0));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function exampleTriangle3(pos, pos1, pos2) {
+            var triangle = new THREE.Geometry();
+
+            var triangle = new THREE.Geometry();
+            triangle.vertices.push(new THREE.Vector3(-53.9, 0, 0));
+            triangle.vertices.push(new THREE.Vector3(0, 48, 0));
+            triangle.vertices.push(new THREE.Vector3(0, -48, 0));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function exampleTriangle4(pos, pos1, pos2) {
+            var triangle = new THREE.Geometry();
+
+            triangle.vertices.push(new THREE.Vector3(50, pos2, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, -50, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, 52.5, pos2));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function exampleTriangle5(pos, pos1, pos2) {
+            var triangle = new THREE.Geometry();
+
+            triangle.vertices.push(new THREE.Vector3(-50, pos2, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, 52.5, pos2));
+            triangle.vertices.push(new THREE.Vector3(pos2, -50, pos2));
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        }
+
+        function onWindowResize() {
+
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        }
+
+        function render() {
+
+            camera.position.x = (mouseX - camera.position.x) * .02;
+            camera.position.y = (-mouseY - camera.position.y) * .05;
+
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        function showValXUp(obj, index, value) {
+            obj.children[index].rotation.x = value;
+        }
+        function showValYUp(obj, index, value) {
+            obj.children[index].rotation.y = value;
+        }
+        function showValPXUp(obj, index, value) {
+            obj.children[index].position.x = value;
+        }
+        function showValPYUp(obj, index, value) {
+            obj.children[index].position.z = value;
+        }
+        function showValPZUp(obj, index, value) {
+            obj.children[index].position.y = value;
+        }
+
+        function rotateY(elmt) {
+            obj.rotation.y = elmt.value;
+        }
+
+        function onload() {
+            init();
+            animate();
+
+            showValXUp(objUp, document.getElementById("mesh0x").attributes.class.value.substr(4, 5), document.getElementById("mesh0x").value);
+            showValYUp(objUp, document.getElementById("mesh0y").attributes.class.value.substr(4, 5), document.getElementById("mesh0y").value);
+
+            showValXUp(objUp, document.getElementById("mesh1x").attributes.class.value.substr(4, 5), document.getElementById("mesh1x").value);
+            showValYUp(objUp, document.getElementById("mesh1y").attributes.class.value.substr(4, 5), document.getElementById("mesh1y").value);
+
+            showValYUp(objUp, document.getElementById("mesh2y").attributes.class.value.substr(4, 5), document.getElementById("mesh2y").value);
+            showValPXUp(objUp, document.getElementById("mesh2px").attributes.class.value.substr(4, 5), document.getElementById("mesh2px").value);
+            showValPYUp(objUp, document.getElementById("mesh2py").attributes.class.value.substr(4, 5), document.getElementById("mesh2py").value);
+
+            showValXUp(objUp, document.getElementById("mesh4x").attributes.class.value.substr(4, 5), document.getElementById("mesh4x").value);
+            showValYUp(objUp, document.getElementById("mesh4y").attributes.class.value.substr(4, 5), document.getElementById("mesh4y").value);
+
+            showValYUp(objUp, document.getElementById("mesh3y").attributes.class.value.substr(4, 5), document.getElementById("mesh3y").value);
+            showValPXUp(objUp, document.getElementById("mesh3px").attributes.class.value.substr(4, 5), document.getElementById("mesh3px").value);
+            showValPYUp(objUp, document.getElementById("mesh3py").attributes.class.value.substr(4, 5), document.getElementById("mesh3py").value);
+
+            showValXUp(objUp, document.getElementById("mesh5x").attributes.class.value.substr(4, 5), document.getElementById("mesh5x").value);
+            showValYUp(objUp, document.getElementById("mesh5y").attributes.class.value.substr(4, 5), document.getElementById("mesh5y").value);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            showValXUp(objDown, document.getElementById("mesh0x").attributes.class.value.substr(4, 5), -document.getElementById("mesh0x").value);
+            showValYUp(objDown, document.getElementById("mesh0y").attributes.class.value.substr(4, 5), -document.getElementById("mesh0y").value);
+
+            showValXUp(objDown, document.getElementById("mesh1x").attributes.class.value.substr(4, 5), -document.getElementById("mesh1x").value);
+            showValYUp(objDown, document.getElementById("mesh1y").attributes.class.value.substr(4, 5), -document.getElementById("mesh1y").value);
+
+            showValYUp(objDown, document.getElementById("mesh2y").attributes.class.value.substr(4, 5), -document.getElementById("mesh2y").value);
+            showValPXUp(objDown, document.getElementById("mesh2px").attributes.class.value.substr(4, 5), document.getElementById("mesh2px").value);
+            showValPYUp(objDown, document.getElementById("mesh2py").attributes.class.value.substr(4, 5), -document.getElementById("mesh2py").value);
+
+            showValXUp(objDown, document.getElementById("mesh4x").attributes.class.value.substr(4, 5), -document.getElementById("mesh4x").value);
+            showValYUp(objDown, document.getElementById("mesh4y").attributes.class.value.substr(4, 5), -document.getElementById("mesh4y").value);
+
+            showValYUp(objDown, document.getElementById("mesh3y").attributes.class.value.substr(4, 5), -document.getElementById("mesh3y").value);
+            showValPXUp(objDown, document.getElementById("mesh3px").attributes.class.value.substr(4, 5), document.getElementById("mesh3px").value);
+            showValPYUp(objDown, document.getElementById("mesh3py").attributes.class.value.substr(4, 5), -document.getElementById("mesh3py").value);
+
+            showValXUp(objDown, document.getElementById("mesh5x").attributes.class.value.substr(4, 5), -document.getElementById("mesh5x").value);
+            showValYUp(objDown, document.getElementById("mesh5y").attributes.class.value.substr(4, 5), -document.getElementById("mesh5y").value);
+
+            prepareGrid();
+            montarGrid();
+            //animateGrid();
+        }
+
+        function animateDown(target) {
+            target.position.z = -30;
+            target.position.y = 5;
+            for (var i = 0; i < target.children.length; i++) {
+                var rotation = target.children[i].rotation,
+                    position = target.children[i].position;
+                TweenLite.to(rotation, animationVelocity, { x: objDown.children[i].rotation.x, y: objDown.children[i].rotation.y, z: objDown.children[i].rotation.z, onUpdate: onUpdateDown, onUpdateParams: [target.children[i], objDown.children[i]] });
+                TweenLite.to(position, animationVelocity, { x: objDown.children[i].position.x, y: objDown.children[i].position.y, z: objDown.children[i].position.z, onUpdate: onUpdateDown, onUpdateParams: [target.children[i], objDown.children[i]] });
+            }
+
+        }
+        function animateUp1(target) {
+            for (var i = 0; i < target.children.length; i++) {
+                var rotation = target.children[i].rotation,
+                    position = target.children[i].position;
+
+                TweenLite.to(rotation, animationVelocity, { x: objUp.children[i].rotation.x, y: objUp.children[i].rotation.y, z: objUp.children[i].rotation.z, onUpdate: onUpdateUp, onUpdateParams: [target.children[i], objUp.children[i]] });
+                TweenLite.to(position, animationVelocity, { x: objUp.children[i].position.x, y: objUp.children[i].position.y, z: objUp.children[i].position.z, onUpdate: onUpdateUp, onUpdateParams: [target.children[i], objUp.children[i]] });
+            }
+        }
+
+        function onUpdateUp(source, target) {
+
+            TweenLite.to(source.geometry.vertices[0], 0, { x: target.geometry.vertices[0].x, y: target.geometry.vertices[0].y, z: target.geometry.vertices[0].z });
+            TweenLite.to(source.geometry.vertices[1], 0, { x: target.geometry.vertices[1].x, y: target.geometry.vertices[1].y, z: target.geometry.vertices[1].z });
+            TweenLite.to(source.geometry.vertices[2], 0, { x: target.geometry.vertices[2].x, y: target.geometry.vertices[2].y, z: target.geometry.vertices[2].z });
+
+            source.geometry.verticesNeedUpdate = true;
+        }
+
+        function onUpdateDown(source, target) {
+            TweenLite.to(source.geometry.vertices[0], 0, { x: target.geometry.vertices[0].x, y: target.geometry.vertices[0].y, z: target.geometry.vertices[0].z });
+            TweenLite.to(source.geometry.vertices[1], 0, { x: target.geometry.vertices[1].x, y: target.geometry.vertices[1].y, z: target.geometry.vertices[1].z });
+            TweenLite.to(source.geometry.vertices[2], 0, { x: target.geometry.vertices[2].x, y: target.geometry.vertices[2].y, z: target.geometry.vertices[2].z });
+
+            source.geometry.verticesNeedUpdate = true;
+        }
+
+        function prepareGrid() {
+            var groudSource = new THREE.Object3D();
+            groudSource.add(objDown)
+            .add(objUp)
+            .add(objPlain);
+
+            scene.add(groudSource);
+
+            groudSource.position.x = -1000;
+        }
+
+        function montarGrid() {
+            var posAnterior = 0;
+            var anchorY = 1000;
+            for (var i = 0; i < 13; i++) {
+
+                posAnterior = -((195) * i) + anchorY;
+
+                if (i > 0) {
+                    console.log(i)
+                    if ((i % 2 == 0)) {
+                        console.log(i, i % 2);
+                        posAnterior = -((196) * i) + anchorY;
+                    }
+                }
+
+                for (var j = 0; j < 25; j++) {
+
+                    var objY = objPlain.clone();
+                    objY.position.x = -(1150) + 99 * j;
+
+                    if (i % 2) {
+                        objY.animated = 'up';
+                        animateUp1(objY.children[0]);
+                    } else {
+                        objY.animated = 'down';
+                        animateDown(objY.children[0]);
+                    }
+
+                    addAuxiliares(objY);
+
+                    objY.position.y = posAnterior;
+
+                    elementos.push(objY);
+
+                    gridGroup.add(objY);
+                }
+            }
+
+            scene.add(gridGroup);
+
+            gridGroup.rotateZ(-.4);
+        }
+
+        function addAuxiliares(pai) {
+
+            var mat = new THREE.MeshPhongMaterial({ color: materialColor, specular: specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide });
+            var triangle = new THREE.Geometry();
+            triangle.vertices.push(new THREE.Vector3(50, 0, 0));
+            triangle.vertices.push(new THREE.Vector3(-50, 0, 0));
+            triangle.vertices.push(new THREE.Vector3(0, 51, 0));
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+            var auxmesh = new THREE.Mesh(triangle, mat)
+            auxmesh.name = 'aux0';
+            var aux = new THREE.Object3D();
+            aux.add(auxmesh)
+
+            var triangleDown = new THREE.Geometry();
+            triangleDown.vertices.push(new THREE.Vector3(-50, 0, 0));
+            triangleDown.vertices.push(new THREE.Vector3(50, 0, 0));
+            triangleDown.vertices.push(new THREE.Vector3(0, -51, 0));
+            triangleDown.faces.push(new THREE.Face3(0, 1, 2));
+            var auxmesh3 = new THREE.Mesh(triangleDown, mat)
+            auxmesh3.name = 'aux3';
+            var aux3 = new THREE.Object3D();
+            aux3.add(auxmesh3)
+
+            if (pai.animated == 'down') {
+                aux.position.y = -143;
+                aux.position.x = -49.5;
+                aux.position.z = -15;
+                aux.rotation.x = -0.18;
+
+                aux3.position.y = 53;
+                aux3.position.x = -49.5;
+                aux3.rotation.x = 0.18;
+                aux3.position.z = aux.position.z;
+            } else if (pai.animated == 'up') {
+                aux.position.y = -148;
+                aux.position.x = -49.5;
+                aux.position.z = -15;
+                aux.rotation.x = 0.18;
+
+                aux3.position.y = 48;
+                aux3.position.x = -49.5;
+                aux3.rotation.x = -0.18;
+                aux3.position.z = aux.position.z;
+            } else {
+                aux.position.y = -150;
+                aux.position.x = -50;
+
+                aux3.position.y = 50;
+                aux3.position.x = -50;
+            }
+
+            pai.add(aux);
+            pai.add(aux3);
+
+        }
+
+        function animateGrid() {
+            for (var i = 0; i < elementos.length; i++) {
+                elementos[i].animated = 'down';
+
+                //TweenLite.delayedCall(i * .1, function (item) {
+                //    animateUp1(item.children[0]);
+                //}, [elementos[i]]);
+            }
+            setInterval(function () {
+                var randomIndex = Math.floor(elementos.length * Math.random());
+                randomAnim = Math.floor(2 * Math.random());
+                if (randomAnim > 0) {
+                    animateUp1(elementos[randomIndex].children[0]);
+                } else {
+                    animateDown(elementos[randomIndex].children[0]);
+                }
+            }, 100)
+        }
+    </script>
+    <div class="controls">
+        <button class="animateUp" type="button" onclick="javascript: animateUp1()">Animate Up</button>
+        <button class="animateDown" type="button" onclick="javascript: animateDown()">Animate Down</button>
+        <div class="">
+            <span>Rotate</span>
+            <label>
+                <input class="rotate" type="number" min="-100" max="100" step="1" onchange="rotateY(this)" value="0" />
+            </label>
+        </div>
+
+        <div class="mesh0 slider">
+            <span>Mesh 0</span>
+            <label>
+                <input class="mesh0" id="mesh0x" type="number" min="-100" max="100" step="0.01" onchange="showValX(this)" value="-0.3" />
+                <span>RX</span>
+            </label>
+            <label>
+                <input class="mesh0" id="mesh0y" type="number" min="-100" max="100" step="0.01" onchange="showValY(this)" value="-0.13" />
+                <span>RY</span>
+            </label>
+            <label>
+                <input class="mesh0" type="number" min="-100" max="100" step="0.01" onchange="showValPX(this)" />
+                <span>PX</span>
+            </label>
+            <label>
+                <input class="mesh0" type="number" min="-100" max="100" step="0.01" onchange="showValPY(this)" />
+                <span>PY</span>
+            </label>
+        </div>
+        <div class="mesh1 slider">
+            <span>Mesh 1</span>
+            <label>
+                <input class="mesh1" id="mesh1x" type="number" min="-100" max="100" step="0.01" onchange="showValX(this)" value="-0.3" />
+                <span>RX</span>
+            </label>
+            <label>
+                <input class="mesh1" id="mesh1y" type="number" min="-100" max="100" step="0.01" onchange="showValY(this)" value="0.13" />
+                <span>RY</span>
+            </label>
+            <label>
+                <input class="mesh1" type="number" min="-100" max="100" step="0.01" onchange="showValPX(this)" />
+                <span>PX</span>
+            </label>
+            <label>
+                <input class="mesh1" type="number" min="-100" max="100" step="0.01" onchange="showValPY(this)" />
+                <span>PY</span>
+            </label>
+        </div><br /><br />
+        <div class="mesh2 slider">
+            <span>Mesh 2</span>
+            <label>
+                <input class="mesh2" type="number" min="-100" max="100" step="0.01" onchange="showValX(this)" />
+                <span>RX</span>
+            </label>
+            <label>
+                <input class="mesh2" id="mesh2y" type="number" min="-100" max="100" step="0.01" onchange="showValY(this)" value="-0.41" />
+                <span>RY</span>
+            </label>
+            <label>
+                <input class="mesh2" id="mesh2px" type="number" min="-100" max="100" step="0.01" onchange="showValPX(this)" value="-49.61" />
+                <span>PX</span>
+            </label>
+            <label>
+                <input class="mesh2" id="mesh2py" type="number" min="-100" max="100" step="0.01" onchange="showValPY(this)" value="-6" />
+                <span>PY</span>
+            </label>
+            <label>
+                <input class="mesh2" type="number" min="-100" max="100" step="1" onchange="showValPZ(this)" />
+                <span>PZ</span>
+            </label>
+        </div><br /><br />
+        <div class="mesh3 slider">
+            <span>Mesh 3</span>
+            <label>
+                <label>
+                    <input class="mesh3" id="mesh3x" type="number" min="-100" max="100" step="0.01" onchange="showValX(this)" />
+                    <span>RX</span>
+                </label>
+                <label>
+                    <input class="mesh3" id="mesh3y" type="number" min="-100" max="100" step="0.01" onchange="showValY(this)" value="0.41" />
+                    <span>RY</span>
+                </label>
+                <label>
+                    <input class="mesh3" id="mesh3px" type="number" min="-100" max="100" step="0.01" onchange="showValPX(this)" value="49.61" />
+                    <span>PX</span>
+                </label>
+                <label>
+                    <input class="mesh3" id="mesh3py" type="number" min="-100" max="100" step="0.01" onchange="showValPY(this)" value="-6" />
+                    <span>PY</span>
+                </label>
+            </label>
+        </div><br /><br />
+        <div class="mesh4 slider">
+            <span>Mesh 4</span>
+            <label>
+                <input class="mesh4" id="mesh4x" type="number" min="-100" max="100" step="0.01" onchange="showValX(this)" value="0.3" />
+                <span>RX</span>
+            </label>
+            <label>
+                <input class="mesh4" id="mesh4y" type="number" min="-100" max="100" step="0.01" onchange="showValY(this)" value="0.13" />
+                <span>RY</span>
+            </label>
+            <label>
+                <input class="mesh4" type="number" min="-100" max="100" step="1" onchange="showValPX(this)" />
+                <span>PX</span>
+            </label>
+            <label>
+                <input class="mesh4" type="number" min="-100" max="100" step="1" onchange="showValPY(this)" />
+                <span>PY</span>
+            </label>
+        </div>
+        <div class="mesh5 slider">
+            <span>Mesh 5</span>
+            <label>
+                <input class="mesh5" id="mesh5x" type="number" min="-100" max="100" step="0.01" onchange="showValX(this)" value="0.3" />
+                <span>RX</span>
+            </label>
+            <label>
+                <input class="mesh5" id="mesh5y" type="number" min="-100" max="100" step="0.01" onchange="showValY(this)" value="-0.13" />
+                <span>RY</span>
+            </label>
+            <label>
+                <input class="mesh5" type="number" min="-100" max="100" step="1" onchange="showValPX(this)" />
+                <span>PX</span>
+            </label>
+            <label>
+                <input class="mesh5" type="number" min="-100" max="100" step="1" onchange="showValPY(this)" />
+                <span>PY</span>
+            </label>
+        </div>
+    </div>
+    <h1>Web Developer <span>JAVASCRIPT && CSHARP</span></h1>
+</body>
+</html>
