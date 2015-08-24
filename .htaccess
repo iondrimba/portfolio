@@ -844,12 +844,15 @@ FileETag None
 #
 # https://httpd.apache.org/docs/current/mod/mod_expires.html
 
+
+<IfModule mod_expires.c>
+
+
 <Filesmatch "\.(jpg|jpeg|png|gif|js|css|swf|ico|woff|mp3)$">
     ExpiresActive on
     ExpiresDefault "access plus 2 days"
 </Filesmatch>
-
-
+</IfModule>
 
 # ----------------------------------------------------------------------
 # | File concatenation                                                 |
