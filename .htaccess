@@ -846,12 +846,12 @@ FileETag None
 
 <IfModule mod_expires.c>
 
-    ExpiresActive on
-    ExpiresDefault                                      "access plus 1 month"
+    ExpiresActive On
+    ExpiresDefault                                      M604800
 
   # CSS
 
-    ExpiresByType text/css                              "access plus 1 year"
+    ExpiresByType text/css                              M604800
 
 
   # Data interchange
@@ -875,14 +875,14 @@ FileETag None
 
   # HTML
 
-    ExpiresByType text/html                             "access plus 0 seconds"
+    ExpiresByType text/html                             M604800
 
 
   # JavaScript
 
-    ExpiresByType application/javascript                "access plus 1 year"
-    ExpiresByType application/x-javascript              "access plus 1 year"
-    ExpiresByType text/javascript                       "access plus 1 year"
+    ExpiresByType application/javascript                M604800
+    ExpiresByType application/x-javascript             M604800
+    ExpiresByType text/javascript                       M604800
 
 
   # Manifest files
@@ -897,8 +897,8 @@ FileETag None
     ExpiresByType audio/ogg                             "access plus 1 month"
     ExpiresByType image/bmp                             "access plus 1 month"
     ExpiresByType image/gif                             "access plus 1 month"
-    ExpiresByType image/jpeg                            "access plus 1 month"
-    ExpiresByType image/png                             "access plus 1 month"
+    ExpiresByType image/jpeg                            M604800
+    ExpiresByType image/png                             M604800
     ExpiresByType image/svg+xml                         "access plus 1 month"
     ExpiresByType image/webp                            "access plus 1 month"
     ExpiresByType video/mp4                             "access plus 1 month"
