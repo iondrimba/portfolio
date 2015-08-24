@@ -1,6 +1,6 @@
 ﻿@import "../_variables.scss";
 
-@media only screen and (max-width:480px) {
+@media only screen and (max-width:540px) {
     .content {
         width: 91%;
     }
@@ -9,14 +9,27 @@
         h1 {
             font-size: 1.4rem;
             text-align: center;
-            line-height: 25pt;
+            line-height: 25pt; 
 
             span {
                 font-size: .8rem;
             }
         }
     }
+    
+    .tech.view .close {
+        top: 18px;
+        left: 30%;
+        z-index: 1;
+    }
+    
+    .tech.view {
+         display: block; 
+    }
 
+    .tech.view fieldset:last-child {
+        margin-left:0%;
+    }
     .work-infos {
         width: 170%;
     }
@@ -39,8 +52,7 @@
         width: 240%;
         left: -100%;
         position: relative;
-        margin-top: 50px;
-        margin-left: -40px;
+        margin-top: 65px;
     }
 
     .preview {
