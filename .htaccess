@@ -851,7 +851,7 @@ FileETag None
 
   # CSS
 
-    ExpiresByType text/css                              M604800
+    ExpiresByType text/css  M604800
 
 
   # Data interchange
