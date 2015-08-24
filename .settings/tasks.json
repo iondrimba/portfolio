@@ -10,6 +10,11 @@
                "taskName": "dev",
                "args": [],
                 "isBuildCommand": true
+            },
+            {
+               "taskName": "prod",
+               "args": [],
+                "isBuildCommand": true
             }
         ]
 }
