@@ -12,11 +12,10 @@
         };
         this.execute = function () {
             if (this.grid3D.executed == false) {
-                this.grid3D.execute();
+               this.grid3D.execute();
             }
 
             console.clear();
-
             console.log("  _    _      _ _       _  ");
             console.log(" | |  | |    | | |     | | ");
             console.log(" | |__| | ___| | | ___ | | ");

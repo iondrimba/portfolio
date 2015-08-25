@@ -1,4 +1,5 @@
-﻿define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColors) {
+﻿/* global Detector */
+define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColors) {
     var Grid3D = function () {
         this.el = 'grid3d';
         this.njq = NoJQuery;
@@ -44,13 +45,6 @@
             this.windowHalfX = window.innerWidth / 2;
             this.windowHalfY = window.innerHeight / 2;
 
-            window.addEventListener('mousemove', this.onMouseMove.bind(this));
-
-            window.addEventListener('resize', this.onWindowResize.bind(this), false);
-
-            this.container = document.getElementById(this.el);
-
-            this.gridGroup = new THREE.Object3D();
         };
 
         this.onMouseMove = function (event) {
@@ -69,6 +63,16 @@
         };
 
         this.initGrid = function () {
+            
+            
+            window.addEventListener('mousemove', this.onMouseMove.bind(this));
+
+            window.addEventListener('resize', this.onWindowResize.bind(this), false);
+
+            this.container = document.getElementById(this.el);
+
+            this.gridGroup = new THREE.Object3D();
+            
             this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             this.renderer.setClearColor(this.baseColor, 1);
             this.renderer.setPixelRatio(window.devicePixelRatio);

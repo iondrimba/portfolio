@@ -20,62 +20,63 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="application-name" content="Portfolio of Ion Drimba Filho">
 
-    <meta name="description" content="">
+    <meta name="description" content="Portfolio of Ion Drimba Filho">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name='keywords' content='Developer, Javascript Developer, Front-End Developer, Portfolio, C# Developer, Web Developer'>
+    <meta name='subject' content='Portfolio'>
+    <meta name='copyright' content='Ion Drimba Filho'>
+    <meta name='robots' content='index,follow'>
+    <meta name='abstract' content=''>
+    <meta name='topic' content=''>
+    <meta name='summary' content=''>
+    <meta name='Classification' content='Business'>
+    <meta name='author' content='Ion Drimba Filho'>
+    <meta name='designer' content=''>
+    <meta name='owner' content=''>
+    <meta name='url' content='http://iondrimbafilho.me'>
+    <meta name='pagename' content='Portfolio of Ion Drimba Filho'>
+    <meta name='category' content=''>
+    <meta name='coverage' content='Worldwide'>
+    <meta name='distribution' content='Global'>
+    <meta name='rating' content='General'>
+    <meta name='subtitle' content='Web Developer'>
+    <meta name='target' content='all'>
+        
 
     <!-- IE cleartype -->
     <meta http-equiv="cleartype" content="on">
 
     <!-- Social: Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="musicbattl">
-    <meta name="twitter:creator" content="Music Battl">
+    <meta name="twitter:site" content="Portfolio of Ion Drimba Filho">
+    <meta name="twitter:creator" content="Ion Drimba Filho">
     <meta name="twitter:title" content="@title">
     <meta name="twitter:description" content="@description">
-    <meta name="twitter:image:src" content="https://dl.dropboxusercontent.com/u/4633623/twitter.jpg">
+    <meta name="twitter:image:src" content="https://dl.dropboxusercontent.com/u/4633623/portfoliotwitter.jpg">
 
     <!-- Social: Facebook  -->
-    <meta property="og:url" content="http://musicbattl.com">
+    <meta property="og:url" content="http://iondrimbafilho.me/">
     <meta property="og:type" content="website">
     <meta property="og:title" content="@title">
-    <meta property="og:image" content="https://dl.dropboxusercontent.com/u/4633623/facebook.jpg" />
+    <meta property="og:image" content="https://dl.dropboxusercontent.com/u/4633623/portfolioface.jpg" />
     <meta property="og:description" content="@description">
-    <meta property="og:site_name" content="Music Battl">
-    <meta property="article:author" content="https://www.facebook.com/musicbattl">
-    <meta property="article:publisher" content="https://www.facebook.com/musicbattl">
+    <meta property="og:site_name" content="Portfolio of Ion Drimba Filho">
+    <meta property="article:author" content="http://iondrimbafilho.me/">
+    <meta property="article:publisher" content="http://iondrimbafilho.me/">
 
     <!-- Social: Google+ / Schema.org  -->
     <meta itemprop="name" content="@title">
     <meta itemprop="description" content="@description">
-    <meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/googleplus.jpg">
+    <meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/portfoliogoogleplus.jpg">
     <title>Portfolio of Ion Drimba Filho</title>
     <link href="/build/css/main.css" rel="stylesheet" />
-    <script defer>
-        window.onload = function () {
-            var loading = document.getElementById('loading-arrow'),
-                 hanldetimeout;
-
-            hanldetimeout = setInterval(function () {
-                loading.className = loading.className.replace(/animate-in/, '');
-                loading.style.display = 'none';
-                loading.offsetHeight;
-                loading.style.display = 'block';
-                loading.className += ' animate-in';
-
-                if (window.app.home.completed) {
-                    clearTimeout(hanldetimeout);
-                }
-
-            }, 2200);
-            loading.className += ' animate-in';
-        }
-    </script>
+    
 </head>
 
 <body>
     <div class="arrow-full loading-arrow" id="loading-arrow"></div>
     <main class="hidden">
-        <div class="home hidden clearfix">
+        <div class="home clearfix">
             <a href="/"><h1>Web Developer <span>JAVASCRIPT &amp;&amp; CSHARP</span></h1></a>
 
             <div id="grid3d"></div>
@@ -464,6 +465,23 @@
             </div>
         </div>
     </footer>
+<script>
+            var loading = document.getElementById('loading-arrow'),
+                 hanldetimeout;
 
+            hanldetimeout = setInterval(function () {
+                loading.className = loading.className.replace(/animate-in/, '');
+                loading.style.display = 'none';
+                loading.offsetHeight;
+                loading.style.display = 'block';
+                loading.className += ' animate-in';
+
+                if (window.app && window.app.home.completed) {
+                    clearTimeout(hanldetimeout);
+                }
+
+            }, 2200);
+            loading.className += ' animate-in';
+    </script>
     <script data-main="/build/scripts/main.js" src="/build/scripts/require.js"></script>
 </body>
