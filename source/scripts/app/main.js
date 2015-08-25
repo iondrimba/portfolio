@@ -12,13 +12,12 @@ require([
     'vendors/OrbitControls',
     'vendors/Detector',
     'vendors/TweenMax',
-    'vendors/plugins/CSSPlugin',
     'views/menu',
     'views/home',
     'views/work',
     'views/about'
 
-], function (PubSub, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax, CSSPlugin, Menu, Home, Work, About) {
+], function (PubSub, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax,  Menu, Home, Work, About) {
     var Master = function () {
         this.njq = NoJQuery;
         this.prefixedEventListener = function (element, type, callback) {
@@ -35,11 +34,9 @@ require([
         this.router = new Router();
         this.menu = new Menu();
         this.home = new Home(this);
-        this.work = new Work(this); 
+        this.work = new Work(this);
         this.about = new About(this);
         this.navigator = new Navigator();
-       
-        
 
         this.initialize = function () {
             PubSub.subscribe('completed', this.complete.bind(this));
@@ -63,7 +60,7 @@ require([
                 this.navigator.addCommand(data[i], this[data[i]]);
             }
 
-            if (this.navigator.currentView) {                
+            if (this.navigator.currentView) {
                 this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
             }
 
@@ -94,7 +91,7 @@ require([
                 obj.item = this[data[0]];
             }
 
-            this.navigator.currentView = obj.item;            
+            this.navigator.currentView = obj.item;
             this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
             this.navigator.addCommand(obj.key, obj.item);
             this.navigator.simpleCommand();

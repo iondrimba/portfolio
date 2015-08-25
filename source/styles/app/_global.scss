@@ -1,16 +1,12 @@
 ﻿@import "_variables.scss";
 
-html {
-    background-color: $base-color;
-}
 
 body {
     font-family: $font-family;
     overflow-y: hidden;
     overflow-x: hidden;
-    background-color: $base-color;
 }
-//
+
 #grid3d {
     overflow-y: hidden;
     -moz-transform: translate3d(0,0,0);

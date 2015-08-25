@@ -6,7 +6,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
         this.completed = false;
 
         this.initialize = function () {
-            if (!Detector.webgl) Detector.addGetWebGLMessage();
+            
 
             this.camera;
             this.scene;

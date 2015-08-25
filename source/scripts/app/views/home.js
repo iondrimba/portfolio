@@ -1,4 +1,5 @@
-﻿define(['lib/NoJQuery', 'views/grid3d'], function (NoJQuery, Grid3D) {
+﻿/* global Detector */
+define(['lib/NoJQuery', 'views/grid3d'], function (NoJQuery, Grid3D) {
     var Home = function (app) {
         this.el = '.home';
         this.njq = NoJQuery;
@@ -6,14 +7,25 @@
         this.menu = app.menu;
 
         this.initialize = function () {
+            
+            this.njq.removeClass(this.njq.select('body'), 'body-gradient');
+            
             this.$el = this.njq.select(this.el);
-            this.grid3D = new Grid3D();
+            if (Detector.webgl) {
+                this.grid3D = new Grid3D();              
+            } else {
+                this.njq.addClass(this.njq.select(this.el), 'body-gradient');
+            }
+            
             this.njq.addClass(this.njq.select('.loading-arrow'), 'hidden');
         };
         this.execute = function () {
-            if (this.grid3D.executed == false) {
-               this.grid3D.execute();
+            if (Detector.webgl) {
+                 if (this.grid3D.executed == false) {
+                    this.grid3D.execute();
+                }
             }
+            
 
             console.clear();
             console.log("  _    _      _ _       _  ");

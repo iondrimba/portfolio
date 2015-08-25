@@ -69,11 +69,44 @@
     <meta itemprop="description" content="@description">
     <meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/portfoliogoogleplus.jpg">
     <title>Portfolio of Ion Drimba Filho</title>
+    <style>
+        .body-gradient {
+            background: -webkit-linear-gradient(140deg, #5824c1, #435085, #d73f26);
+            background: -o-linear-gradient(140deg, #5824c1, #435085, #d73f26);
+            background: linear-gradient(230deg, #5824c1, #435085, #d73f26);
+            background-size:600% 600%;            
+             height: 100vh;
+            -webkit-animation: AnimationName 21s ease infinite;
+            -moz-animation: AnimationName 21s ease infinite;
+            -o-animation: AnimationName 21s ease infinite;
+            animation: AnimationName 21s ease infinite;
+        }
+        @-webkit-keyframes AnimationName {
+            0%{background-position:17% 0%}
+            50%{background-position:84% 100%}
+            100%{background-position:17% 0%}
+        }
+        @-moz-keyframes AnimationName {
+            0%{background-position:17% 0%}
+            50%{background-position:84% 100%}
+            100%{background-position:17% 0%}
+        }
+        @-o-keyframes AnimationName {
+            0%{background-position:17% 0%}
+            50%{background-position:84% 100%}
+            100%{background-position:17% 0%}
+        }
+        @keyframes AnimationName { 
+            0%{background-position:17% 0%}
+            50%{background-position:84% 100%}
+            100%{background-position:17% 0%}
+        }
+        </style>
     <link href="/build/css/main.css" rel="stylesheet" />
     
 </head>
 
-<body>
+<body class="body-gradient">
     <div class="arrow-full loading-arrow" id="loading-arrow"></div>
     <main class="hidden">
         <div class="home clearfix">
@@ -451,16 +484,16 @@
                 <a target="_blank" href="https://www.linkedin.com/in/iondrimbafilho" class="sprite linkedin"></a>
             </div>
     </footer>
-<script>
+    <script>
             var loading = document.getElementById('loading-arrow'),
-                 hanldetimeout;
+                 hanldetimeout; 
 
             hanldetimeout = setInterval(function () {
                 loading.className = loading.className.replace(/animate-in/, '');
                 loading.style.display = 'none';
                 loading.offsetHeight;
                 loading.style.display = 'block';
-                loading.className += ' animate-in';
+                loading.className += 'animate-in';
 
                 if (window.app && window.app.home.completed) {
                     clearTimeout(hanldetimeout);
@@ -469,5 +502,5 @@
             }, 2200);
             loading.className += ' animate-in';
     </script>
-    <script data-main="/build/scripts/main.js" src="/build/scripts/require.js"></script>
+    <script data-main="/build/scripts/main.js" src="/build/scripts/require.js" async></script>
 </body>
