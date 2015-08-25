@@ -1495,7 +1495,8 @@ nav {
       line-height: 16pt;
       font-style: italic; }
   .about fieldset {
-    position: relative; }
+    position: relative;
+    padding: 0 0 0.75em; }
     .about fieldset .line-ph i {
       top: 5%; }
     .about fieldset ul {
