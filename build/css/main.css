@@ -957,6 +957,13 @@ nav {
   -webkit-transition: height 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transition: height 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
+html:not(.mobile) .picture-mask:hover {
+  -moz-transform: translateY(-5%) rotate(45deg);
+  -ms-transform: translateY(-5%) rotate(45deg);
+  -o-transform: translateY(-5%) rotate(45deg);
+  -webkit-transform: translateY(-5%) rotate(45deg);
+  transform: translateY(-5%) rotate(45deg); }
+
 .work .info {
   height: 315px; }
   .work .info .preview {
@@ -989,13 +996,6 @@ nav {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
   position: absolute; }
-
-.work html:not(.mobile) .picture-mask:hover {
-  -moz-transform: translateY(-5%) rotate(45deg);
-  -ms-transform: translateY(-5%) rotate(45deg);
-  -o-transform: translateY(-5%) rotate(45deg);
-  -webkit-transform: translateY(-5%) rotate(45deg);
-  transform: translateY(-5%) rotate(45deg); }
 
 .work .picture-one {
   margin-top: 60px;
