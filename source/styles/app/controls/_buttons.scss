@@ -44,6 +44,20 @@
     }
 }
 
+html:not(.mobile) {
+    .sprite:hover {
+            -moz-transform: translateY(-20%);
+            -ms-transform: translateY(-20%);
+            -o-transform: translateY(-20%);
+            -webkit-transform: translateY(-20%);
+            transform: translateY(-20%);
+            -moz-transition: all .2s ease;
+            -o-transition: all .2s ease;
+            -webkit-transition: all .2s ease;
+            transition: all .2s ease;
+        }
+}
+
 .social-icons {
 
 
@@ -57,17 +71,7 @@
         margin-right: 10px;
     }
 
-        .sprite:hover {
-            -moz-transform: translateY(-20%);
-            -ms-transform: translateY(-20%);
-            -o-transform: translateY(-20%);
-            -webkit-transform: translateY(-20%);
-            transform: translateY(-20%);
-            -moz-transition: all .2s ease;
-            -o-transition: all .2s ease;
-            -webkit-transition: all .2s ease;
-            transition: all .2s ease;
-        }
+        
 
     .github {
         background-position: 0 0;

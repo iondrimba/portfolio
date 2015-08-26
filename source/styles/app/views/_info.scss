@@ -1,15 +1,22 @@
 ﻿@import "../_variables.scss";
-html:not(.mobile) a:hover {
-    -moz-transform: translateY(-5%);
-    -ms-transform: translateY(-5%);
-    -o-transform: translateY(-5%);
-    -webkit-transform: translateY(-5%);
-    transform: translateY(-5%);
-    -moz-transition: all .2s;
-    -o-transition: all .2s;
-    -webkit-transition: all .2s;
-    transition: all .2s;
+html:not(.mobile)  {
+
+    .infos {
+        a:hover {
+            -moz-transform: translateY(-5%);
+            -ms-transform: translateY(-5%);
+            -o-transform: translateY(-5%);
+            -webkit-transform: translateY(-5%);
+            transform: translateY(-5%);
+            -moz-transition: all .2s;
+            -o-transition: all .2s;
+            -webkit-transition: all .2s;
+            transition: all .2s;
+        }
+    }   
+    
 }
+
 .infos {
     p {
         width: 90%;

@@ -1,7 +1,8 @@
 ﻿@import "../_variables.scss";
 
 html:not(.mobile) {
-        .close:hover {
+    .gallery {
+         .close:hover {
             -moz-transform: rotate(360deg);
             -ms-transform: rotate(360deg);
             -o-transform: rotate(360deg);
@@ -17,8 +18,9 @@ html:not(.mobile) {
             -webkit-transition: all .5s ease-in-out;
             transition: all .5s ease-in-out;
         }
-
     }
+}
+
 .gallery {
     .svg-ph {
         height: 100%;
