@@ -1,16 +1,16 @@
 ﻿@import "../_variables.scss";
 
 .tech.view {
-    display: flex;
-    flex-direction: row;
-    padding-top: 18%;
+    top: 60px;
+    will-change: transform;
+    position: relative;
     will-change: transform;
 
     .close {
-        top: -40px;
+        top: 0;
         position: relative;
         height:20px;
-        left: 35px;
+        left: 0;
 
         label {
             cursor: pointer;
@@ -45,6 +45,8 @@
 
     fieldset {
         position: relative;
+        display: block;
+        float: left;
 
         ul {
             opacity: 0;
