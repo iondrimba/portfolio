@@ -2,8 +2,9 @@
 
 .tech.view {
     display: flex;
+    flex-direction: row;
     padding-top: 18%;
-        will-change: transform;
+    will-change: transform;
 
     .close {
         top: -40px;

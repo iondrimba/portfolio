@@ -47,6 +47,7 @@
 
     .skills-set {
         display: flex;
+       flex-direction: row;
 
         fieldset:not(:first-child) {
             margin-left: 10%;
