@@ -417,8 +417,8 @@
                 <p>
                     Hi, my name is Ion Drimba Filho, I'm a Web Developer based in Brazil.<br />
                     I'm focused on front-end development with javascript and back-end development with C#(.NET).<br />
-                    Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.<br />                    
-                    Currently looking for work opportunities.<br /><br />
+                    <br>Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.<br />                    
+                    <br>Currently looking for work opportunities.<br /><br />
                     Thanks for stopping by =]
                 </p>
                 <div class="skills-set">
@@ -445,10 +445,10 @@
                         </div>
                         <ul>
                             <li>C#</li>
-                            <li>MVC (.NET)</li>
-                            <li>WEBAPI (.NET)</li>
-                            <li>Web Forms (.NET)</li>
-                            <li>WPF (.NET)</li>
+                            <li>MVC </li>
+                            <li>Web API</li>
+                            <li>Web Forms</li>
+                            <li>WPF</li>
                             <li>SQL Server</li>
                         </ul>
                     </fieldset>
@@ -485,6 +485,27 @@
             </div>
     </footer>
     <script>
+            var isMobile = {
+                Android: function() {
+                    return navigator.userAgent.match(/Android/i);
+                },
+                BlackBerry: function() {
+                    return navigator.userAgent.match(/BlackBerry/i);
+                },
+                iOS: function() {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                },
+                Opera: function() {
+                    return navigator.userAgent.match(/Opera Mini/i);
+                },
+                Windows: function() {
+                    return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+                },
+                any: function() {
+                    return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                }
+            };            
+            
             var loading = document.getElementById('loading-arrow'),
                  hanldetimeout; 
 
@@ -501,6 +522,11 @@
 
             }, 2200);
             loading.className += ' animate-in';
+            
+            if( isMobile.any() ) {
+                document.getElementsByTagName('html')[0].className += 'mobile';
+                console.log('mobile');
+            }
     </script>
     <script data-main="/build/scripts/main.js" src="/build/scripts/require.js" async></script>
 </body>

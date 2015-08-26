@@ -26,15 +26,7 @@ define(['lib/NoJQuery', 'views/grid3d'], function (NoJQuery, Grid3D) {
                 }
             }
             
-
-            console.clear();
-            console.log("  _    _      _ _       _  ");
-            console.log(" | |  | |    | | |     | | ");
-            console.log(" | |__| | ___| | | ___ | | ");
-            console.log(" |  __  |/ _ \ | |/ _ \| | ");
-            console.log(" | |  | |  __/ | | (_) |_| ");
-            console.log(" |_|  |_|\___|_|_|\___/(_) ");
-            console.log("Thanks for stopping by! =]");
+            //app.showConsoleGretings();
                           
             this.njq.removeClass(this.$el, 'hidden');
             this.full();

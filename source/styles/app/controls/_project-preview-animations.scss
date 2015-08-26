@@ -39,7 +39,7 @@
             position: absolute;
         }
 
-        .picture-mask:hover {
+        html:not(.mobile) .picture-mask:hover {
             -moz-transform: translateY(-5%) rotate(45deg);
             -ms-transform: translateY(-5%) rotate(45deg);
             -o-transform: translateY(-5%) rotate(45deg);

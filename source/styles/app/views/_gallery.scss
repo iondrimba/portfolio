@@ -49,7 +49,7 @@
         font-size: 15pt;
     }
 
-        .close:hover {
+        html:not(.mobile) .close:hover {
             -moz-transform: rotate(360deg);
             -ms-transform: rotate(360deg);
             -o-transform: rotate(360deg);

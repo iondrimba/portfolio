@@ -1,6 +1,6 @@
 ﻿@import "../_variables.scss";
 
-@media only screen and (max-width:768px) and (min-width:541px) {
+@media only screen and (max-width:768px) and (min-width:481px) {
 
     .content {
         width: 91%;
@@ -27,18 +27,15 @@
         width: 240%;
         left: -100%;
         position: relative;
-        margin-top: 50px;
-        margin-left: -40px;
+        margin-top: -10px;
+        margin-left: -13px;
+        height: 250px;
     }
 
     .preview {
         display: none !important;
     }
-
-    .about .skills-set fieldset:not(:first-child) {
-        margin-left: 3%;
-    }
-
+    
     .infos p {
         width: 200%;
     }
@@ -46,6 +43,7 @@
     .work .btn {
         h2 {
             width: 190%;
+            font-size: 1.1rem;
         }
     }
 

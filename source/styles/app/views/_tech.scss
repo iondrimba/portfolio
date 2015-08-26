@@ -20,7 +20,7 @@
         }
     }
 
-        .close:hover {
+        html:not(.mobile) .close:hover {
             label {
                 -moz-transform: rotate(360deg);
                 -ms-transform: rotate(360deg);

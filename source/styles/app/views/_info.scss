@@ -30,7 +30,7 @@
         background-position: -52px -3px;
     }
 
-    a:hover {
+    html:not(.mobile) a:hover {
         -moz-transform: translateY(-5%);
         -ms-transform: translateY(-5%);
         -o-transform: translateY(-5%);

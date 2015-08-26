@@ -103,7 +103,17 @@ require([
         this.onRouterChangeNoAnimationDetailsZ = function (evt, data) {
             this.onRouterChange(null, [data[0]]);
             this.work.showSection(data[1], data[2]);
-        }
+        };
+        this.showConsoleGreetings = function () {
+            console.clear();
+            console.log("  _    _      _ _       _  ");
+            console.log(" | |  | |    | | |     | | ");
+            console.log(" | |__| | ___| | | ___ | | ");
+            console.log(" |  __  |/ _ \ | |/ _ \| | ");
+            console.log(" | |  | |  __/ | | (_) |_| ");
+            console.log(" |_|  |_|\___|_|_|\___/(_) ");
+            console.log("Thanks for stopping by! =]");
+        };
     };
 
     window.app = new Master();

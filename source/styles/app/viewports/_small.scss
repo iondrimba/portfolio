@@ -1,6 +1,6 @@
 ﻿@import "../_variables.scss";
 
-@media only screen and (max-width:540px) {
+@media only screen and (max-width:480px) {
     .content {
         width: 91%;
         padding-left: 0;
@@ -23,25 +23,28 @@
         margin-bottom: 0;
     }
     
-    .tech.view .close {
-        top: 18px;
-        left: 70%;
-        z-index: 1;
-    }
     
-    .tech.view {
-         display: block; 
+    .gallery, .tech {
+        display: none;
     }
 
     .tech.view fieldset:last-child {
         margin-left:0%;
     }
     .work-infos {
-        width: 170%;
-    }
+        width: 170%; 
+        a {
+            margin-left: 0!important;
+        }
+        
+        .tech, .gallery {
+            display: none!important;
+        }
+    } 
 
-    .about .skills-set fieldset:not(:first-child) {
-        margin-left: 0;
+    .about fieldset {
+        float: none!important;
+        margin-left: 0!important;
     }
 
     .about .skills-set {
