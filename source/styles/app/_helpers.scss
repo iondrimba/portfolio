@@ -3,7 +3,7 @@
     pointer-events: none;
     position: absolute;
     height:0;
-    display:none;
+    display:none!important;
 }
 
 .clearfix:before,
