@@ -526,8 +526,11 @@
             loading.className += ' animate-in';
             
             if( isMobile.any() ) {
-                document.getElementsByTagName('html')[0].className += 'mobile';
-                console.log('mobile');
+                document.getElementsByTagName('html')[0].className += 'mobile';                
+                var elmts = document.querySelectorAll('a');
+                Array.prototype.forEach.call(elmts, function (el, i) {
+                    el.setAttribute('onclick','');
+                });
             }
     </script>
     <script data-main="/build/scripts/main.js" src="/build/scripts/require.js" async></script>
