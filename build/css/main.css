@@ -1123,6 +1123,22 @@ nav {
   to {
     clip: rect(0, 30px, 30px, 0); } }
 
+html:not(.mobile) .close:hover {
+  -moz-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+  -moz-transform-origin: center center;
+  -ms-transform-origin: center center;
+  -o-transform-origin: center center;
+  -webkit-transform-origin: center center;
+  transform-origin: center center;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out; }
+
 .gallery {
   will-change: transform; }
   .gallery .svg-ph {
@@ -1157,21 +1173,6 @@ nav {
     position: relative;
     top: 15px;
     font-size: 15pt; }
-  .gallery html:not(.mobile) .close:hover {
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-    -moz-transform-origin: center center;
-    -ms-transform-origin: center center;
-    -o-transform-origin: center center;
-    -webkit-transform-origin: center center;
-    transform-origin: center center;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    -webkit-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out; }
   .gallery .prev {
     position: absolute;
     left: -80px;
@@ -1272,6 +1273,22 @@ nav {
     -webkit-transform-origin: center;
     transform-origin: center; } }
 
+html:not(.mobile) .close:hover label {
+  -moz-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+  -moz-transform-origin: center center;
+  -ms-transform-origin: center center;
+  -o-transform-origin: center center;
+  -webkit-transform-origin: center center;
+  transform-origin: center center;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out; }
+
 .tech.view {
   top: 60px;
   will-change: transform;
@@ -1287,21 +1304,6 @@ nav {
       padding: 11px;
       left: 0;
       position: relative; }
-  .tech.view html:not(.mobile) .close:hover label {
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-    -moz-transform-origin: center center;
-    -ms-transform-origin: center center;
-    -o-transform-origin: center center;
-    -webkit-transform-origin: center center;
-    transform-origin: center center;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    -webkit-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out; }
   .tech.view .line-ph i {
     top: 5%; }
   .tech.view fieldset {
@@ -1343,6 +1345,17 @@ nav {
     -webkit-animation: fadeIn 0.2s 0s 1 forwards;
     animation: fadeIn 0.2s 0s 1 forwards; }
 
+html:not(.mobile) a:hover {
+  -moz-transform: translateY(-5%);
+  -ms-transform: translateY(-5%);
+  -o-transform: translateY(-5%);
+  -webkit-transform: translateY(-5%);
+  transform: translateY(-5%);
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s; }
+
 .infos p {
   width: 90%;
   padding-bottom: 5%;
@@ -1366,17 +1379,6 @@ nav {
 
 .infos .sprite-images {
   background-position: -52px -3px; }
-
-.infos html:not(.mobile) a:hover {
-  -moz-transform: translateY(-5%);
-  -ms-transform: translateY(-5%);
-  -o-transform: translateY(-5%);
-  -webkit-transform: translateY(-5%);
-  transform: translateY(-5%);
-  -moz-transition: all 0.2s;
-  -o-transition: all 0.2s;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s; }
 
 .infos a.tech, .infos a.gallery, .infos a.external {
   display: inline-block;

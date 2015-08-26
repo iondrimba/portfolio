@@ -1,5 +1,25 @@
 ﻿@import "../_variables.scss";
 
+html:not(.mobile) {
+    .close:hover {
+        label {
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+            -moz-transform-origin: center center;
+            -ms-transform-origin: center center;
+            -o-transform-origin: center center;
+            -webkit-transform-origin: center center;
+            transform-origin: center center;
+            -moz-transition: all .5s ease-in-out;
+            -o-transition: all .5s ease-in-out;
+            -webkit-transition: all .5s ease-in-out;
+            transition: all .5s ease-in-out;
+        }
+    }
+}
 .tech.view {
     top: 60px;
     will-change: transform;
@@ -20,24 +40,7 @@
         }
     }
 
-        html:not(.mobile) .close:hover {
-            label {
-                -moz-transform: rotate(360deg);
-                -ms-transform: rotate(360deg);
-                -o-transform: rotate(360deg);
-                -webkit-transform: rotate(360deg);
-                transform: rotate(360deg);
-                -moz-transform-origin: center center;
-                -ms-transform-origin: center center;
-                -o-transform-origin: center center;
-                -webkit-transform-origin: center center;
-                transform-origin: center center;
-                -moz-transition: all .5s ease-in-out;
-                -o-transition: all .5s ease-in-out;
-                -webkit-transition: all .5s ease-in-out;
-                transition: all .5s ease-in-out;
-            }
-        }
+        
 
     .line-ph i {
         top: 5%;
