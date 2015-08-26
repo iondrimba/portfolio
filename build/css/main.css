@@ -1491,13 +1491,18 @@ nav {
     padding-bottom: 20px; }
   .about .about-project {
     font-size: 9pt;
-    opacity: 0; }
+    opacity: 0;
+    display: inline-block;
+    margin-top: 20px; }
     .about .about-project p {
       line-height: 16pt;
       font-style: italic; }
   .about fieldset {
     position: relative;
-    padding: 0 0 0.75em; }
+    padding: 0 0 0.75em;
+    display: block;
+    height: 100%;
+    float: left; }
     .about fieldset .line-ph i {
       top: 5%; }
     .about fieldset ul {
@@ -1505,8 +1510,8 @@ nav {
   .about legend {
     opacity: 0; }
   .about .skills-set {
-    display: flex;
-    flex-direction: row; }
+    float: left;
+    width: 100%; }
     .about .skills-set fieldset:not(:first-child) {
       margin-left: 10%; }
   .about .animate-in-legend-left .line-ph i {

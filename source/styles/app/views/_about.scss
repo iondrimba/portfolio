@@ -21,16 +21,21 @@
     .about-project {
         font-size: 9pt;
         opacity: 0;
+        display: inline-block;
+        margin-top: 20px;
 
         p {
             line-height: 16pt;
             font-style: italic;
         }
     }
-
+ 
     fieldset {
         position: relative;
         padding: 0 0.0 0.75em;
+        display: block;
+        height: 100%;
+        float: left;
 
         .line-ph i {
             top: 5%;
@@ -46,8 +51,8 @@
     }
 
     .skills-set {
-        display: flex;
-       flex-direction: row;
+        float: left;
+        width: 100%;
 
         fieldset:not(:first-child) {
             margin-left: 10%;
