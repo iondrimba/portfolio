@@ -1,4 +1,5 @@
-﻿define(['lib/NoJQuery'], function (NoJQuery) {
+﻿/* global TweenLite */
+define(['lib/NoJQuery'], function (NoJQuery) {
     var AnimateColors = function (Grid3D) {
         this.el = 'grid3d';
         this.njq = NoJQuery;
@@ -29,7 +30,6 @@
         };
 
         this.initialize = function () {
-            console.log(this.grid.renderer);
             setInterval(function () {
                 var index = this.getRandomIndex();
                 this.changeColors(index);

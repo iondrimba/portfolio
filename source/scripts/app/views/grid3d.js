@@ -1,4 +1,5 @@
-﻿/* global Detector */
+﻿/* global THREE */
+/* global Detector */
 define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColors) {
     var Grid3D = function () {
         this.el = 'grid3d';

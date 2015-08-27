@@ -45,12 +45,7 @@ require([
             
             //ADD FAST CLICK IF MOBILE BROWSING
             if (this.njq.hasClass(this.njq.select('html')[0], 'mobile')) {
-                console.log('fastclik');
-                if ('addEventListener' in document) {
-                    document.addEventListener('DOMContentLoaded', function() {
-                        FastClick.attach(document.body);
-                    }, false);
-                }
+                FastClick.attach(document.body, {});
             }
 
             this.navigator = new Navigator();
