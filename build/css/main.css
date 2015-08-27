@@ -543,7 +543,7 @@ th {
       -webkit-transform: rotate(180deg) translateX(79%) translateY(41%);
       transform: rotate(180deg) translateX(79%) translateY(41%); }
 
-html.notmobile .sprite:hover {
+html.notmobile .social-icons .sprite:hover {
   -moz-transform: translateY(-20%);
   -ms-transform: translateY(-20%);
   -o-transform: translateY(-20%);
