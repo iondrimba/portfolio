@@ -5,6 +5,7 @@
 
 require([
     'vendors/pubsub',
+    'vendors/fastclick',
     'routers/router',
     'lib/navigator',
     'lib/NoJQuery',
@@ -17,7 +18,7 @@ require([
     'views/work',
     'views/about'
 
-], function (PubSub, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax,  Menu, Home, Work, About) {
+], function (PubSub,FastClick, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax,  Menu, Home, Work, About) {
     var Master = function () {
         this.njq = NoJQuery;
         this.prefixedEventListener = function (element, type, callback) {
@@ -27,6 +28,7 @@ require([
                 element.addEventListener(pfx[p] + type, callback, false);
             }
         };
+         
         this.currentView;
         this.previousView;
         this.event = PubSub;
@@ -40,6 +42,16 @@ require([
 
         this.initialize = function () {
             PubSub.subscribe('completed', this.complete.bind(this));
+            
+            //ADD FAST CLICK IF MOBILE BROWSING
+            if (this.njq.hasClass(this.njq.select('html')[0], '.mobile')) {
+                console.log('fastclik');
+                if ('addEventListener' in document) {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        FastClick.attach(document.body);
+                    }, false);
+                }
+            }
 
             this.navigator = new Navigator();
             this.navigator.addCommand('home', this.home, undefined);
