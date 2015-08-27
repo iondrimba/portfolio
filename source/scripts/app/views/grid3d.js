@@ -450,7 +450,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
 
                     this.addAuxiliaryFaces(objY);
 
-                    objY.position.y = posAnterior;
+                    objY.position.y = posAnterior; 
 
                     this.gridGroup.add(objY);
                 }
