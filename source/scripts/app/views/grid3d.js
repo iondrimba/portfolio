@@ -79,7 +79,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.container.appendChild(this.renderer.domElement);
 
-            this.scene = new THREE.Scene();
+            this.scene = new THREE.Scene();            
             this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
             this.camera.position.set(0, 0, 500);
 
@@ -163,7 +163,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
             .add(triangleMesh5);
             scene.add(obj);
 
-            obj.position.x = -150;
+            obj.position.x = -1000;
 
             return obj;
         };
@@ -226,7 +226,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
             .add(triangleMesh5);
             scene.add(obj);
 
-            obj.position.x = -250;
+            obj.position.x = -1000;
 
             return obj;
         };
@@ -293,7 +293,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
             obj = new THREE.Object3D();
             obj.add(group);
             scene.add(obj);
-            obj.position.x = -49;
+            obj.position.x = -1000;
 
             return obj;
         };
@@ -422,7 +422,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
         this.buildGrid = function () {
             var posAnterior = 0,
                 anchorY = 1000,
-                i = 0,
+                i = 0, 
                 cols = 13,
                 lines = 25,
                 objY;
