@@ -69,7 +69,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
 
             window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
-            this.container = document.getElementById(this.el);
+            this.container = document.getElementsByClassName(this.el)[0];
 
             this.gridGroup = new THREE.Object3D();
             
@@ -460,7 +460,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
 
             this.gridGroup.rotateZ(-0.4);
             
-            this.njq.removeClass(this.njq.select('#grid3d'), 'hidden');
+            this.njq.removeClass(this.njq.select('.grid3d'), 'visible-false');
         };
 
         this.addAuxiliaryFaces = function (pai) {
