@@ -46868,7 +46868,7 @@ require([
             PubSub.subscribe('completed', this.complete.bind(this));
             
             //ADD FAST CLICK IF MOBILE BROWSING
-            if (this.njq.hasClass(this.njq.select('html')[0], '.mobile')) {
+            if (this.njq.hasClass(this.njq.select('html')[0], 'mobile')) {
                 console.log('fastclik');
                 if ('addEventListener' in document) {
                     document.addEventListener('DOMContentLoaded', function() {
