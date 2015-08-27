@@ -9,13 +9,12 @@ define(['lib/NoJQuery', 'views/grid3d'], function (NoJQuery, Grid3D) {
         this.initialize = function () {
             
             this.njq.removeClass(this.njq.select('body'), 'body-gradient');
-            
+            this.njq.addClass(this.njq.select(this.el), 'body-gradient');            
             this.$el = this.njq.select(this.el);
+            
             if (Detector.webgl) {
                 this.grid3D = new Grid3D();              
-            } else {
-                this.njq.addClass(this.njq.select(this.el), 'body-gradient');
-            }
+            } 
             
             this.njq.addClass(this.njq.select('.loading-arrow'), 'hidden');
         };

@@ -6,8 +6,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
         this.njq = NoJQuery;
         this.completed = false;
 
-        this.initialize = function () {
-            
+        this.initialize = function () {            
 
             this.camera;
             this.scene;
@@ -456,10 +455,12 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
                     this.gridGroup.add(objY);
                 }
             }
-
+ 
             this.scene.add(this.gridGroup);
 
             this.gridGroup.rotateZ(-0.4);
+            
+            this.njq.removeClass(this.njq.select('#grid3d'), 'hidden');
         };
 
         this.addAuxiliaryFaces = function (pai) {
