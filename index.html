@@ -509,7 +509,8 @@
             console.log(navigator.userAgent);
             
             var loading = document.getElementById('loading-arrow'),
-                 hanldetimeout; 
+                 hanldetimeout,
+                 fixHover;
 
             hanldetimeout = setInterval(function () {
                 loading.className = loading.className.replace(/animate-in/, '');
@@ -526,12 +527,12 @@
             loading.className += ' animate-in';
             
             if( isMobile.any() ) {
-                document.getElementsByTagName('html')[0].className += 'mobile';                
-                var elmts = document.querySelectorAll('a');
-                Array.prototype.forEach.call(elmts, function (el, i) {
-                    el.setAttribute('onclick','');
-                });
+                fixHover = 'mobile';
+            }else{
+                fixHover = 'notmobile';
             }
+            
+            document.getElementsByTagName('html')[0].className += fixHover;
     </script>
     <script data-main="/build/scripts/main.js" src="/build/scripts/require.js" async></script>
 </body>

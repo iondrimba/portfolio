@@ -44,7 +44,7 @@
     }
 }
 
-html:not(.mobile) {
+html.notmobile {
     .sprite:hover {
             -moz-transform: translateY(-20%);
             -ms-transform: translateY(-20%);

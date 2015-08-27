@@ -1,6 +1,6 @@
 ﻿@import "../_variables.scss";
 
-html:not(.mobile) {
+html.notmobile {
     .gallery {
          .close:hover {
             -moz-transform: rotate(360deg);

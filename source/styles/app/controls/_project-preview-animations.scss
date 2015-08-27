@@ -1,6 +1,6 @@
 ﻿@import "../_variables.scss";
 
-html:not(.mobile) {
+html.notmobile {
     .picture-mask:hover {
         -moz-transform: translateY(-5%) rotate(45deg);
         -ms-transform: translateY(-5%) rotate(45deg);
