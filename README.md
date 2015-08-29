@@ -1,11 +1,8 @@
-# Portfolio
-Portfolio
+###Future improvements:
 
-Future improvements:
-
- Decouple views in separated template files
- Refactor javascript and css
- Improve pagespeed score on mobile and desktop
- Fix some issues on mobile view
- Decouple data from views in separated models
+1. Decouple views in separated template files
+2. Refactor javascript and css
+3. Improve pagespeed score on mobile and desktop
+4. Fix some issues on mobile view
+5. Decouple data from views in separated models
 
