@@ -535,9 +535,7 @@
             var svgsmill = function() {
                 var valid =  !!document.createElementNS && /SVGAnimate/.test(document.createElementNS('http://www.w3.org/2000/svg', 'animate').toString());
                 return valid;
-            };
-            
-            svgsmill();
+            };            
             
             document.getElementsByTagName('html')[0].className += fixHover;
             
