@@ -5,7 +5,7 @@ define(['lib/NoJQuery'], function (NoJQuery) {
         this.njq = NoJQuery;
         this.grid = Grid3D;
         this.totalColors = this.grid.colors.length;
-        this.duration = 5;
+        this.duration = 2;
         this.delay = 1000 * this.duration;
 
         function hexToRgbTreeJs(hex) {
