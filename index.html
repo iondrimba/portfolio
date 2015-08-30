@@ -505,6 +505,8 @@
                 }
             };            
                         
+            
+                        
             var loading = document.getElementById('loading-arrow'),
                  hanldetimeout,
                  fixHover;
@@ -529,7 +531,17 @@
                 fixHover = 'notmobile';
             }
             
+            //SVG SMILL SUPPORT
+            var svgsmill = function() {
+                var valid =  !!document.createElementNS && /SVGAnimate/.test(document.createElementNS('http://www.w3.org/2000/svg', 'animate').toString());
+                return valid;
+            };
+            
+            svgsmill();
+            
             document.getElementsByTagName('html')[0].className += fixHover;
+            
+            document.getElementsByTagName('html')[0].className += svgsmill()===false?' no-svgsmill':'';
     </script>
     <script data-main="/build/scripts/main.js" src="/build/scripts/require.js" async></script>
 </body>

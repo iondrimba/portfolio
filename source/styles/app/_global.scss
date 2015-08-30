@@ -85,3 +85,9 @@ p {
 .show-scroll {
     overflow-y: scroll;
 }
+
+.no-svgsmill {
+    .svg-ph {
+        visibility: hidden;
+    }
+}
