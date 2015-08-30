@@ -31,8 +31,9 @@
     }
 
     .svg-ph {
-        height: 100%;
-        width: 100%;
+        height: 60px;
+        width: 60px;
+        overflow: hidden; 
 
         svg {
             -moz-transform: rotate(180deg) translateX(79%) translateY(41%);
