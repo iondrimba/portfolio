@@ -1431,7 +1431,8 @@ html.notmobile .infos a:hover {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
   .work .project {
-    margin-bottom: 40px; }
+    margin-bottom: 40px;
+    min-height: 315px; }
 
 .animate-in-title .line-ph i {
   -moz-animation: scaleLineIn 0.5s 0.3s, scaleLineOut 0.5s 0.6s;
