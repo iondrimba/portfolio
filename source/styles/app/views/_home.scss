@@ -38,18 +38,19 @@
     }
 }
 
+$easingtime:.5s;
 .show-full {
     height: 100vh;
-    -moz-transition: height 1s $easeOutBack;
-    -o-transition: height 1s $easeOutBack;
-    -webkit-transition: height 1s $easeOutBack;
-    transition: height 1s $easeOutBack;
+    -moz-transition: height $easingtime $easing;
+    -o-transition: height $easingtime $easing;
+    -webkit-transition: height $easingtime $easing;
+    transition: height $easingtime $easing;
 }
 
 .show-min {
     height: 250px;
-    -moz-transition: height 1s $easeOutBack;
-    -o-transition: height 1s $easeOutBack;
-    -webkit-transition: height 1s $easeOutBack;
-    transition: height 1s $easeOutBack;
+    -moz-transition: height $easingtime $easing;
+    -o-transition: height $easingtime $easing;
+    -webkit-transition: height $easingtime $easing;
+    transition: height $easingtime $easing;
 }
