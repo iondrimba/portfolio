@@ -86,7 +86,7 @@ gulp.task('watch', function () {
     gulp.watch('./source/scripts/**/*.js', ['requirejs:dev']);
 });
 
-gulp.task('dev', ['sass','copy-js-files', 'requirejs:dev'], function () {
+gulp.task('default', ['sass','copy-js-files', 'requirejs:dev'], function () {
 });
 
 gulp.task('prod', ['sass', 'copy-js-files','cssmin', 'minifyjs', 'requirejs:prod'], function () {
