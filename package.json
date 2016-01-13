@@ -8,6 +8,7 @@
   "license": "ISC",
   "devDependencies": {
     "backbone": "^1.1.2",
+    "browser-sync": "^2.11.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.5.2",
     "gulp-concat-css": "^2.2.0",

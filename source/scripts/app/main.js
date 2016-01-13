@@ -8,7 +8,7 @@ require([
     'vendors/fastclick',
     'routers/router',
     'lib/navigator',
-    'lib/NoJQuery',
+    'noJquery',
     'vendors/three',
     'vendors/OrbitControls',
     'vendors/Detector',
@@ -20,7 +20,7 @@ require([
 
 ], function (PubSub,FastClick, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax,  Menu, Home, Work, About) {
     var Master = function () {
-        this.njq = NoJQuery;
+        this.$$ = NoJQuery;
         this.prefixedEventListener = function (element, type, callback) {
             var pfx = ["webkit", "moz", "MS", "o", ""];
             for (var p = 0; p < pfx.length; p++) {
@@ -43,8 +43,9 @@ require([
         this.initialize = function () {
             PubSub.subscribe('completed', this.complete.bind(this));
             
+            
             //ADD FAST CLICK IF MOBILE BROWSING
-            if (this.njq.hasClass(this.njq.select('html')[0], 'mobile')) {
+            if (this.$$('html').hasClass('mobile')) {            
                 FastClick.attach(document.body, {});
             }
 
@@ -57,9 +58,10 @@ require([
             this.router.on('details', this.onRouterChangeNoAnimationDetails.bind(this));
             this.router.start();
 
-            this.njq.removeClass(this.njq.select('main'), 'hidden');
-            this.njq.removeClass(this.njq.select('footer'), 'hidden');
-            this.njq.removeClass(this.njq.select('.content'), 'hidden');
+            //LET ELEMENTS VISIBLE
+            this.$$('main').removeClass('hidden');
+            this.$$('.footer').removeClass('hidden');
+            this.$$('.content').removeClass('hidden');
         };
         this.onRouterChange = function (evt, data) {
             for (var i = 0; i < data.length; i++) {

@@ -6,50 +6,53 @@ var sass = require('gulp-sass');
 var requirejsOptimize = require('gulp-requirejs-optimize');
 var concatCss = require('gulp-concat-css');
 var watch = require('gulp-watch');
+var browserSync = require('browser-sync').create();
+var reload = browserSync.reload;
 
 
 var requirePaths = {
     lib: 'source/scripts/app/lib',
     views: 'source/scripts/app/views',
-    router5: 'node_modules/router5/dist/browser/router5',    
+    router5: 'node_modules/router5/dist/browser/router5',
     vendors: 'source/scripts/vendors',
+    noJquery: 'node_modules/nojquery/nojquery',
     TweenLite: 'source/scripts/vendors/TweenLite',
     routers: 'source/scripts/app/routers'
 };
 
-gulp.task('sass', function () {
+gulp.task('sass', function() {
     gulp.src('./source/styles/app/main.scss')
-      .pipe(sass.sync().on('error', sass.logError))
-      .pipe(gulp.dest('./build/css'));
+        .pipe(sass.sync().on('error', sass.logError))
+        .pipe(gulp.dest('./build/css'));
 });
 
 
-gulp.task('copy-js-files', function () {
+gulp.task('copy-js-files', function() {
     gulp.src(['node_modules/gulp-requirejs/node_modules/requirejs/require.js', 'source/scripts/vendors/page.js'])
-   .pipe(gulp.dest('./build/scripts/'));
+        .pipe(gulp.dest('./build/scripts/'));
 });
 
-gulp.task('cssmin', function () {
+gulp.task('cssmin', function() {
     gulp.src('./build/css/*.css')
         .pipe(cssmin())
         .pipe(gulp.dest('./build/css/'));
 });
 
-gulp.task('minifyjs', function () {
+gulp.task('minifyjs', function() {
     return gulp.src('./build/scripts/*.js')
-      .pipe(uglify())
-      .pipe(gulp.dest('./build/scripts'));
+        .pipe(uglify())
+        .pipe(gulp.dest('./build/scripts'));
 });
 
 
-gulp.task('requirejs:dev', function () {
+gulp.task('requirejs:dev', function() {
     return gulp.src('source/scripts/app/main.js')
-        .pipe(requirejsOptimize(function () {
+        .pipe(requirejsOptimize(function() {
             return {
                 name: 'source/scripts/app/main',
                 out: 'build/scripts/main.js',
                 baseUrl: '',
-                enforceDefine: true,    
+                enforceDefine: true,
                 waitSeconds: 10000,
                 optimizeAllPluginResources: false,
                 noGlobal: true,
@@ -62,9 +65,25 @@ gulp.task('requirejs:dev', function () {
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('requirejs:prod', function () {
+// Static server
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        proxy: 'local'
+    });
+
+   
+    gulp.watch("build/css/*.css").on('change', browserSync.reload)
+    gulp.watch("build/scripts/*.js").on('change', browserSync.reload)
+    gulp.watch("*.html").on('change', browserSync.reload)
+
+    gulp.watch('./source/styles/**/*.{sass,scss}', ['sass']);
+    gulp.watch('./source/scripts/**/*.js', ['requirejs:dev']);
+});
+
+
+gulp.task('requirejs:prod', function() {
     return gulp.src('source/scripts/app/main.js')
-        .pipe(requirejsOptimize(function () {
+        .pipe(requirejsOptimize(function() {
             return {
                 name: 'source/scripts/app/main',
                 out: 'build/scripts/main.js',
@@ -81,13 +100,11 @@ gulp.task('requirejs:prod', function () {
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
     gulp.watch('./source/styles/**/*.{sass,scss}', ['sass']);
     gulp.watch('./source/scripts/**/*.js', ['requirejs:dev']);
 });
 
-gulp.task('default', ['sass','copy-js-files', 'requirejs:dev'], function () {
-});
+gulp.task('default', ['sass', 'copy-js-files', 'requirejs:dev', 'browser-sync', 'watch'], function() {});
 
-gulp.task('prod', ['sass', 'copy-js-files','cssmin', 'minifyjs', 'requirejs:prod'], function () {
-});
+gulp.task('prod', ['sass', 'copy-js-files', 'cssmin', 'minifyjs', 'requirejs:prod'], function() {});
