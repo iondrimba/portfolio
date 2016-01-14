@@ -46950,37 +46950,53 @@ define('views/tech',['lib/NoJQuery'], function (NoJQuery) {
     };
     return Tech;
 });
-define('views/info',['lib/NoJQuery'], function (NoJQuery) {
-    var Info = function (options) {
+define('views/info',['noJquery'], function(NoJQuery) {
+    var Info = function(options) {
         this.el = options.el;
-        this.njq = NoJQuery;        
-        this.initialize = function () {
-            this.$el = this.njq.select(this.el);
-        },
-        this.execute = function () {            
-            this.njq.removeClass(this.$el, 'hidden');
-            
-            this.njq.addClass(this.njq.select(this.el + ' .picture-one'), 'picture-one-animatein');
-            this.njq.addClass(this.njq.select(this.el + ' .picture-two'), 'picture-two-animatein');
-            this.njq.addClass(this.njq.select(this.el + ' .picture-tree'), 'picture-tree-animatein');
-            this.njq.addClass(this.njq.select(this.el + ' .picture-four'), 'picture-four-animatein');
-            this.njq.addClass(this.njq.select(this.el + ' .picture-five'), 'picture-five-animatein');
+        this.$$ = NoJQuery;
+        this.initialize = function() {
+            this.$el = this.$$(this.el);
+        };
+        this.execute = function() {
+            this.show();
+            this.animateIn();
         };
 
-        this.destroy = function () {
-            this.njq.addClass(this.$el, 'hidden');
-            
-            this.njq.removeClass(this.njq.select(this.el + ' .picture-one'), 'picture-one-animatein');
-            this.njq.removeClass(this.njq.select(this.el + ' .picture-two'), 'picture-two-animatein');
-            this.njq.removeClass(this.njq.select(this.el + ' .picture-tree'), 'picture-tree-animatein');
-            this.njq.removeClass(this.njq.select(this.el + ' .picture-four'), 'picture-four-animatein');
-            this.njq.removeClass(this.njq.select(this.el + ' .picture-five'), 'picture-five-animatein');
+        this.show = function() {
+            this.$el.removeClass('hidden');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+
+        this.animateIn = function() {
+
+            this.$$('.picture-one').addClass('picture-one-animatein');
+            this.$$('.picture-two').addClass('picture-two-animatein');
+            this.$$('.picture-tree').addClass('picture-tree-animatein');
+            this.$$('.picture-four').addClass('picture-four-animatein');
+            this.$$('.picture-five').addClass('picture-five-animatein');
+        };
+
+        this.removeAnimation = function() {
+            this.$$('.picture-one').removeClass('picture-one-animatein');
+            this.$$('.picture-two').removeClass('picture-two-animatein');
+            this.$$('.picture-tree').removeClass('picture-tree-animatein');
+            this.$$('.picture-four').removeClass('picture-four-animatein');
+            this.$$('.picture-five').removeClass('picture-five-animatein');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeAnimation();
         };
 
         this.initialize();
     };
     return Info;
 });
+
 define('views/project',['lib/NoJQuery', 'views/gallery', 'views/tech', 'views/info'], function (NoJQuery, Gallery, Tech, Info) {
     var Project = function (app, el) {
         this.el = '.project';
