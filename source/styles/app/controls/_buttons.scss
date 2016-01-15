@@ -1,5 +1,4 @@
 ﻿@import "../_variables.scss";
-
 .rounded-button {
     display: block;
     position: absolute;
@@ -10,62 +9,36 @@
 }
 
 .scroll-down-button {
-    -moz-transform: translateY(-96px) translateX(109px);
-    -ms-transform: translateY(-96px) translateX(109px);
-    -o-transform: translateY(-96px) translateX(109px);
-    -webkit-transform: translateY(-96px) translateX(109px);
     transform: translateY(-96px) translateX(109px);
     margin-top: -40px;
-
     .arrow {
         width: 15%;
         height: 15%;
-        -moz-transform: translateX(-50%) translateY(-50%) rotate(135deg);
-        -ms-transform: translateX(-50%) translateY(-50%) rotate(135deg);
-        -o-transform: translateX(-50%) translateY(-50%) rotate(135deg);
-        -webkit-transform: translateX(-50%) translateY(-50%) rotate(135deg);
         transform: translateX(-50%) translateY(-50%) rotate(135deg);
         margin-top: -50%;
         left: 50%;
         position: absolute;
     }
-
     .svg-ph {
         height: 60px;
         width: 60px;
-        overflow: hidden; 
-
+        overflow: hidden;
         svg {
-            -moz-transform: rotate(180deg) translateX(79%) translateY(41%);
-            -ms-transform: rotate(180deg) translateX(79%) translateY(41%);
-            -o-transform: rotate(180deg) translateX(79%) translateY(41%);
-            -webkit-transform: rotate(180deg) translateX(79%) translateY(41%);
             transform: rotate(180deg) translateX(79%) translateY(41%);
         }
     }
 }
 
 html.notmobile {
-    
     .social-icons {
         .sprite:hover {
-            -moz-transform: translateY(-20%);
-            -ms-transform: translateY(-20%);
-            -o-transform: translateY(-20%);
-            -webkit-transform: translateY(-20%);
             transform: translateY(-20%);
-            -moz-transition: all .2s ease;
-            -o-transition: all .2s ease;
-            -webkit-transition: all .2s ease;
             transition: all .2s ease;
         }
     }
-    
 }
 
 .social-icons {
-
-
     .sprite {
         background: url('/images/social.png') no-repeat;
         width: 35px;
@@ -75,17 +48,12 @@ html.notmobile {
         margin-left: 10px;
         margin-right: 10px;
     }
-
-        
-
     .github {
         background-position: 0 0;
     }
-
     .coderwall {
         background-position: -45px 0;
     }
-
     .linkedin {
         background-position: -96px 0;
     }

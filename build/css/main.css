@@ -170,7 +170,6 @@ figure {
  * Address differences between Firefox and other browsers.
  */
 hr {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   height: 0; }
 
@@ -299,8 +298,6 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   /* 2 */
   box-sizing: content-box; }
 
@@ -383,121 +380,61 @@ th {
   width: 100%;
   display: inline-block;
   border-bottom: solid 1px #000;
-  -moz-transform: scale(0, 1);
-  -ms-transform: scale(0, 1);
-  -o-transform: scale(0, 1);
   -webkit-transform: scale(0, 1);
   transform: scale(0, 1);
-  -moz-transform-origin: top left;
-  -ms-transform-origin: top left;
-  -o-transform-origin: top left;
   -webkit-transform-origin: top left;
   transform-origin: top left;
   position: absolute;
   top: 50%;
   left: 0; }
 
-@keyframes scaleLineIn {
+@-webkit-keyframes scaleLineIn {
   from {
-    -moz-transform: scale(0, 1);
-    -ms-transform: scale(0, 1);
-    -o-transform: scale(0, 1);
     -webkit-transform: scale(0, 1);
     transform: scale(0, 1);
-    -moz-transform-origin: top left;
-    -ms-transform-origin: top left;
-    -o-transform-origin: top left;
     -webkit-transform-origin: top left;
     transform-origin: top left; }
   to {
-    -moz-transform: scale(1, 1);
-    -ms-transform: scale(1, 1);
-    -o-transform: scale(1, 1);
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1);
-    -moz-transform-origin: top left;
-    -ms-transform-origin: top left;
-    -o-transform-origin: top left;
     -webkit-transform-origin: top left;
     transform-origin: top left; } }
 
-@-moz-keyframes scaleLineOut {
+@keyframes scaleLineIn {
   from {
-    -moz-transform: scale(1, 1);
-    -ms-transform: scale(1, 1);
-    -o-transform: scale(1, 1);
-    -webkit-transform: scale(1, 1);
-    transform: scale(1, 1);
-    -moz-transform-origin: top right;
-    -ms-transform-origin: top right;
-    -o-transform-origin: top right;
-    -webkit-transform-origin: top right;
-    transform-origin: top right; }
-  to {
-    -moz-transform: scale(0, 1);
-    -ms-transform: scale(0, 1);
-    -o-transform: scale(0, 1);
     -webkit-transform: scale(0, 1);
     transform: scale(0, 1);
-    -moz-transform-origin: top right;
-    -ms-transform-origin: top right;
-    -o-transform-origin: top right;
-    -webkit-transform-origin: top right;
-    transform-origin: top right; } }
+    -webkit-transform-origin: top left;
+    transform-origin: top left; }
+  to {
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+    -webkit-transform-origin: top left;
+    transform-origin: top left; } }
 
 @-webkit-keyframes scaleLineOut {
   from {
-    -moz-transform: scale(1, 1);
-    -ms-transform: scale(1, 1);
-    -o-transform: scale(1, 1);
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1);
-    -moz-transform-origin: top right;
-    -ms-transform-origin: top right;
-    -o-transform-origin: top right;
     -webkit-transform-origin: top right;
     transform-origin: top right; }
   to {
-    -moz-transform: scale(0, 1);
-    -ms-transform: scale(0, 1);
-    -o-transform: scale(0, 1);
     -webkit-transform: scale(0, 1);
     transform: scale(0, 1);
-    -moz-transform-origin: top right;
-    -ms-transform-origin: top right;
-    -o-transform-origin: top right;
     -webkit-transform-origin: top right;
     transform-origin: top right; } }
 
 @keyframes scaleLineOut {
   from {
-    -moz-transform: scale(1, 1);
-    -ms-transform: scale(1, 1);
-    -o-transform: scale(1, 1);
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1);
-    -moz-transform-origin: top right;
-    -ms-transform-origin: top right;
-    -o-transform-origin: top right;
     -webkit-transform-origin: top right;
     transform-origin: top right; }
   to {
-    -moz-transform: scale(0, 1);
-    -ms-transform: scale(0, 1);
-    -o-transform: scale(0, 1);
     -webkit-transform: scale(0, 1);
     transform: scale(0, 1);
-    -moz-transform-origin: top right;
-    -ms-transform-origin: top right;
-    -o-transform-origin: top right;
     -webkit-transform-origin: top right;
     transform-origin: top right; } }
-
-@-moz-keyframes fadeIn {
-  from {
-    opacity: 0; }
-  to {
-    opacity: 1; } }
 
 @-webkit-keyframes fadeIn {
   from {
@@ -520,18 +457,12 @@ th {
   opacity: 0; }
 
 .scroll-down-button {
-  -moz-transform: translateY(-96px) translateX(109px);
-  -ms-transform: translateY(-96px) translateX(109px);
-  -o-transform: translateY(-96px) translateX(109px);
   -webkit-transform: translateY(-96px) translateX(109px);
   transform: translateY(-96px) translateX(109px);
   margin-top: -40px; }
   .scroll-down-button .arrow {
     width: 15%;
     height: 15%;
-    -moz-transform: translateX(-50%) translateY(-50%) rotate(135deg);
-    -ms-transform: translateX(-50%) translateY(-50%) rotate(135deg);
-    -o-transform: translateX(-50%) translateY(-50%) rotate(135deg);
     -webkit-transform: translateX(-50%) translateY(-50%) rotate(135deg);
     transform: translateX(-50%) translateY(-50%) rotate(135deg);
     margin-top: -50%;
@@ -542,21 +473,12 @@ th {
     width: 60px;
     overflow: hidden; }
     .scroll-down-button .svg-ph svg {
-      -moz-transform: rotate(180deg) translateX(79%) translateY(41%);
-      -ms-transform: rotate(180deg) translateX(79%) translateY(41%);
-      -o-transform: rotate(180deg) translateX(79%) translateY(41%);
       -webkit-transform: rotate(180deg) translateX(79%) translateY(41%);
       transform: rotate(180deg) translateX(79%) translateY(41%); }
 
 html.notmobile .social-icons .sprite:hover {
-  -moz-transform: translateY(-20%);
-  -ms-transform: translateY(-20%);
-  -o-transform: translateY(-20%);
   -webkit-transform: translateY(-20%);
   transform: translateY(-20%);
-  -moz-transition: all .2s ease;
-  -o-transition: all .2s ease;
-  -webkit-transition: all .2s ease;
   transition: all .2s ease; }
 
 .social-icons .sprite {
@@ -578,17 +500,10 @@ html.notmobile .social-icons .sprite:hover {
   background-position: -96px 0; }
 
 .animate-in {
-  -moz-animation: left .5s 0s forwards,top .5s .3s forwards, right .5s .6s forwards, bottom .5s .9s forwards, left-r .5s 1.2s forwards, top-r .5s 1.5s forwards, right-r .5s 1.8s forwards, bottom-r .5s 2.1s forwards;
-  -o-animation: left .5s 0s forwards,top .5s .3s forwards, right .5s .6s forwards, bottom .5s .9s forwards, left-r .5s 1.2s forwards, top-r .5s 1.5s forwards, right-r .5s 1.8s forwards, bottom-r .5s 2.1s forwards;
-  -webkit-animation: left .5s 0s forwards,top .5s .3s forwards, right .5s .6s forwards, bottom .5s .9s forwards, left-r .5s 1.2s forwards, top-r .5s 1.5s forwards, right-r .5s 1.8s forwards, bottom-r .5s 2.1s forwards;
-  animation: left .5s 0s forwards,top .5s .3s forwards, right .5s .6s forwards, bottom .5s .9s forwards, left-r .5s 1.2s forwards, top-r .5s 1.5s forwards, right-r .5s 1.8s forwards, bottom-r .5s 2.1s forwards; }
+  -webkit-animation: left .5s 0s forwards, top .5s .3s forwards, right .5s .6s forwards, bottom .5s .9s forwards, left-r .5s 1.2s forwards, top-r .5s 1.5s forwards, right-r .5s 1.8s forwards, bottom-r .5s 2.1s forwards;
+  animation: left .5s 0s forwards, top .5s .3s forwards, right .5s .6s forwards, bottom .5s .9s forwards, left-r .5s 1.2s forwards, top-r .5s 1.5s forwards, right-r .5s 1.8s forwards, bottom-r .5s 2.1s forwards; }
 
 /*ANIMATION IN*/
-@-moz-keyframes bottom {
-  from {
-    border-bottom-color: transparent; }
-  to {
-    border-bottom-color: #eaeaea; } }
 
 @-webkit-keyframes bottom {
   from {
@@ -602,11 +517,23 @@ html.notmobile .social-icons .sprite:hover {
   to {
     border-bottom-color: #eaeaea; } }
 
+@-webkit-keyframes top {
+  from {
+    border-top-color: transparent; }
+  to {
+    border-top-color: #dddddd; } }
+
 @keyframes top {
   from {
     border-top-color: transparent; }
   to {
     border-top-color: #dddddd; } }
+
+@-webkit-keyframes left {
+  from {
+    border-left-color: transparent; }
+  to {
+    border-left-color: #f5f5f5; } }
 
 @keyframes left {
   from {
@@ -615,11 +542,22 @@ html.notmobile .social-icons .sprite:hover {
     border-left-color: #f5f5f5; } }
 
 /*ANIMATION OUT*/
+@-webkit-keyframes right {
+  from {
+    border-right-color: transparent; }
+  to {
+    border-right-color: #cccccc; } }
 @keyframes right {
   from {
     border-right-color: transparent; }
   to {
     border-right-color: #cccccc; } }
+
+@-webkit-keyframes bottom-r {
+  to {
+    border-bottom-color: transparent; }
+  from {
+    border-bottom-color: #eaeaea; } }
 
 @keyframes bottom-r {
   to {
@@ -627,17 +565,35 @@ html.notmobile .social-icons .sprite:hover {
   from {
     border-bottom-color: #eaeaea; } }
 
+@-webkit-keyframes top-r {
+  to {
+    border-top-color: transparent; }
+  from {
+    border-top-color: #dddddd; } }
+
 @keyframes top-r {
   to {
     border-top-color: transparent; }
   from {
     border-top-color: #dddddd; } }
 
+@-webkit-keyframes left-r {
+  to {
+    border-left-color: transparent; }
+  from {
+    border-left-color: #f5f5f5; } }
+
 @keyframes left-r {
   to {
     border-left-color: transparent; }
   from {
     border-left-color: #f5f5f5; } }
+
+@-webkit-keyframes right-r {
+  to {
+    border-right-color: transparent; }
+  from {
+    border-right-color: #cccccc; } }
 
 @keyframes right-r {
   to {
@@ -647,27 +603,14 @@ html.notmobile .social-icons .sprite:hover {
 
 .draw-in {
   opacity: 1;
-  -moz-transition: opacity 0s .5s;
-  -o-transition: opacity 0s .5s;
-  -webkit-transition: opacity 0s .5s;
   transition: opacity 0s .5s; }
   .draw-in .path {
-    -moz-animation: draw 2s .5s .5 forwards;
-    -o-animation: draw 2s .5s .5 forwards;
     -webkit-animation: draw 2s .5s .5 forwards;
     animation: draw 2s .5s .5 forwards; }
   .draw-in .arrow {
     opacity: 0;
-    -moz-animation: showArrow 1s .6s 1 forwards;
-    -o-animation: showArrow 1s .6s 1 forwards;
     -webkit-animation: showArrow 1s .6s 1 forwards;
     animation: showArrow 1s .6s 1 forwards; }
-
-@-moz-keyframes draw {
-  50% {
-    stroke-dashoffset: 0; }
-  100% {
-    stroke-dashoffset: 0; } }
 
 @-webkit-keyframes draw {
   50% {
@@ -681,6 +624,12 @@ html.notmobile .social-icons .sprite:hover {
   100% {
     stroke-dashoffset: 0; } }
 
+@-webkit-keyframes showArrow {
+  50% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
 @keyframes showArrow {
   50% {
     opacity: 0; }
@@ -690,9 +639,6 @@ html.notmobile .social-icons .sprite:hover {
 .arrow-full, .loading-arrow, .arrow-half-down, .arrow-half-up {
   width: 0;
   height: 0;
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg); }
 
@@ -720,9 +666,6 @@ html.notmobile .social-icons .sprite:hover {
 i.arrow {
   border-right: 0.1em solid #fff;
   border-top: 0.1em solid #fff;
-  -moz-transform: rotate(135deg);
-  -ms-transform: rotate(135deg);
-  -o-transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
   transform: rotate(135deg);
   will-change: transform; }
@@ -756,9 +699,6 @@ nav {
     width: 0;
     opacity: 0; }
   nav .active i {
-    -moz-transform: scale(1, 1);
-    -ms-transform: scale(1, 1);
-    -o-transform: scale(1, 1);
     -webkit-transform: scale(1, 1);
     transform: scale(1, 1); }
   nav .arrows {
@@ -777,7 +717,9 @@ nav {
     border-right-color: #e5e5e5;
     border-top-color: #f2f2f2;
     border-bottom-color: white; }
-  nav .arrow-half-down.first, nav .arrow-half-down.second, nav .arrow-half-down.third {
+  nav .arrow-half-down.first,
+  nav .arrow-half-down.second,
+  nav .arrow-half-down.third {
     top: -20px;
     position: absolute; }
   nav .arrow-half-down.first {
@@ -840,9 +782,6 @@ nav {
   position: relative; }
 
 .animate-line-fixed {
-  -moz-transform: scale(1, 1) !important;
-  -ms-transform: scale(1, 1) !important;
-  -o-transform: scale(1, 1) !important;
   -webkit-transform: scale(1, 1) !important;
   transform: scale(1, 1) !important;
   top: 100% !important;
@@ -852,67 +791,38 @@ nav {
   opacity: 1; }
 
 .animate-line {
-  -moz-animation: scaleLineIn .5s, scaleLineOut 1s .5s;
-  -o-animation: scaleLineIn .5s, scaleLineOut 1s .5s;
   -webkit-animation: scaleLineIn .5s, scaleLineOut 1s .5s;
   animation: scaleLineIn .5s, scaleLineOut 1s .5s; }
 
 .animate-span span {
-  -moz-animation: fadeIn .5s 1.5s;
-  -o-animation: fadeIn .5s 1.5s;
   -webkit-animation: fadeIn .5s 1.5s;
   animation: fadeIn .5s 1.5s;
-  -moz-animation-iteration-count: 1;
-  -o-animation-iteration-count: 1;
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
-  -moz-animation-direction: normal;
-  -o-animation-direction: normal;
   -webkit-animation-direction: normal;
   animation-direction: normal;
-  -moz-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards; }
 
 .animate-line-about {
-  -moz-transform: scale(0, 1);
-  -ms-transform: scale(0, 1);
-  -o-transform: scale(0, 1);
   -webkit-transform: scale(0, 1);
   transform: scale(0, 1);
-  -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
-  -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
   -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
   animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
-  -moz-animation-iteration-count: 1;
-  -o-animation-iteration-count: 1;
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
-  -moz-animation-direction: normal;
-  -o-animation-direction: normal;
   -webkit-animation-direction: normal;
   animation-direction: normal;
-  -moz-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards; }
 
 .animate-span-about span {
-  -moz-animation: fadeIn .5s 1.4s;
-  -o-animation: fadeIn .5s 1.4s;
   -webkit-animation: fadeIn .5s 1.4s;
   animation: fadeIn .5s 1.4s;
-  -moz-animation-iteration-count: 1;
-  -o-animation-iteration-count: 1;
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
-  -moz-animation-direction: normal;
-  -o-animation-direction: normal;
   -webkit-animation-direction: normal;
   animation-direction: normal;
-  -moz-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards; }
 
@@ -927,9 +837,6 @@ nav {
     font-size: 46pt;
     top: 50%;
     font-family: 'Open Sans', sans-serif;
-    -moz-transform: translateX(-50%) translateY(-50%);
-    -ms-transform: translateX(-50%) translateY(-50%);
-    -o-transform: translateX(-50%) translateY(-50%);
     -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
     left: 50%;
@@ -951,22 +858,13 @@ nav {
 
 .show-full {
   height: 100vh;
-  -moz-transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -webkit-transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 .show-min {
   height: 250px;
-  -moz-transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -webkit-transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 html.notmobile .picture-mask:hover {
-  -moz-transform: translateY(-5%) rotate(45deg);
-  -ms-transform: translateY(-5%) rotate(45deg);
-  -o-transform: translateY(-5%) rotate(45deg);
   -webkit-transform: translateY(-5%) rotate(45deg);
   transform: translateY(-5%) rotate(45deg); }
 
@@ -984,21 +882,11 @@ html.notmobile .picture-mask:hover {
   clip: rect(0, 0, 0, 0);
   width: 190px;
   height: 190px;
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-  -moz-transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -webkit-transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   will-change: transform; }
 
 .work .picture-mask img {
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
   position: absolute; }
@@ -1052,40 +940,24 @@ html.notmobile .picture-mask:hover {
   top: -300%; }
 
 .picture-one-animatein {
-  -moz-animation: picture-one-animatein 0.5s 0.1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-animation: picture-one-animatein 0.5s 0.1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   -webkit-animation: picture-one-animatein 0.5s 0.1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   animation: picture-one-animatein 0.5s 0.1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 .picture-two-animatein {
-  -moz-animation: picture-two-animatein 0.5s 0.3s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-animation: picture-two-animatein 0.5s 0.3s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   -webkit-animation: picture-two-animatein 0.5s 0.3s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   animation: picture-two-animatein 0.5s 0.3s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 .picture-tree-animatein {
-  -moz-animation: picture-tree-animatein 0.5s 0.6s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-animation: picture-tree-animatein 0.5s 0.6s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   -webkit-animation: picture-tree-animatein 0.5s 0.6s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   animation: picture-tree-animatein 0.5s 0.6s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 .picture-four-animatein {
-  -moz-animation: picture-four-animatein 0.5s 0.8s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-animation: picture-four-animatein 0.5s 0.8s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   -webkit-animation: picture-four-animatein 0.5s 0.8s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   animation: picture-four-animatein 0.5s 0.8s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 .picture-five-animatein {
-  -moz-animation: picture-five-animatein 0.5s 1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  -o-animation: picture-five-animatein 0.5s 1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   -webkit-animation: picture-five-animatein 0.5s 1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1);
   animation: picture-five-animatein 0.5s 1s 1 forwards cubic-bezier(0.175, 0.885, 0.32, 1.1); }
-
-@-moz-keyframes picture-one-animatein {
-  from {
-    clip: rect(90px, 0, 0, 90px); }
-  to {
-    clip: rect(0, 180px, 180px, 0); } }
 
 @-webkit-keyframes picture-one-animatein {
   from {
@@ -1099,13 +971,31 @@ html.notmobile .picture-mask:hover {
   to {
     clip: rect(0, 180px, 180px, 0); } }
 
+@-webkit-keyframes picture-two-animatein {
+  from {
+    clip: rect(90px, 0, 0, 90px); }
+  to {
+    clip: rect(0, 46px, 46px, 0); } }
+
 @keyframes picture-two-animatein {
   from {
     clip: rect(90px, 0, 0, 90px); }
   to {
     clip: rect(0, 46px, 46px, 0); } }
 
+@-webkit-keyframes picture-tree-animatein {
+  from {
+    clip: rect(90px, 0, 0, 90px); }
+  to {
+    clip: rect(0, 26px, 26px, 0); } }
+
 @keyframes picture-tree-animatein {
+  from {
+    clip: rect(90px, 0, 0, 90px); }
+  to {
+    clip: rect(0, 26px, 26px, 0); } }
+
+@-webkit-keyframes picture-four-animatein {
   from {
     clip: rect(90px, 0, 0, 90px); }
   to {
@@ -1123,6 +1013,12 @@ html.notmobile .picture-mask:hover {
   to {
     clip: rect(0, 18px, 18px, 0); } }
 
+@-webkit-keyframes picture-five-animatein {
+  from {
+    clip: rect(90px, 0, 0, 90px); }
+  to {
+    clip: rect(0, 30px, 30px, 0); } }
+
 @keyframes picture-five-animatein {
   from {
     clip: rect(90px, 0, 0, 90px); }
@@ -1130,19 +1026,10 @@ html.notmobile .picture-mask:hover {
     clip: rect(0, 30px, 30px, 0); } }
 
 html.notmobile .gallery .close:hover {
-  -moz-transform: rotate(360deg);
-  -ms-transform: rotate(360deg);
-  -o-transform: rotate(360deg);
   -webkit-transform: rotate(360deg);
   transform: rotate(360deg);
-  -moz-transform-origin: center center;
-  -ms-transform-origin: center center;
-  -o-transform-origin: center center;
   -webkit-transform-origin: center center;
   transform-origin: center center;
-  -moz-transition: all .5s ease-in-out;
-  -o-transition: all .5s ease-in-out;
-  -webkit-transition: all .5s ease-in-out;
   transition: all .5s ease-in-out; }
 
 .gallery {
@@ -1151,9 +1038,6 @@ html.notmobile .gallery .close:hover {
     height: 100%;
     width: 100%; }
     .gallery .svg-ph svg {
-      -moz-transform: rotate(180deg) translateX(79%) translateY(41%);
-      -ms-transform: rotate(180deg) translateX(79%) translateY(41%);
-      -o-transform: rotate(180deg) translateX(79%) translateY(41%);
       -webkit-transform: rotate(180deg) translateX(79%) translateY(41%);
       transform: rotate(180deg) translateX(79%) translateY(41%); }
   .gallery .images-ph {
@@ -1187,9 +1071,6 @@ html.notmobile .gallery .close:hover {
     height: 60px;
     border-color: #333; }
     .gallery .prev .arrow {
-      -moz-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
-      -ms-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
-      -o-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
       -webkit-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
       transform: translateX(-50%) translateY(-150%) rotate(-135deg); }
   .gallery .next {
@@ -1200,9 +1081,6 @@ html.notmobile .gallery .close:hover {
     width: 60px;
     height: 60px; }
     .gallery .next .arrow {
-      -moz-transform: translateX(-50%) translateY(-150%) rotate(45deg);
-      -ms-transform: translateX(-50%) translateY(-150%) rotate(45deg);
-      -o-transform: translateX(-50%) translateY(-150%) rotate(45deg);
       -webkit-transform: translateX(-50%) translateY(-150%) rotate(45deg);
       transform: translateX(-50%) translateY(-150%) rotate(45deg); }
   .gallery .images-menu {
@@ -1221,83 +1099,41 @@ html.notmobile .gallery .close:hover {
     border: solid 1px #333;
     cursor: pointer; }
   .gallery .animate-in-upper-line .line-ph i {
-    -moz-animation: scaleLineIn .5s .2s;
-    -o-animation: scaleLineIn .5s .2s;
     -webkit-animation: scaleLineIn .5s .2s;
     animation: scaleLineIn .5s .2s; }
   .gallery .animate-in-upper-line .ph {
-    -moz-animation: scaleMask 1s .7s 1 forwards;
-    -o-animation: scaleMask 1s .7s 1 forwards;
     -webkit-animation: scaleMask 1s .7s 1 forwards;
     animation: scaleMask 1s .7s 1 forwards; }
-
-@-moz-keyframes scaleMask {
-  from {
-    clip: rect(320px, 960px, 320px, 0);
-    -moz-transform-origin: center;
-    -ms-transform-origin: center;
-    -o-transform-origin: center;
-    -webkit-transform-origin: center;
-    transform-origin: center; }
-  to {
-    clip: rect(0, 960px, 620px, 0);
-    -moz-transform-origin: center;
-    -ms-transform-origin: center;
-    -o-transform-origin: center;
-    -webkit-transform-origin: center;
-    transform-origin: center; } }
 
 @-webkit-keyframes scaleMask {
   from {
     clip: rect(320px, 960px, 320px, 0);
-    -moz-transform-origin: center;
-    -ms-transform-origin: center;
-    -o-transform-origin: center;
     -webkit-transform-origin: center;
     transform-origin: center; }
   to {
     clip: rect(0, 960px, 620px, 0);
-    -moz-transform-origin: center;
-    -ms-transform-origin: center;
-    -o-transform-origin: center;
     -webkit-transform-origin: center;
     transform-origin: center; } }
 
 @keyframes scaleMask {
   from {
     clip: rect(320px, 960px, 320px, 0);
-    -moz-transform-origin: center;
-    -ms-transform-origin: center;
-    -o-transform-origin: center;
     -webkit-transform-origin: center;
     transform-origin: center; }
   to {
     clip: rect(0, 960px, 620px, 0);
-    -moz-transform-origin: center;
-    -ms-transform-origin: center;
-    -o-transform-origin: center;
     -webkit-transform-origin: center;
     transform-origin: center; } }
 
 html.notmobile .tech.view .close:hover label {
-  -moz-transform: rotate(360deg);
-  -ms-transform: rotate(360deg);
-  -o-transform: rotate(360deg);
   -webkit-transform: rotate(360deg);
   transform: rotate(360deg);
-  -moz-transform-origin: center center;
-  -ms-transform-origin: center center;
-  -o-transform-origin: center center;
   -webkit-transform-origin: center center;
   transform-origin: center center;
-  -moz-transition: all .5s ease-in-out;
-  -o-transition: all .5s ease-in-out;
-  -webkit-transition: all .5s ease-in-out;
   transition: all .5s ease-in-out; }
 
 .tech.view {
   top: 60px;
-  will-change: transform;
   position: relative;
   will-change: transform; }
   .tech.view .close {
@@ -1326,49 +1162,30 @@ html.notmobile .tech.view .close:hover label {
   .tech.view fieldset:last-child {
     margin-left: 10%; }
   .tech.view .animate-in-legend-left .line-ph i {
-    -moz-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
-    -o-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     -webkit-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s; }
   .tech.view .animate-in-legend-left legend {
-    -moz-animation: fadeIn .5s .7s 1 forwards;
-    -o-animation: fadeIn .5s .7s 1 forwards;
     -webkit-animation: fadeIn .5s .7s 1 forwards;
     animation: fadeIn .5s .7s 1 forwards; }
   .tech.view .animate-in-legend-right .line-ph i {
-    -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
-    -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
     -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
     animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s; }
   .tech.view .animate-in-legend-right legend {
-    -moz-animation: fadeIn .5s 1.2s 1 forwards;
-    -o-animation: fadeIn .5s 1.2s 1 forwards;
     -webkit-animation: fadeIn .5s 1.2s 1 forwards;
     animation: fadeIn .5s 1.2s 1 forwards; }
   .tech.view .animate-text {
-    -moz-animation: fadeIn .2s 0s 1 forwards;
-    -o-animation: fadeIn .2s 0s 1 forwards;
     -webkit-animation: fadeIn .2s 0s 1 forwards;
     animation: fadeIn .2s 0s 1 forwards; }
 
 html.notmobile .infos a:hover {
-  -moz-transform: translateY(-5%);
-  -ms-transform: translateY(-5%);
-  -o-transform: translateY(-5%);
   -webkit-transform: translateY(-5%);
   transform: translateY(-5%);
-  -moz-transition: all .2s;
-  -o-transition: all .2s;
-  -webkit-transition: all .2s;
   transition: all .2s; }
 
 .infos p {
   width: 90%;
   padding-bottom: 5%;
   opacity: 0;
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
 
@@ -1403,7 +1220,9 @@ html.notmobile .infos a:hover {
     margin-left: 8px; }
 
 @-moz-document url-prefix() {
-  .animate-in-link-tech .line-ph i, .animate-in-link-gallery .line-ph i, .animate-in-link-external .line-ph i {
+  .animate-in-link-tech .line-ph i,
+  .animate-in-link-gallery .line-ph i,
+  .animate-in-link-external .line-ph i {
     top: 16% !important; } }
 
 .work {
@@ -1415,9 +1234,6 @@ html.notmobile .infos a:hover {
   .work .btn {
     display: block;
     position: relative;
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
     .work .btn h2 {
@@ -1426,9 +1242,6 @@ html.notmobile .infos a:hover {
       width: 90%; }
   .work .views {
     position: relative;
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
   .work .project {
@@ -1436,56 +1249,38 @@ html.notmobile .infos a:hover {
     min-height: 315px; }
 
 .animate-in-title .line-ph i {
-  -moz-animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s;
-  -o-animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s;
   -webkit-animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s;
   animation: scaleLineIn .5s .3s, scaleLineOut .5s .6s; }
 
 .animate-in-title p {
-  -moz-animation: fadeIn .5s .5s;
-  -o-animation: fadeIn .5s .5s;
   -webkit-animation: fadeIn .5s .5s;
   animation: fadeIn .5s .5s; }
 
 .animate-text-opacity {
-  -moz-animation: fadeIn .5s 1s 1 forwards;
-  -o-animation: fadeIn .5s 1s 1 forwards;
   -webkit-animation: fadeIn .5s 1s 1 forwards;
   animation: fadeIn .5s 1s 1 forwards; }
 
 .animate-in-link-tech .line-ph i {
-  -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
-  -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
   -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
   animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s; }
 
 .animate-in-link-external .line-ph i {
-  -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
-  -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
   -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s;
   animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s; }
 
 .animate-in-link-gallery .line-ph i {
-  -moz-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards;
-  -o-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards;
   -webkit-animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards;
   animation: scaleLineIn .5s .5s, scaleLineOut .5s .8s 1 forwards; }
 
 .animate-span {
-  -moz-animation: fadeIn .2s 0s 1 forwards;
-  -o-animation: fadeIn .2s 0s 1 forwards;
   -webkit-animation: fadeIn .2s 0s 1 forwards;
   animation: fadeIn .2s 0s 1 forwards; }
 
 .animate-title-opacity {
-  -moz-animation: fadeIn .2s 0s 1 forwards;
-  -o-animation: fadeIn .2s 0s 1 forwards;
   -webkit-animation: fadeIn .2s 0s 1 forwards;
   animation: fadeIn .2s 0s 1 forwards; }
 
 .animate-sprite {
-  -moz-animation: fadeIn .5s .2s 1 forwards;
-  -o-animation: fadeIn .5s .2s 1 forwards;
   -webkit-animation: fadeIn .5s .2s 1 forwards;
   animation: fadeIn .5s .2s 1 forwards; }
 
@@ -1525,49 +1320,31 @@ html.notmobile .infos a:hover {
     .about .skills-set fieldset:not(:first-child) {
       margin-left: 10%; }
   .about .animate-in-legend-left .line-ph i {
-    -moz-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
-    -o-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     -webkit-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s; }
   .about .animate-in-legend-left legend {
-    -moz-animation: fadeIn .5s .7s 1 forwards;
-    -o-animation: fadeIn .5s .7s 1 forwards;
     -webkit-animation: fadeIn .5s .7s 1 forwards;
     animation: fadeIn .5s .7s 1 forwards; }
   .about .animate-in-legend-center .line-ph i {
-    -moz-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
-    -o-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     -webkit-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s; }
   .about .animate-in-legend-center legend {
-    -moz-animation: fadeIn .5s .7s 1 forwards;
-    -o-animation: fadeIn .5s .7s 1 forwards;
     -webkit-animation: fadeIn .5s .7s 1 forwards;
     animation: fadeIn .5s .7s 1 forwards; }
   .about .animate-in-legend-right .line-ph i {
-    -moz-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
-    -o-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     -webkit-animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
     animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s; }
   .about .animate-in-legend-right legend {
-    -moz-animation: fadeIn .5s .7s 1 forwards;
-    -o-animation: fadeIn .5s .7s 1 forwards;
     -webkit-animation: fadeIn .5s .7s 1 forwards;
     animation: fadeIn .5s .7s 1 forwards; }
   .about .animate-text {
-    -moz-animation: fadeIn .2s 0s 1 forwards;
-    -o-animation: fadeIn .2s 0s 1 forwards;
     -webkit-animation: fadeIn .2s 0s 1 forwards;
     animation: fadeIn .2s 0s 1 forwards; }
   .about .animate-text-project {
-    -moz-animation: fadeIn .5s 1s 1 forwards;
-    -o-animation: fadeIn .5s 1s 1 forwards;
     -webkit-animation: fadeIn .5s 1s 1 forwards;
     animation: fadeIn .5s 1s 1 forwards; }
 
 .animate-text-opacity-about {
-  -moz-animation: fadeIn .5s .3s 1 forwards;
-  -o-animation: fadeIn .5s .3s 1 forwards;
   -webkit-animation: fadeIn .5s .3s 1 forwards;
   animation: fadeIn .5s .3s 1 forwards; }
 
@@ -1584,24 +1361,15 @@ body {
 
 .grid3d {
   overflow-y: hidden;
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
   .grid3d canvas {
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
 
 .loading-arrow {
   left: 50%;
   top: 50%;
-  -moz-transform: translateX(-50%) translateY(-50%) rotate(45deg);
-  -ms-transform: translateX(-50%) translateY(-50%) rotate(45deg);
-  -o-transform: translateX(-50%) translateY(-50%) rotate(45deg);
   -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
   transform: translateX(-50%) translateY(-50%) rotate(45deg);
   position: absolute; }
@@ -1662,7 +1430,8 @@ p {
       font-size: .8rem; }
   .work .project {
     margin-bottom: 0; }
-  .gallery, .tech {
+  .gallery,
+  .tech {
     display: none; }
   .tech.view fieldset:last-child {
     margin-left: 0%; }
@@ -1670,7 +1439,8 @@ p {
     width: 170%; }
     .work-infos a {
       margin-left: 0 !important; }
-    .work-infos .tech, .work-infos .gallery {
+    .work-infos .tech,
+    .work-infos .gallery {
       display: none !important; }
   .about fieldset {
     float: none !important;
@@ -1695,7 +1465,8 @@ p {
   .gallery .next {
     right: 1%;
     z-index: 2; }
-  .prev, .next {
+  .prev,
+  .next {
     display: none; }
   .gallery .image-list {
     height: 100%; }
@@ -1706,7 +1477,11 @@ p {
   .ph img {
     width: 100%; }
   @-moz-document url-prefix() {
-    .animate-in-link-tech .line-ph i, .animate-in-link-gallery .line-ph i, .animate-in-link-external .line-ph i, .animate-in-legend-left .line-ph i, .animate-in-legend-right .line-ph i {
+    .animate-in-link-tech .line-ph i,
+    .animate-in-link-gallery .line-ph i,
+    .animate-in-link-external .line-ph i,
+    .animate-in-legend-left .line-ph i,
+    .animate-in-legend-right .line-ph i {
       top: -11% !important; } } }
 
 @media only screen and (max-width: 768px) and (min-width: 481px) {

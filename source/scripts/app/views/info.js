@@ -3,11 +3,17 @@
         this.el = options.el;
         this.$$ = NoJQuery;
         this.initialize = function() {
-            this.$el = this.$$(this.el);
+            this.setup();
         };
+
         this.execute = function() {
+            this.setup();
             this.show();
             this.animateIn();
+        };
+
+        this.setup = function() {
+            this.$el = this.$$(this.el);
         };
 
         this.show = function() {

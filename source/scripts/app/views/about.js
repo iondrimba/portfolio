@@ -4,15 +4,23 @@
         this.$$ = NoJQuery;
         this.completed = false;
         this.initialize = function() {
-          
+            this.setup();
+        };
+        this.execute = function() {
+            this.setup();
+            this.addAnimationsListeners();
+            this.show();
+            this.animateIn();
+            this.completed = true;
+            app.event.publish('completed');
         };
         this.addAnimationsListeners = function() {
             var countleft = 0,
                 countcenter = 0,
                 countright = 0;
 
-            //FRONT END LINE
-            app.prefixedEventListener(this.firstLine.elmts[0], "AnimationEnd", function(e) {
+            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
+            app.prefixedEventListener(this.firstLine.elmts[0], 'AnimationEnd', function(e) {
                 countleft++;
                 if (countleft === 2) {
                     this.$$(e.target).removeClass('animate-in-legend-left');
@@ -20,8 +28,8 @@
                 }
             }.bind(this));
 
-            //BACK END LINE
-            app.prefixedEventListener(this.secondLine.elmts[0], "AnimationEnd", function(e) {
+            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
+            app.prefixedEventListener(this.secondLine.elmts[0], 'AnimationEnd', function(e) {
                 countcenter++;
                 if (countcenter === 2) {
                     this.$$(e.target).removeClass('animate-in-legend-center');
@@ -30,8 +38,8 @@
             }.bind(this));
 
 
-            //DESIGN LINE
-            app.prefixedEventListener(this.thirdLine.elmts[0], "AnimationEnd", function(e) {
+            //LISTENS TO THE LINE ANIMATION COMPLETE (DESIGN)
+            app.prefixedEventListener(this.thirdLine.elmts[0], 'AnimationEnd', function(e) {
                 countright++;
                 if (countright === 2) {
                     this.$$(e.target).removeClass('animate-in-legend-right');
@@ -48,32 +56,29 @@
             this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
             this.thirdLine = this.$$('fieldset:last-child');
             this.thirdText = this.$$('fieldset:last-child').find('ul');
-
+        };
+        this.show = function() {
             this.$el.removeClass('hidden');
         };
-        this.animate = function() {
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+        this.animateIn = function() {
             this.$$('p').addClass('animate-text-opacity-about');
             this.firstLine.addClass('animate-in-legend-left');
             this.secondLine.addClass('animate-in-legend-center');
             this.thirdLine.addClass('animate-in-legend-right');
             this.$$('.about-project').addClass('animate-text-project');
         };
-        this.execute = function() {
-            this.setup();                        
-            this.addAnimationsListeners();
-            this.animate();
-            this.completed = true;
-            app.event.publish('completed');
-
-        };
-        this.destroy = function() {
-
-            this.$el.addClass('hidden');
+        this.removeAnimation = function() {
             this.$$('.about-project').removeClass('animate-text-project');
             this.$$('p').removeClass('animate-text-opacity-about');
             this.$$('ul').removeClass('animate-text');
+        };
 
-            this.$el = null;
+        this.destroy = function() {
+            this.hide();
+            this.removeAnimation();
         };
 
         this.initialize();

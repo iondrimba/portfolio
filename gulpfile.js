@@ -8,6 +8,7 @@ var concatCss = require('gulp-concat-css');
 var watch = require('gulp-watch');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
+var autoprefixer = require('gulp-autoprefixer');
 
 
 var requirePaths = {
@@ -23,6 +24,10 @@ var requirePaths = {
 gulp.task('sass', function() {
     gulp.src('./source/styles/app/main.scss')
         .pipe(sass.sync().on('error', sass.logError))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
         .pipe(gulp.dest('./build/css'));
 });
 
@@ -71,7 +76,7 @@ gulp.task('browser-sync', function() {
         proxy: 'local'
     });
 
-   
+
     gulp.watch("build/css/*.css").on('change', browserSync.reload)
     gulp.watch("build/scripts/*.js").on('change', browserSync.reload)
     gulp.watch("*.html").on('change', browserSync.reload)

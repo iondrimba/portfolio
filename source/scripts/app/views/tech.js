@@ -1,45 +1,76 @@
-﻿define(['lib/NoJQuery'], function (NoJQuery) {
-    var Tech = function (options) {
+﻿define(['noJquery'], function(NoJQuery) {
+    var Tech = function(options) {
         this.el = options.el;
-        this.njq = NoJQuery;        
-        var countleft = 0,
-            countright = 0;
+        this.$$ = NoJQuery;
 
-
-
-        this.initialize = function () {
-            this.$el = this.njq.select(this.el);
-
-            options.app.prefixedEventListener(this.njq.select(this.el + ' .front-end')[0], "AnimationEnd", function (e) {
-                countleft++;
-                if (countleft === 2) {
-                    this.njq.removeClass([e.target], 'animate-in-legend-left');
-                    this.njq.addClass(this.njq.select(this.el + ' .front-end ul'), 'animate-text');
-
-                }
-            }.bind(this));
-            options.app.prefixedEventListener(this.njq.select(this.el + ' .back-end')[0], "AnimationEnd", function (e) {
-                countright++;
-                if (countright === 2) {
-                    this.njq.removeClass([e.target], 'animate-in-legend-right');
-                    this.njq.addClass(this.njq.select(this.el + ' .back-end ul'), 'animate-text');
-                }
-            }.bind(this));
-        },
-        this.execute = function () {
-            this.njq.removeClass(this.$el, 'hidden');
-            this.njq.addClass(this.njq.select(this.el + ' .front-end'), 'animate-in-legend-left');
-            this.njq.addClass(this.njq.select(this.el + ' .back-end'), 'animate-in-legend-right');
+        this.initialize = function() {
+            this.setup();
         };
 
-        this.destroy = function () {
-            countleft = 0,
-            countright = 0;
+        this.execute = function() {
+            this.setup();
+            this.addAnimationsListeners();
+            this.show()
+            this.animateIn();
+        };
 
-            this.njq.addClass(this.$el, 'hidden');
-            this.njq.removeClass(this.njq.select(this.el + ' .front-end'), 'animate-in-legend-left');
-            this.njq.removeClass(this.njq.select(this.el + ' .back-end'), 'animate-in-legend-right');
-            this.njq.removeClass(this.njq.select(this.el + ' fieldset ul'), 'animate-text');
+        this.addAnimationsListeners = function() {
+            var countleft = 0,
+                countright = 0;
+
+            this.$el = this.$$(this.el);
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
+            options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
+                countleft++;
+                if (countleft === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-left');
+                    this.$$(e.target).find('ul').addClass('animate-text');
+
+                }
+            }.bind(this));
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
+            options.app.prefixedEventListener(this.backendLine.elmts[0], 'AnimationEnd', function(e) {
+                countright++;
+                if (countright === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-right');
+                    this.$$(e.target).find('ul').addClass('animate-text');
+                }
+            }.bind(this));
+        };
+
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            this.frontendLine = this.$$('.front-end');
+            this.frontendText = this.$$('.front-end').find('ul');
+            this.backendLine = this.$$('.back-end');
+            this.backendText = this.$$('.back-end').find('ul');
+        };
+
+        this.show = function() {
+            this.$el.removeClass('hidden');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+
+
+        this.animateIn = function() {
+            this.frontendLine.addClass('animate-in-legend-left');
+            this.backendLine.addClass('animate-in-legend-right');
+        };
+
+        this.removeAnimation = function() {
+            this.frontendLine.removeClass('animate-in-legend-left');
+            this.backendLine.removeClass('animate-in-legend-right');
+            this.$$('ul').removeClass('animate-text');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeAnimation();
         };
 
         this.initialize();

@@ -1,21 +1,9 @@
 ﻿@import "../_variables.scss";
-
 html.notmobile {
     .gallery {
-         .close:hover {
-            -moz-transform: rotate(360deg);
-            -ms-transform: rotate(360deg);
-            -o-transform: rotate(360deg);
-            -webkit-transform: rotate(360deg);
+        .close:hover {
             transform: rotate(360deg);
-            -moz-transform-origin: center center;
-            -ms-transform-origin: center center;
-            -o-transform-origin: center center;
-            -webkit-transform-origin: center center;
             transform-origin: center center;
-            -moz-transition: all .5s ease-in-out;
-            -o-transition: all .5s ease-in-out;
-            -webkit-transition: all .5s ease-in-out;
             transition: all .5s ease-in-out;
         }
     }
@@ -25,25 +13,17 @@ html.notmobile {
     .svg-ph {
         height: 100%;
         width: 100%;
-
         svg {
-            -moz-transform: rotate(180deg) translateX(79%) translateY(41%);
-            -ms-transform: rotate(180deg) translateX(79%) translateY(41%);
-            -o-transform: rotate(180deg) translateX(79%) translateY(41%);
-            -webkit-transform: rotate(180deg) translateX(79%) translateY(41%);
             transform: rotate(180deg) translateX(79%) translateY(41%);
         }
     }
-
     will-change: transform;
-
     .images-ph {
         position: relative;
         left: -100%;
         margin-top: 25px;
         width: 960px;
     }
-
     .arrow {
         border-color: $link-color !important;
         width: 15%;
@@ -51,27 +31,21 @@ html.notmobile {
         top: -25px;
         left: 50%;
     }
-
     .image-list {
         overflow: hidden;
         height: 630px;
         background-color: $base-color;
-
         .ph {
-            clip: rect(320px,960px,320px,0);
+            clip: rect(320px, 960px, 320px, 0);
             position: absolute;
         }
     }
-
     .close {
         left: 96%;
         position: relative;
         top: 15px;
         font-size: 15pt;
     }
-    
-
-        
     .prev {
         position: absolute;
         left: -80px;
@@ -79,16 +53,10 @@ html.notmobile {
         width: 60px;
         height: 60px;
         border-color: $link-color;
-
         .arrow {
-            -moz-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
-            -ms-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
-            -o-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
-            -webkit-transform: translateX(-50%) translateY(-150%) rotate(-135deg);
             transform: translateX(-50%) translateY(-150%) rotate(-135deg);
         }
     }
-
     .next {
         position: absolute;
         top: 45%;
@@ -96,25 +64,17 @@ html.notmobile {
         border-color: $link-color;
         width: 60px;
         height: 60px;
-
         .arrow {
-            -moz-transform: translateX(-50%) translateY(-150%) rotate(45deg);
-            -ms-transform: translateX(-50%) translateY(-150%) rotate(45deg);
-            -o-transform: translateX(-50%) translateY(-150%) rotate(45deg);
-            -webkit-transform: translateX(-50%) translateY(-150%) rotate(45deg);
             transform: translateX(-50%) translateY(-150%) rotate(45deg);
         }
     }
-
     .images-menu {
         margin-top: 20px;
         text-align: center;
     }
-
     .active {
         background-color: $link-color !important;
     }
-
     .images-menu-item {
         background-color: $base-color;
         width: 15px;
@@ -126,19 +86,11 @@ html.notmobile {
         border: solid 1px $link-color;
         cursor: pointer;
     }
-
     .animate-in-upper-line {
         .line-ph i {
-            -moz-animation: scaleLineIn .5s .2s;
-            -o-animation: scaleLineIn .5s .2s;
-            -webkit-animation: scaleLineIn .5s .2s;
             animation: scaleLineIn .5s .2s;
         }
-
         .ph {
-            -moz-animation: scaleMask 1s .7s 1 forwards;
-            -o-animation: scaleMask 1s .7s 1 forwards;
-            -webkit-animation: scaleMask 1s .7s 1 forwards;
             animation: scaleMask 1s .7s 1 forwards;
         }
     }
@@ -147,19 +99,10 @@ html.notmobile {
 @-moz-keyframes scaleMask {
     from {
         clip: rect(320px, 960px, 320px, 0);
-        -moz-transform-origin: center;
-        -ms-transform-origin: center;
-        -o-transform-origin: center;
-        -webkit-transform-origin: center;
         transform-origin: center;
     }
-
     to {
         clip: rect(0, 960px, 620px, 0);
-        -moz-transform-origin: center;
-        -ms-transform-origin: center;
-        -o-transform-origin: center;
-        -webkit-transform-origin: center;
         transform-origin: center;
     }
 }
@@ -167,19 +110,10 @@ html.notmobile {
 @-webkit-keyframes scaleMask {
     from {
         clip: rect(320px, 960px, 320px, 0);
-        -moz-transform-origin: center;
-        -ms-transform-origin: center;
-        -o-transform-origin: center;
-        -webkit-transform-origin: center;
         transform-origin: center;
     }
-
     to {
         clip: rect(0, 960px, 620px, 0);
-        -moz-transform-origin: center;
-        -ms-transform-origin: center;
-        -o-transform-origin: center;
-        -webkit-transform-origin: center;
         transform-origin: center;
     }
 }
@@ -187,19 +121,10 @@ html.notmobile {
 @keyframes scaleMask {
     from {
         clip: rect(320px, 960px, 320px, 0);
-        -moz-transform-origin: center;
-        -ms-transform-origin: center;
-        -o-transform-origin: center;
-        -webkit-transform-origin: center;
         transform-origin: center;
     }
-
     to {
         clip: rect(0, 960px, 620px, 0);
-        -moz-transform-origin: center;
-        -ms-transform-origin: center;
-        -o-transform-origin: center;
-        -webkit-transform-origin: center;
         transform-origin: center;
     }
 }
