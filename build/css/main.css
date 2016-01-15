@@ -1203,20 +1203,28 @@ html.notmobile .infos a:hover {
 .infos .sprite-images {
   background-position: -52px -3px; }
 
-.infos a.tech, .infos a.gallery, .infos a.external {
+.infos a.tech,
+.infos a.gallery,
+.infos a.external {
   display: inline-block;
   position: relative;
   will-change: transform; }
-  .infos a.tech span, .infos a.gallery span, .infos a.external span {
+  .infos a.tech span,
+  .infos a.gallery span,
+  .infos a.external span {
     display: block;
     opacity: 0;
     padding-bottom: 10px; }
-  .infos a.tech .sprite, .infos a.gallery .sprite, .infos a.external .sprite {
+  .infos a.tech .sprite,
+  .infos a.gallery .sprite,
+  .infos a.external .sprite {
     opacity: 0; }
 
-.infos a.gallery, .infos a.external {
+.infos a.gallery,
+.infos a.external {
   margin-left: 20px; }
-  .infos a.gallery .sprite, .infos a.external .sprite {
+  .infos a.gallery .sprite,
+  .infos a.external .sprite {
     margin-left: 8px; }
 
 @-moz-document url-prefix() {

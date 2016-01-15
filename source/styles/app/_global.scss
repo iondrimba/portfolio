@@ -1,6 +1,4 @@
 ﻿@import "_variables.scss";
-
-
 body {
     font-family: $font-family;
     overflow: hidden;
@@ -8,28 +6,15 @@ body {
 
 .grid3d {
     overflow-y: hidden;
-    -moz-transform: translate3d(0,0,0);
-    -ms-transform: translate3d(0,0,0);
-    -o-transform: translate3d(0,0,0);
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-
+    transform: translate3d(0, 0, 0);
     canvas {
-        -moz-transform: translate3d(0,0,0);
-        -ms-transform: translate3d(0,0,0);
-        -o-transform: translate3d(0,0,0);
-        -webkit-transform: translate3d(0,0,0);
-        transform: translate3d(0,0,0);
+        transform: translate3d(0, 0, 0);
     }
 }
 
 .loading-arrow {
     left: 50%;
     top: 50%;
-    -moz-transform: translateX(-50%) translateY(-50%) rotate(45deg);
-    -ms-transform: translateX(-50%) translateY(-50%) rotate(45deg);
-    -o-transform: translateX(-50%) translateY(-50%) rotate(45deg);
-    -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
     transform: translateX(-50%) translateY(-50%) rotate(45deg);
     position: absolute;
 }
@@ -60,18 +45,15 @@ i {
 fieldset {
     border: none;
     color: $link-color;
-
     legend {
         font-family: $font-family;
         padding-bottom: 15px;
         font-weight: bolder;
     }
-
     ul {
         margin: 0;
         padding: 0;
         list-style: none;
-
         li {
             height: 25px;
         }
