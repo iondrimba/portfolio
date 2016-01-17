@@ -25,7 +25,7 @@
                 countleft++;
                 if (countleft === 2) {
                     this.$$(e.target).removeClass('animate-in-legend-left');
-                    this.$$(e.target).find('ul').addClass('animate-text');
+                    this.$$(this.el + ' .front-end ul').addClass('animate-text');
 
                 }
             }.bind(this));
@@ -35,17 +35,17 @@
                 countright++;
                 if (countright === 2) {
                     this.$$(e.target).removeClass('animate-in-legend-right');
-                    this.$$(e.target).find('ul').addClass('animate-text');
+                    this.$$(this.el + ' .back-end ul').addClass('animate-text');
                 }
             }.bind(this));
         };
 
         this.setup = function() {
             this.$el = this.$$(this.el);
-            this.frontendLine = this.$$('.front-end');
-            this.frontendText = this.$$('.front-end').find('ul');
-            this.backendLine = this.$$('.back-end');
-            this.backendText = this.$$('.back-end').find('ul');
+            this.frontendLine = this.$$(this.el + ' .front-end');
+            this.frontendText = this.$$(this.el + ' .front-end').find('ul');
+            this.backendLine = this.$$(this.el + ' .back-end');
+            this.backendText = this.$$(this.el + ' .back-end').find('ul');
         };
 
         this.show = function() {
@@ -65,7 +65,7 @@
         this.removeAnimation = function() {
             this.frontendLine.removeClass('animate-in-legend-left');
             this.backendLine.removeClass('animate-in-legend-right');
-            this.$$('ul').removeClass('animate-text');
+            this.$$(this.el + 'ul').removeClass('animate-text');
         };
 
         this.destroy = function() {
