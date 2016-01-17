@@ -34,7 +34,7 @@ require([
         this.event = PubSub;
 
         this.router = new Router();
-        this.menu = new Menu();
+        this.menu = new Menu(this);
         this.home = new Home(this);
         this.work = new Work(this);
         this.about = new About(this);

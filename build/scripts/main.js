@@ -45779,6 +45779,103 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
 define("vendors/TweenMax", function(){});
 
+define('views/menu',['noJquery'], function(NoJQuery) {
+    var Menu = function(app) {
+        this.el = '.menu';
+        this.$$ = NoJQuery;
+        this.initialize = function() {
+            this.setup();
+            this.execute();
+        };
+
+        this.setup = function() {
+            this.countAbout = 0;
+            this.countWork = 0;
+            this.$el = this.$$(this.el);
+            this.btnWork = this.$$('.btn-work');
+            this.btnAbout = this.$$('.btn-about');
+            this.workLine = this.$$('.btn-work').find('.line-ph').find('i');
+            this.aboutLine = this.$$('.btn-about').find('.line-ph').find('i');
+        };
+
+        this.execute = function() {
+            this.setup()
+            this.addAnimationsListeners();
+            this.animate();
+        };
+        this.animate = function() {
+            this.$$('.btn-work').find('.text-ph').addClass('animate-span');
+            this.$$('.btn-work').find('.line-ph').find('i').addClass('animate-line');
+
+            this.$$('.btn-about').find('.text-ph').addClass('animate-span-about');
+            this.$$('.btn-about').find('.line-ph').find('i').addClass('animate-line-about');
+        };
+
+        this.addAnimationsListeners = function() {
+            app.prefixedEventListener(this.workLine.elmts[0], 'AnimationEnd', function(e) {
+                this.countWork++;
+                if (this.countWork === 2) {
+                    this.$$(e.target).removeClass('animate-line');
+                    this.$$(e.target).addClass('animate-line-fixed');
+                    if (this.currentItem) {
+                        this.deactivetButton();
+                        this.activetButton(this.currentItem);
+                    }
+                }
+            }.bind(this));
+            app.prefixedEventListener(this.aboutLine.elmts[0], 'AnimationEnd', function(e) {
+                this.countAbout++;
+                if (this.countAbout === 2) {
+                    this.$$(e.target).removeClass('animate-line-about');
+                    this.$$(e.target).addClass('animate-line-fixed');
+                    if (this.currentItem) {
+                        this.deactivetButton();
+                        this.activetButton(this.currentItem);
+                    }
+                }
+            }.bind(this));
+        };
+
+        this.hide = function() {
+            this.countAbout = 0;
+            this.countWork = 0;
+            this.$$('.btn-work').find('.text-ph').removeClass('animate-span');
+            this.$$('.btn-work').find('.line-ph').find('i').removeClass('animate-line');
+
+            this.$$('.btn-about').find('.text-ph').removeClass('animate-span-about');
+            this.$$('.btn-about').find('.line-ph').find('i').removeClass('animate-line-about');
+
+            this.btnWork.removeClass('active-button');
+            this.btnAbout.removeClass('active-button');
+
+            this.$$('.btn-work').find('.line-ph').find('i').removeClass('animate-line-fixed');
+            this.$$('.btn-about').find('.line-ph').find('i').removeClass('animate-line-fixed');
+        };
+
+        this.activatetMenu = function(view) {
+            this.currentItem = view;
+            if (this.countAbout > 1 && this.countWork > 1) {
+                this.deactivetButton();
+                this.activetButton(view);
+            }
+        };
+
+        this.deactivetButton = function() {
+            this.btnWork.removeClass('active-button');
+            this.btnAbout.removeClass('active-button');
+        };
+
+        this.activetButton = function(view) {
+            try {
+                this.$$('.btn-' + view).addClass('active-button');
+            } catch (e) {};
+        };
+
+        this.initialize();
+    };
+    return Menu;
+});
+
 define('lib/NoJQuery',[], function () {
     'use strict';    
     var NoJQuery = {
@@ -45989,98 +46086,6 @@ define('lib/NoJQuery',[], function () {
     };
 
     return NoJQuery;
-});
-define('views/menu',['lib/NoJQuery'], function (NoJQuery) {
-    var Menu = function () {
-        this.el = '.menu';
-        this.njq = NoJQuery;
-        this.initialize = function () {
-            this.$el = this.njq.select(this.el);
-            this.btnWork = this.njq.select('.btn-work');
-            this.btnAbout = this.njq.select('.btn-about');
-        },
-        this.execute = function () {
-            this.animateMenu();
-        };
-        this.animate = function () {
-            this.njq.addClass(this.njq.select('.btn-work > .text-ph'), 'animate-span');
-            this.njq.addClass(this.njq.select('.btn-work > .line-ph  i'), 'animate-line');
-
-            this.njq.addClass(this.njq.select('.btn-about> .text-ph'), 'animate-span-about');
-            this.njq.addClass(this.njq.select('.btn-about> .line-ph  i'), 'animate-line-about');
-        };
-
-        var pfx = ["webkit", "moz", "MS", "o", ""];
-        function prefixedEventListener(element, type, callback) {
-            for (var p = 0; p < pfx.length; p++) {
-                if (!pfx[p]) type = type.toLowerCase();
-                element.addEventListener(pfx[p] + type, callback, false);
-            }
-        };
-
-        var countabout = 0,
-            countwork = 0;
-        prefixedEventListener(this.njq.select('.btn-work > .line-ph  i')[0], "AnimationEnd", function (e) {
-            countwork++;
-            if (countwork === 2) {
-                this.njq.removeClass([e.target], 'animate-line');
-                this.njq.addClass([e.target], 'animate-line-fixed');
-                if (this.currentItem) {
-                    this.deactivetButton();
-                    this.activetButton(this.currentItem);
-                }
-            }
-        }.bind(this));
-        prefixedEventListener(this.njq.select('.btn-about > .line-ph  i')[0], "AnimationEnd", function (e) {
-            countabout++;
-            if (countabout === 2) {
-                this.njq.removeClass([e.target], 'animate-line-about');
-                this.njq.addClass([e.target], 'animate-line-fixed');
-                if (this.currentItem) {
-                    this.deactivetButton();
-                    this.activetButton(this.currentItem);
-                }
-            }
-        }.bind(this));
-
-        this.hide = function () {
-            countabout = 0;
-            countwork = 0;
-            this.njq.removeClass(this.njq.select('.btn-work > .text-ph'), 'animate-span');
-            this.njq.removeClass(this.njq.select('.btn-work > .line-ph  i'), 'animate-line');
-
-            this.njq.removeClass(this.njq.select('.btn-about> .text-ph'), 'animate-span-about');
-            this.njq.removeClass(this.njq.select('.btn-about> .line-ph  i'), 'animate-line-about');
-
-            this.njq.removeClass(this.btnWork, 'active-button');
-            this.njq.removeClass(this.btnAbout, 'active-button');
-
-            this.njq.removeClass(this.njq.select('.btn-work > .line-ph  i'), 'animate-line-fixed');
-            this.njq.removeClass(this.njq.select('.btn-about > .line-ph  i'), 'animate-line-fixed');
-        };
-
-        this.activatetMenu = function (view) {
-            this.currentItem = view;
-            if (countabout > 1 && countwork > 1) {
-                this.deactivetButton();
-                this.activetButton(view);
-            }
-        };
-
-        this.deactivetButton = function () {
-            this.njq.removeClass(this.btnWork, 'active-button');
-            this.njq.removeClass(this.btnAbout, 'active-button');
-        };
-
-        this.activetButton = function (view) {
-            try {
-                this.njq.addClass(this.njq.select('.btn-' + view), 'active-button');
-            } catch (e) { };
-        };
-
-        this.initialize();
-    };
-    return Menu;
 });
 /* global TweenLite */
 define('views/AnimateColors',['lib/NoJQuery'], function (NoJQuery) {
@@ -47346,7 +47351,7 @@ require([
         this.event = PubSub;
 
         this.router = new Router();
-        this.menu = new Menu();
+        this.menu = new Menu(this);
         this.home = new Home(this);
         this.work = new Work(this);
         this.about = new About(this);
