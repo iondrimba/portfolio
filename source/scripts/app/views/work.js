@@ -38,9 +38,7 @@
 
             projectsElmt = this.$$('.project').elmts;
             projectsElmt.map(function(elmt, index) {
-
                 var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
-                console.log(index);
                 pro.initialize();
                 ar[index] = pro;
             }.bind(this));

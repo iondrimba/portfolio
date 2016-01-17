@@ -1,85 +1,104 @@
-﻿define(['lib/NoJQuery'], function (NoJQuery) {
-    var Gallery = function (router, el) {
+﻿define(['noJquery'], function(NoJQuery) {
+    var Gallery = function(router, el) {
         this.el = '.gallery';
-        this.njq = NoJQuery;
-        this.initialize = function () {
+        this.$$ = NoJQuery;
+        this.initialize = function() {
+            this.setup();
+        };
+        this.setup = function() {
             this.total = 4;
             this.current = 0;
             this.el = el;
-
-            this.view = this.njq.select(this.el);
-
-            this.btnNext = this.njq.select(this.el + ' .next')[0];
-            this.btnPrev = this.njq.select(this.el + ' .prev')[0];
+            this.view = this.$$(this.el);
+            this.btnNext = this.$$(this.el + ' .next');
+            this.btnPrev = this.$$(this.el + ' .prev');
         };
-        this.start = function () {
-            this.current = 0;
+        this.addListeners = function() {
+            var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
 
             this.nextHandler = this.onNextClick.bind(this);
             this.prevHandler = this.onPrevClick.bind(this);
 
-            this.njq.on(this.btnNext, 'click', this.nextHandler);
-            this.njq.on(this.btnPrev, 'click', this.prevHandler);
+            this.btnNext.on('click', this.nextHandler);
+            this.btnPrev.on('click', this.prevHandler);
 
-            var menuItens = this.njq.select(this.el + ' .images-menu-item'),
-                total = menuItens.length,
-                i = 0;
+            menuItens.map(function(elmt, index) {
+                elmt.onclick = this.onMenuItemClick.bind(this, index);
+            }.bind(this));
 
-            for (i; i < total ; i++) {
-                menuItens[i].onclick = this.onMenuItemClick.bind(this, i);
-            }
+        };
+        this.show = function() {
+            this.view.removeClass('hidden');
+        };
 
-            this.njq.removeClass(this.view, 'hidden');
+        this.drawSVGButtons = function() {
+            this.$$('.next').addClass('draw-in');
+            this.$$('.prev').addClass('draw-in');
+        };
 
-            this.njq.redraw(this.btnNext);
-            this.njq.redraw(this.btnPrev);
+        this.animateLine = function() {
+            this.$$(this.el + ' .image-list ').addClass('animate-in-upper-line');
+        };
 
-            this.njq.addClass(this.njq.select('.next'), 'draw-in');
-            this.njq.addClass(this.njq.select('.prev'), 'draw-in');
+        this.start = function() {
+            this.current = 0;
+
+            this.addListeners();
+
+            this.show();
+
+            this.drawSVGButtons();
 
             this.showImage(this.current);
 
-            this.njq.addClass(this.njq.select(this.el + ' .image-list '), 'animate-in-upper-line');
-        };
-        
-        this.destroy = function () {
-            this.njq.addClass(this.view, 'hidden');
-            this.njq.off(this.btnNext, 'click', this.nextHandler);
-            this.njq.off(this.btnPrev, 'click', this.prevHandler);
-
-            this.njq.removeClass(this.njq.select('.next'), 'draw-in');
-            this.njq.removeClass(this.njq.select('.prev'), 'draw-in');
-            this.njq.removeClass(this.njq.select(this.el + ' .image-list '), 'animate-in-upper-line');
-
-            var menuItens = this.njq.select(this.el + ' .images-menu-item'),
-                total = menuItens.length,
-                i = 0;
-
-            for (i; i < total; i++) {
-                menuItens[i].onclick = null;
-            }
+            this.animateLine();
         };
 
-        this.menuActivet = function (el) {
-            this.njq.addClass(el, 'active');
+        this.hide = function() {
+            this.view.addClass('hidden');
         };
 
-        this.showImage = function (index) {
-            this.njq.removeClass(this.njq.select(this.el + ' .images-menu-item'), 'active');
-            this.menuActivet(this.njq.select(this.el + ' .images-menu-item:nth-child(' + (index + 1) + ')'));
-            this.njq.addClass(this.njq.select(this.el + ' .image-list > .ph > img'), 'hidden');
-            this.njq.removeClass(this.njq.select(this.el + ' .image-list > .ph > img:nth-child(' + (index + 1) + ')'), 'hidden');
+        this.removeListeners = function() {
+            var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
+            this.btnNext.off('click', this.nextHandler);
+            this.btnPrev.off('click', this.prevHandler);
+            menuItens.map(function(elmt, index) {
+                elmt.onclick = null;
+            });
+        };
+
+        this.removeAnimation = function() {
+            this.$$('.next').removeClass('draw-in');
+            this.$$('.prev').removeClass('draw-in');
+            this.$$(this.el + ' .image-list ').removeClass('animate-in-upper-line');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeListeners();
+            this.removeAnimation();
+        };
+
+        this.menuActivet = function(el) {
+            this.$$(el).addClass('active');
+        };
+
+        this.showImage = function(index) {
+            this.$$(this.el + ' .images-menu-item').removeClass('active');
+            this.menuActivet(this.el + ' .images-menu-item:nth-child(' + (index + 1) + ')');
+            this.$$(this.el + ' .image-list > .ph > img').addClass('hidden');
+            this.$$(this.el + ' .image-list > .ph > img:nth-child(' + (index + 1) + ')').removeClass('hidden');
             this.current = index;
         };
 
-        this.prev = function () {
+        this.prev = function() {
             if (this.current > 0) {
                 this.current -= 1;
             }
 
             this.showImage(this.current);
         };
-        this.next = function () {
+        this.next = function() {
             if (this.current < this.total - 1) {
                 this.current += 1;
             }
@@ -87,14 +106,14 @@
             this.showImage(this.current);
         };
 
-        this.onMenuItemClick = function (index) {
+        this.onMenuItemClick = function(index) {
             this.showImage(index);
         };
 
-        this.onNextClick = function () {
+        this.onNextClick = function() {
             this.next();
         };
-        this.onPrevClick = function () {
+        this.onPrevClick = function() {
             this.prev();
         };
     };
