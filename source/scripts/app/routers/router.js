@@ -2,21 +2,23 @@
 
     var Router = function() {
         this.njq = NoJQuery;
-        this.initialize = function(PubSub) {
-            this.pubsub = PubSub;
+        this.initialize = function(event) {
+            console.log('Router');
+            this.event = event;
             page('/', this.callbackPage.bind(this));
             page('/work', this.callbackPage.bind(this));
             page('/about', this.callbackPage.bind(this));
             page('/work/:project/:section', this.callbackPageDetails.bind(this));
         };
         this.start = function() {
+            console.log('Router start');
             page();
         };
         this.on = function(eventName, callback) {
-            this.pubsub.subscribe(eventName, callback);
+            this.event.subscribe(eventName, callback);
         };
         this.off = function(eventName) {
-            this.pubsub.unsubscribe(eventName);
+            this.event.unsubscribe(eventName);
             this.eventName = '';
         };
         this.callbackPage = function(ctx) {
@@ -32,11 +34,11 @@
                 total = paths.length;
 
             for (i; i < total; i++) {
-                if (paths[i] !== '' && paths[i] !== 'home') {
+                if (paths[i] !== '') {
                     commands.push(paths[i]);
                 }
             }
-            this.pubsub.publish(event, commands);
+            this.event.publish(event, commands);
         };
     };
     return Router;

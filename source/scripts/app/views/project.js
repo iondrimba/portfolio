@@ -24,7 +24,7 @@
             });
 
             //INIT GALLERY VIEW
-            this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
+            this.gallery = new Gallery(this.el + '> .views >.gallery');
             this.gallery.initialize();
 
             this.show();

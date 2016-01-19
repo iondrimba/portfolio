@@ -3,10 +3,10 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
     var Home = function(app) {
         this.el = '.home';
         this.$$ = NoJQuery;
-        this.completed = false;
         this.menu = app.menu;
 
         this.initialize = function() {
+            console.log('Home init');
 
             this.$$('body').removeClass('body-gradient');
             this.$$(this.el).addClass('body-gradient');
@@ -21,21 +21,18 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.loading-arrow').addClass('hidden');
         };
         this.execute = function() {
+            console.log('Home execute');
             if (Detector.webgl) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
                 }
-            }
-
-            //app.showConsoleGretings();                          
+            }                     
 
             //SHOW VIEW
             this.$el.removeClass('hidden');
 
             //OPEN FULL MODE
             this.full();
-
-            app.event.publish('completed');
         };
 
         this.full = function() {
@@ -48,7 +45,6 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').removeClass('hidden');
             this.$$('body').removeClass('show-scroll');
             this.$$('.scroll-down-button').addClass('draw-in');
-            this.completed = true;
 
             this.menu.hide();
         };
@@ -61,7 +57,6 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');
             this.$$('.scroll-down-button').removeClass('draw-in');
-            this.completed = true;
 
             this.menu.animate();
         };

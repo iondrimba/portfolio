@@ -2420,21 +2420,23 @@ define('routers/router',['noJquery', 'vendors/page'], function(NoJQuery, page) {
 
     var Router = function() {
         this.njq = NoJQuery;
-        this.initialize = function(PubSub) {
-            this.pubsub = PubSub;
+        this.initialize = function(event) {
+            console.log('Router');
+            this.event = event;
             page('/', this.callbackPage.bind(this));
             page('/work', this.callbackPage.bind(this));
             page('/about', this.callbackPage.bind(this));
             page('/work/:project/:section', this.callbackPageDetails.bind(this));
         };
         this.start = function() {
+            console.log('Router start');
             page();
         };
         this.on = function(eventName, callback) {
-            this.pubsub.subscribe(eventName, callback);
+            this.event.subscribe(eventName, callback);
         };
         this.off = function(eventName) {
-            this.pubsub.unsubscribe(eventName);
+            this.event.unsubscribe(eventName);
             this.eventName = '';
         };
         this.callbackPage = function(ctx) {
@@ -2450,41 +2452,47 @@ define('routers/router',['noJquery', 'vendors/page'], function(NoJQuery, page) {
                 total = paths.length;
 
             for (i; i < total; i++) {
-                if (paths[i] !== '' && paths[i] !== 'home') {
+                if (paths[i] !== '') {
                     commands.push(paths[i]);
                 }
             }
-            this.pubsub.publish(event, commands);
+            this.event.publish(event, commands);
         };
     };
     return Router;
 });
 
-define('lib/navigator',[], function () {
+define('lib/navigator',[], function() {
     'use strict';
     var Navigator = function Navigator() {
         this.currentCommand = undefined;
         this.previousCommand = undefined;
         this.commands = [];
         this.subCommands = [];
-        this.addCommand = function (key, item) {
-            var cmd = { item: item, key: key };
+        this.addCommand = function(key, item) {
+            var cmd = {
+                item: item,
+                key: key
+            };
 
             this.commands.push(cmd);
             this.currentCommand = cmd;
 
-            if (this.previousCommand && this.commands.length > 1) {
-                this.previousCommand = this.commands[0];
-                if (this.commands.length > 1) {
-                    this.commands.shift();
-                }
-            }
+            // if (this.previousCommand && this.commands.length > 1) {
+            //     this.previousCommand = this.commands[0];
+            //     if (this.commands.length > 1) {
+            //         this.commands.shift();
+            //     }
+            // }
+
+            console.log('navigator addCommand', key);
         };
-        this.executeCommand = function () {
+        this.executeCommand = function() {
+            console.log('navigator executeCommand',this.commands[0].key)
             this.currentCommand = this.commands[0];
             this.currentCommand.item.execute();
         };
-        this.simpleCommand = function () {
+        this.simpleCommand = function() {
             if (this.previousCommand && this.previousCommand.key !== 'home') {
                 this.previousCommand.item.destroy();
             } else {
@@ -2493,26 +2501,35 @@ define('lib/navigator',[], function () {
 
             this.executeCommand();
         };
-        this.nextCommand = function () {
-            this.previousCommand = this.commands.shift();
+        this.removeCommand = function() {                        
             this.currentCommand = this.commands[0];
+            this.commands = [];
+        };
+        this.nextCommand = function() {
+            if (this.commands.length > 1) {
+                this.previousCommand = this.commands.shift();
+                this.currentCommand = this.commands[0];
 
-            if (this.previousCommand) {
-                if (this.previousCommand.key === 'home' && this.currentCommand) {
-                    this.previousCommand.item.minimize();
-                } else if (this.currentCommand) {
-                    this.previousCommand.item.destroy();
-                }
-            }
-
-            if (this.currentCommand) {
                 this.executeCommand();
+                this.previousCommand = this.commands.shift();
             }
+            // this.previousCommand = this.commands.shift();
+            // this.currentCommand = this.commands[0];
+
+            // if (this.previousCommand) {
+            //     if (this.previousCommand.key === 'home' && this.currentCommand) {
+            //         this.previousCommand.item.minimize();
+            //     } else if (this.currentCommand) {
+            //         this.previousCommand.item.destroy();
+            //     }
+            // }
+
         };
     };
 
     return Navigator;
 });
+
 // File:src/Three.js
 
 /**
@@ -45784,6 +45801,7 @@ define('views/menu',['noJquery'], function(NoJQuery) {
         this.el = '.menu';
         this.$$ = NoJQuery;
         this.initialize = function() {
+             console.log('Menu');
             this.setup();
             this.execute();
         };
@@ -46737,10 +46755,10 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
     var Home = function(app) {
         this.el = '.home';
         this.$$ = NoJQuery;
-        this.completed = false;
         this.menu = app.menu;
 
         this.initialize = function() {
+            console.log('Home init');
 
             this.$$('body').removeClass('body-gradient');
             this.$$(this.el).addClass('body-gradient');
@@ -46755,21 +46773,18 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.loading-arrow').addClass('hidden');
         };
         this.execute = function() {
+            console.log('Home execute');
             if (Detector.webgl) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
                 }
-            }
-
-            //app.showConsoleGretings();                          
+            }                     
 
             //SHOW VIEW
             this.$el.removeClass('hidden');
 
             //OPEN FULL MODE
             this.full();
-
-            app.event.publish('completed');
         };
 
         this.full = function() {
@@ -46782,7 +46797,6 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').removeClass('hidden');
             this.$$('body').removeClass('show-scroll');
             this.$$('.scroll-down-button').addClass('draw-in');
-            this.completed = true;
 
             this.menu.hide();
         };
@@ -46795,7 +46809,6 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');
             this.$$('.scroll-down-button').removeClass('draw-in');
-            this.completed = true;
 
             this.menu.animate();
         };
@@ -46806,7 +46819,7 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
 });
 
 define('views/gallery',['noJquery'], function(NoJQuery) {
-    var Gallery = function(router, el) {
+    var Gallery = function( el) {
         this.el = '.gallery';
         this.$$ = NoJQuery;
         this.initialize = function() {
@@ -47086,7 +47099,7 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
             });
 
             //INIT GALLERY VIEW
-            this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
+            this.gallery = new Gallery(this.el + '> .views >.gallery');
             this.gallery.initialize();
 
             this.show();
@@ -47229,21 +47242,19 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = NoJQuery;
-        this.router = app.router;
-        this.completed = false;
         this.projects = [];
         this.initialize = function() {
+            console.log('Work init');
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
         };
         this.execute = function() {
+            console.log('Work execute');
             this.setup();
             this.show();
             this.projetSelect();
-            this.completed = true;
-            app.event.publish('completed');
         };
 
         this.show = function() {
@@ -47304,15 +47315,15 @@ define('views/about',['noJquery'], function(NoJQuery) {
         this.$$ = NoJQuery;
         this.completed = false;
         this.initialize = function() {
+            console.log('About init');
             this.setup();
         };
         this.execute = function() {
+            console.log('About execute');
             this.setup();
             this.addAnimationsListeners();
             this.show();
             this.animateIn();
-            this.completed = true;
-            app.event.publish('completed');
         };
         this.addAnimationsListeners = function() {
             var countleft = 0,
@@ -47406,44 +47417,46 @@ require([
     'views/work',
     'views/about'
 
-], function (PubSub,FastClick, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax,  Menu, Home, Work, About) {
-    var Master = function () {
+], function(PubSub, FastClick, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax, Menu, Home, Work, About) {
+    var Master = function() {
         this.$$ = NoJQuery;
-        this.prefixedEventListener = function (element, type, callback) {
+        this.prefixedEventListener = function(element, type, callback) {
             var pfx = ["webkit", "moz", "MS", "o", ""];
             for (var p = 0; p < pfx.length; p++) {
                 if (!pfx[p]) type = type.toLowerCase();
                 element.addEventListener(pfx[p] + type, callback, false);
             }
         };
-         
+
         this.currentView;
         this.previousView;
         this.event = PubSub;
 
-        this.router = new Router();
+        console.log('App');
+
+        this.router = new Router(this.event);
         this.menu = new Menu(this);
         this.home = new Home(this);
         this.work = new Work(this);
         this.about = new About(this);
         this.navigator = new Navigator();
 
-        this.initialize = function () {
-            PubSub.subscribe('completed', this.complete.bind(this));
-            
-            
+        this.initialize = function() {
+            console.log('App initialize');
+            this.event.subscribe('completed', this.complete.bind(this));
+
+
             //ADD FAST CLICK IF MOBILE BROWSING
-            if (this.$$('html').hasClass('mobile')) {            
+            if (this.$$('html').hasClass('mobile')) {
                 FastClick.attach(document.body, {});
             }
 
             this.navigator = new Navigator();
-            this.navigator.addCommand('home', this.home, undefined);
+            this.navigator.addCommand('home', this.home);
 
-            this.router.initialize(PubSub);
-            this.routerChangeAnimated = this.onRouterChange.bind(this);
-            this.router.on('change', this.routerChangeAnimated);
-            this.router.on('details', this.onRouterChangeNoAnimationDetails.bind(this));
+            this.router.initialize(this.event);
+            this.router.on('change', this.routerChange.bind(this));
+            this.router.on('details', this.onRouterDetails.bind(this));
             this.router.start();
 
             //LET ELEMENTS VISIBLE
@@ -47451,57 +47464,84 @@ require([
             this.$$('.footer').removeClass('hidden');
             this.$$('.content').removeClass('hidden');
         };
-        this.onRouterChange = function (evt, data) {
-            for (var i = 0; i < data.length; i++) {
-                this.navigator.currentView = this[data[i]];
-                this.navigator.addCommand(data[i], this[data[i]]);
-            }
+        this.routerChange = function(evt, data) {
+            console.log('App routerChange', evt, data);
+            data.map(function(elmt, index) {
+                this.navigator.currentView = this[data[index]];
+                this.navigator.addCommand(data[index], this[data[index]]);
+            }.bind(this));
 
             if (this.navigator.currentView) {
                 this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
             }
 
-            this.navigator.executeCommand();
-        };
-        this.complete = function () {
-            this.navigator.nextCommand();
 
-            if (this.navigator.currentCommand === undefined) {
-                this.router.off('change');
-                PubSub.unsubscribe('completed');
-                this.router.on('change', this.onRouterChangeNoAnimation.bind(this));
-                this.router.off('details');
-                this.router.on('details', this.onRouterChangeNoAnimationDetailsZ.bind(this));
+            if (this.navigator.previousCommand) {
+                console.log('App routerChange Previous View Destroy', this.navigator.previousCommand.key);
+                this.navigator.previousCommand.item.destroy();
+                this.navigator.removeCommand();
+                console.log('destroy', this.navigator);
+                this.navigator.currentCommand.item.execute();
+            }else{
+                this.navigator.executeCommand();
+            }            
 
-                if (this.navigator.subCommands.length) {
-                    this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
-                }
-            }
-        };
-        this.onRouterChangeNoAnimation = function (evt, data) {
-            var obj = { key: '', item: {} };
-            if (data.length === 0) {
-                obj.key = 'home';
-                obj.item = this.home;
-            } else {
-                obj.key = data[0];
-                obj.item = this[data[0]];
+            //MINIMIZE HOME
+            if (data.length && this.navigator.currentCommand.key === 'home') {
+                this.home.minimize();
             }
 
-            this.navigator.currentView = obj.item;
-            this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
-            this.navigator.addCommand(obj.key, obj.item);
-            this.navigator.simpleCommand();
+            //EXECUTE NEXT COMMANDS
+            while (this.navigator.commands.length > 1) {
+                console.log('App routerChange While command', this.navigator.currentCommand.key);
+                this.navigator.nextCommand();
+            }
+
         };
-        this.onRouterChangeNoAnimationDetails = function (evt, data) {
+        this.onRouterDetails = function(evt, data) {
+            console.log('App onRouterDetails', evt, data);
             this.onRouterChange(null, [data[0]]);
-            this.navigator.subCommands.push({ project: data[1], section: data[2] });
+            this.navigator.subCommands.push({
+                project: data[1],
+                section: data[2]
+            });
         };
-        this.onRouterChangeNoAnimationDetailsZ = function (evt, data) {
-            this.onRouterChange(null, [data[0]]);
-            this.work.showSection(data[1], data[2]);
+        this.complete = function() {
+            // this.navigator.nextCommand();
+
+            // if (this.navigator.currentCommand === undefined) {
+            //     this.router.off('change');
+            //     this.event.unsubscribe('completed');
+            //     this.router.on('change', this.onRouterChangeNoAnimation.bind(this));
+            //     this.router.off('details');
+            //     this.router.on('details', this.onRouterChangeNoAnimationDetailsZ.bind(this));
+
+            //     if (this.navigator.subCommands.length) {
+            //         this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
+            //     }
+            // }
         };
-        this.showConsoleGreetings = function () {
+        this.onRouterChangeNoAnimation = function(evt, data) {
+            // var obj = { key: '', item: {} };
+            // if (data.length === 0) {
+            //     obj.key = 'home';
+            //     obj.item = this.home;
+            // } else {
+            //     obj.key = data[0];
+            //     obj.item = this[data[0]];
+            // }
+
+            // this.navigator.currentView = obj.item;
+            // this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
+            // this.navigator.addCommand(obj.key, obj.item);
+            // this.navigator.simpleCommand();
+        };
+
+        this.onRouterChangeNoAnimationDetailsZ = function(evt, data) {
+            // this.onRouterChange(null, [data[0]]);
+            // this.work.showSection(data[1], data[2]);
+        };
+        this.showConsoleGreetings = function() {
             console.clear();
             console.log("  _    _      _ _       _  ");
             console.log(" | |  | |    | | |     | | ");
@@ -47516,5 +47556,6 @@ require([
     window.app = new Master();
     window.app.initialize();
 });
+
 define("source/scripts/app/main", function(){});
 

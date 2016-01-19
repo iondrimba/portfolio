@@ -1,5 +1,5 @@
 ﻿define(['noJquery'], function(NoJQuery) {
-    var Gallery = function(router, el) {
+    var Gallery = function( el) {
         this.el = '.gallery';
         this.$$ = NoJQuery;
         this.initialize = function() {

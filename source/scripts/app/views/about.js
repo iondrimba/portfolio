@@ -4,15 +4,15 @@
         this.$$ = NoJQuery;
         this.completed = false;
         this.initialize = function() {
+            console.log('About init');
             this.setup();
         };
         this.execute = function() {
+            console.log('About execute');
             this.setup();
             this.addAnimationsListeners();
             this.show();
             this.animateIn();
-            this.completed = true;
-            app.event.publish('completed');
         };
         this.addAnimationsListeners = function() {
             var countleft = 0,

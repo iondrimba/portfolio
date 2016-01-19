@@ -2,21 +2,19 @@
     var Work = function(app) {
         this.el = '.work';
         this.$$ = NoJQuery;
-        this.router = app.router;
-        this.completed = false;
         this.projects = [];
         this.initialize = function() {
+            console.log('Work init');
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
         };
         this.execute = function() {
+            console.log('Work execute');
             this.setup();
             this.show();
             this.projetSelect();
-            this.completed = true;
-            app.event.publish('completed');
         };
 
         this.show = function() {
