@@ -1,4 +1,4 @@
-﻿define(['noJquery', 'views/gallery', 'views/tech', 'views/info'], function(NoJQuery, Gallery, Tech, Info) {
+﻿define(['noJquery', 'text!source/templates/project.html', 'models/project', 'views/tech', 'views/info', 'views/gallery'], function(NoJQuery, template,  ProjectModel, Tech, Info, Gallery) {
     var Project = function(app, el) {
         this.el = '.project';
         this.$$ = NoJQuery;
@@ -11,6 +11,7 @@
         this.counttitle = 0;
 
         this.initialize = function() {
+            console.log('Project INIT', template);
             this.setup();
             this.addAnimationListeners();
 

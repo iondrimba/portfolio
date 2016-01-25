@@ -38,16 +38,13 @@ require([
         this.home = new Home(this);
         this.work = new Work(this);
         this.about = new About(this);
-        this.navigator = new Navigator();
 
         this.initialize = function() {
-
-            //ADD FAST CLICK IF MOBILE BROWSING
-            if (this.$$('html').hasClass('mobile')) {
-                FastClick.attach(document.body, {});
-            }
-
+            
+            //NAVIGATOR
             this.navigator = new Navigator();
+
+            //ROUTER
             this.router.initialize(this.event);
             this.router.on('change', this.routerChange.bind(this));
             this.router.on('details', this.onRouterDetails.bind(this));
@@ -58,7 +55,7 @@ require([
             this.$$('.footer').removeClass('hidden');
             this.$$('.content').removeClass('hidden');
 
-            this.showConsoleGreetings();
+            //this.showConsoleGreetings();
         };
         this.routerChange = function(evt, data) {
             if (data.length > 0 && data[0] !== 'home' && this.home.loaded === false) {
@@ -87,7 +84,6 @@ require([
             if(data.length<3)  {
                 this.navigator.subCommands=[];
             }
-
 
             if (this.navigator.subCommands.length) {
                 this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);

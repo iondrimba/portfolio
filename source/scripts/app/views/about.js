@@ -1,14 +1,15 @@
-﻿define(['noJquery'], function(NoJQuery) {
+﻿define(['noJquery', 'text!source/templates/about.html', 'models/about'], function(NoJQuery, template, AboutModel) {
     var About = function(app) {
         this.el = '.about';
         this.$$ = NoJQuery;
         this.completed = false;
+
         this.initialize = function() {
-            console.log('About init');
+            console.log('About init', AboutModel);
             this.setup();
         };
         this.execute = function() {
-            console.log('About execute');
+            console.log('About execute', this.template);
             this.setup();
             this.addAnimationsListeners();
             this.show();

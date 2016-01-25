@@ -1,9 +1,10 @@
-﻿define(['noJquery', 'views/project'], function(NoJQuery, Project) {
+﻿define(['noJquery', 'text!source/templates/work.html', 'models/work', 'views/project'], function(NoJQuery, template, WorkModel, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = NoJQuery;
         this.projects = [];
         this.initialize = function() {
+            console.log('work initialize', WorkModel);
             this.setup();
         };
         this.setup = function() {

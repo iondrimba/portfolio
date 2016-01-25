@@ -1,10 +1,13 @@
-﻿define(['noJquery'], function(NoJQuery) {
+﻿define(['noJquery', 'text!source/templates/gallery.html', 'models/gallery'], function(NoJQuery, template, GalleryModel) {
+    
     var Gallery = function( el) {
         this.el = '.gallery';
         this.$$ = NoJQuery;
+
         this.initialize = function() {
             this.setup();
         };
+        
         this.setup = function() {
             this.total = 4;
             this.current = 0;
@@ -117,5 +120,6 @@
             this.prev();
         };
     };
+
     return Gallery;
 });
