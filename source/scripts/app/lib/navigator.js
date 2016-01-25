@@ -1,8 +1,9 @@
 ﻿define([], function() {
     'use strict';
     var Navigator = function Navigator() {
-        this.currentCommand = undefined;
-        this.previousCommand = undefined;
+        this.currentCommand;
+        this.previousCommand;
+        this.currentView;
         this.commands = [];
         this.subCommands = [];
         this.addCommand = function(key, item) {
@@ -12,53 +13,36 @@
             };
 
             this.commands.push(cmd);
+
             this.currentCommand = cmd;
 
-            // if (this.previousCommand && this.commands.length > 1) {
-            //     this.previousCommand = this.commands[0];
-            //     if (this.commands.length > 1) {
-            //         this.commands.shift();
-            //     }
-            // }
+            if (this.commands.length > 2) {
+                this.previousCommand = this.commands[0];
+                this.commands.shift();
+            }
 
-            console.log('navigator addCommand', key);
+            this.currentView = this.commands[this.commands.length - 1].item;
         };
         this.executeCommand = function() {
-            console.log('navigator executeCommand',this.commands[0].key)
-            this.currentCommand = this.commands[0];
-            this.currentCommand.item.execute();
-        };
-        this.simpleCommand = function() {
-            if (this.previousCommand && this.previousCommand.key !== 'home') {
-                this.previousCommand.item.destroy();
-            } else {
-                this.previousCommand.item.minimize();
-            }
+            this.currentCommand = this.commands[this.commands.length - 1];
+            this.currentView.execute();
 
-            this.executeCommand();
-        };
-        this.removeCommand = function() {                        
-            this.currentCommand = this.commands[0];
-            this.commands = [];
-        };
-        this.nextCommand = function() {
             if (this.commands.length > 1) {
-                this.previousCommand = this.commands.shift();
-                this.currentCommand = this.commands[0];
-
-                this.executeCommand();
-                this.previousCommand = this.commands.shift();
+                this.previousCommand = this.commands[0];
+                if (this.currentCommand.key !== this.previousCommand.key) {
+                    this.previousCommand.item.destroy();
+                }
             }
-            // this.previousCommand = this.commands.shift();
-            // this.currentCommand = this.commands[0];
+        };
+        this.removeCommand = function() {
+            this.commands.pop();
+            this.currentCommand = this.commands[this.commands.length - 1];
 
-            // if (this.previousCommand) {
-            //     if (this.previousCommand.key === 'home' && this.currentCommand) {
-            //         this.previousCommand.item.minimize();
-            //     } else if (this.currentCommand) {
-            //         this.previousCommand.item.destroy();
-            //     }
-            // }
+            if (this.currentView) {
+                this.currentView.destroy();
+            }
+            this.previousCommand = null;
+            this.currentView = this.currentCommand.item;
 
         };
     };

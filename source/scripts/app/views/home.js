@@ -4,6 +4,7 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
         this.el = '.home';
         this.$$ = NoJQuery;
         this.menu = app.menu;
+        this.loaded = false;
 
         this.initialize = function() {
             console.log('Home init');
@@ -26,7 +27,7 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
                 }
-            }                     
+            }
 
             //SHOW VIEW
             this.$el.removeClass('hidden');
@@ -47,19 +48,26 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').addClass('draw-in');
 
             this.menu.hide();
+
+            this.loaded = true;
         };
+
         this.minimize = function() {
-            this.$el.removeClass('show-full');
+            this.$$('.home').removeClass('show-full');
 
             //ANIMATE MINIMIZED VIEW
-            this.$el.addClass('show-min');
+            this.$$('.home').addClass('show-min');
 
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');
             this.$$('.scroll-down-button').removeClass('draw-in');
-
+            console.log('home minimize');
             this.menu.animate();
         };
+        this.destroy = function() {
+
+            this.minimize();
+        }
 
         this.initialize();
     };

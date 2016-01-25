@@ -5,6 +5,10 @@
         this.key = '';
         this.router = app.router;
         this.routerHandler = null;
+        this.countatech = 0;
+        this.countgallery = 0;
+        this.countexternal = 0;
+        this.counttitle = 0;
 
         this.initialize = function() {
             this.setup();
@@ -41,55 +45,50 @@
             this.techLink = this.$$(this.el + ' .work-infos > .tech');
             this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
             this.launchLink = this.$$(this.el + ' .work-infos > .external');
-            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
         };
 
         this.addAnimationListeners = function() {
-            var countatech = 0,
-                countgallery = 0,
-                countexternal = 0,
-                counttitle = 0,
-                techLine = this.$$(this.el + ' .work-infos > .tech'),
+            var techLine = this.$$(this.el + ' .work-infos > .tech'),
                 externalLine = this.$$(this.el + ' .work-infos > .external'),
                 galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
-                infoBtn = this.$$(this.el).find('.info').find('.btn');
+                infoBtn = this.$$(this.el + ' .infos > .btn');
 
             app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
-                countatech++;
-                if (countatech == 1) {
+                this.countatech++;
+                if (this.countatech == 1) {
                     this.$$(this.el + ' .work-infos > .tech > .sprite').addClass('animate-sprite');
                 }
-                if (countatech === 2) {
+                if (this.countatech === 2) {
                     this.$$(e.target).removeClass('animate-in-link-tech');
                     this.$$(this.el + ' .work-infos > .tech > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(externalLine.elmts[0], 'AnimationEnd', function(e) {
-                countexternal++;
-                if (countexternal == 1) {
+                this.countexternal++;
+                if (this.countexternal == 1) {
                     this.$$(this.el + ' .work-infos > .external > .sprite').addClass('animate-sprite');
                 }
-                if (countexternal === 2) {
-
-                    this.$$(e.target).removeClass('animate-in-link-gallery');
+                if (this.countexternal === 2) {
+                    this.$$(e.target).removeClass('animate-in-link-external');
                     this.$$(this.el + ' .work-infos > .external > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(galleryLine.elmts[0], 'AnimationEnd', function(e) {
-                countgallery++;
-                if (countgallery == 1) {
+                this.countgallery++;
+                if (this.countgallery == 1) {
                     this.$$(this.el + ' .work-infos > .gallery > .sprite').addClass('animate-sprite');
                 }
-                if (countgallery === 2) {
+                if (this.countgallery === 2) {
                     this.$$(e.target).removeClass('animate-in-link-gallery');
                     this.$$(this.el + ' .work-infos > .gallery > span').addClass('animate-span');
                 }
             }.bind(this));
+
             app.prefixedEventListener(infoBtn.elmts[0], 'AnimationEnd', function(e) {
-                counttitle++;
-                if (counttitle === 1) {
+                this.counttitle++;
+                if (this.counttitle === 1) {
                     this.$$(e.target).removeClass('animate-in-title');
                     this.$$(this.el + ' .infos > .btn > h2').addClass('animate-title-opacity');
                 }
@@ -107,10 +106,24 @@
 
 
         this.animateIn = function() {
-            this.titleLink.addClass('animate-in-title');
+            this.countatech = 0;
+            this.countgallery = 0;
+            this.countexternal = 0;
+            this.counttitle = 0;
+            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
+            this.$$(this.el + ' .infos > .btn').addClass('animate-in-title');
             this.techLink.addClass('animate-in-link-tech');
             this.launchLink.addClass('animate-in-link-external');
             this.galleryLink.addClass('animate-in-link-gallery');
+        };
+
+        this.close = function() {
+            this.tech.destroy();
+
+            if (this.gallery) {
+                this.gallery.destroy();
+            }
+            this.info.execute();
         };
 
         this.destroy = function() {
@@ -146,8 +159,13 @@
             this.$$(this.el + ' .infos > p').removeClass('animate-text-opacity');
         };
         this.callbackPageProject = function(section) {
-            this.info.destroy()
-            this.tech.destroy();
+
+            if (this.info) {
+                this.info.destroy();
+            }
+            if (this.tech) {
+                this.tech.destroy();
+            }
 
             if (this.gallery) {
                 this.gallery.destroy();

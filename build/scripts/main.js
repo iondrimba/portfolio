@@ -2465,8 +2465,9 @@ define('routers/router',['noJquery', 'vendors/page'], function(NoJQuery, page) {
 define('lib/navigator',[], function() {
     'use strict';
     var Navigator = function Navigator() {
-        this.currentCommand = undefined;
-        this.previousCommand = undefined;
+        this.currentCommand;
+        this.previousCommand;
+        this.currentView;
         this.commands = [];
         this.subCommands = [];
         this.addCommand = function(key, item) {
@@ -2476,53 +2477,36 @@ define('lib/navigator',[], function() {
             };
 
             this.commands.push(cmd);
+
             this.currentCommand = cmd;
 
-            // if (this.previousCommand && this.commands.length > 1) {
-            //     this.previousCommand = this.commands[0];
-            //     if (this.commands.length > 1) {
-            //         this.commands.shift();
-            //     }
-            // }
+            if (this.commands.length > 2) {
+                this.previousCommand = this.commands[0];
+                this.commands.shift();
+            }
 
-            console.log('navigator addCommand', key);
+            this.currentView = this.commands[this.commands.length - 1].item;
         };
         this.executeCommand = function() {
-            console.log('navigator executeCommand',this.commands[0].key)
-            this.currentCommand = this.commands[0];
-            this.currentCommand.item.execute();
-        };
-        this.simpleCommand = function() {
-            if (this.previousCommand && this.previousCommand.key !== 'home') {
-                this.previousCommand.item.destroy();
-            } else {
-                this.previousCommand.item.minimize();
-            }
+            this.currentCommand = this.commands[this.commands.length - 1];
+            this.currentView.execute();
 
-            this.executeCommand();
-        };
-        this.removeCommand = function() {                        
-            this.currentCommand = this.commands[0];
-            this.commands = [];
-        };
-        this.nextCommand = function() {
             if (this.commands.length > 1) {
-                this.previousCommand = this.commands.shift();
-                this.currentCommand = this.commands[0];
-
-                this.executeCommand();
-                this.previousCommand = this.commands.shift();
+                this.previousCommand = this.commands[0];
+                if (this.currentCommand.key !== this.previousCommand.key) {
+                    this.previousCommand.item.destroy();
+                }
             }
-            // this.previousCommand = this.commands.shift();
-            // this.currentCommand = this.commands[0];
+        };
+        this.removeCommand = function() {
+            this.commands.pop();
+            this.currentCommand = this.commands[this.commands.length - 1];
 
-            // if (this.previousCommand) {
-            //     if (this.previousCommand.key === 'home' && this.currentCommand) {
-            //         this.previousCommand.item.minimize();
-            //     } else if (this.currentCommand) {
-            //         this.previousCommand.item.destroy();
-            //     }
-            // }
+            if (this.currentView) {
+                this.currentView.destroy();
+            }
+            this.previousCommand = null;
+            this.currentView = this.currentCommand.item;
 
         };
     };
@@ -46756,6 +46740,7 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
         this.el = '.home';
         this.$$ = NoJQuery;
         this.menu = app.menu;
+        this.loaded = false;
 
         this.initialize = function() {
             console.log('Home init');
@@ -46778,7 +46763,7 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
                 }
-            }                     
+            }
 
             //SHOW VIEW
             this.$el.removeClass('hidden');
@@ -46799,19 +46784,26 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').addClass('draw-in');
 
             this.menu.hide();
+
+            this.loaded = true;
         };
+
         this.minimize = function() {
-            this.$el.removeClass('show-full');
+            this.$$('.home').removeClass('show-full');
 
             //ANIMATE MINIMIZED VIEW
-            this.$el.addClass('show-min');
+            this.$$('.home').addClass('show-min');
 
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');
             this.$$('.scroll-down-button').removeClass('draw-in');
-
+            console.log('home minimize');
             this.menu.animate();
         };
+        this.destroy = function() {
+
+            this.minimize();
+        }
 
         this.initialize();
     };
@@ -47080,6 +47072,10 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
         this.key = '';
         this.router = app.router;
         this.routerHandler = null;
+        this.countatech = 0;
+        this.countgallery = 0;
+        this.countexternal = 0;
+        this.counttitle = 0;
 
         this.initialize = function() {
             this.setup();
@@ -47116,55 +47112,50 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
             this.techLink = this.$$(this.el + ' .work-infos > .tech');
             this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
             this.launchLink = this.$$(this.el + ' .work-infos > .external');
-            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
         };
 
         this.addAnimationListeners = function() {
-            var countatech = 0,
-                countgallery = 0,
-                countexternal = 0,
-                counttitle = 0,
-                techLine = this.$$(this.el + ' .work-infos > .tech'),
+            var techLine = this.$$(this.el + ' .work-infos > .tech'),
                 externalLine = this.$$(this.el + ' .work-infos > .external'),
                 galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
-                infoBtn = this.$$(this.el).find('.info').find('.btn');
+                infoBtn = this.$$(this.el + ' .infos > .btn');
 
             app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
-                countatech++;
-                if (countatech == 1) {
+                this.countatech++;
+                if (this.countatech == 1) {
                     this.$$(this.el + ' .work-infos > .tech > .sprite').addClass('animate-sprite');
                 }
-                if (countatech === 2) {
+                if (this.countatech === 2) {
                     this.$$(e.target).removeClass('animate-in-link-tech');
                     this.$$(this.el + ' .work-infos > .tech > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(externalLine.elmts[0], 'AnimationEnd', function(e) {
-                countexternal++;
-                if (countexternal == 1) {
+                this.countexternal++;
+                if (this.countexternal == 1) {
                     this.$$(this.el + ' .work-infos > .external > .sprite').addClass('animate-sprite');
                 }
-                if (countexternal === 2) {
-
-                    this.$$(e.target).removeClass('animate-in-link-gallery');
+                if (this.countexternal === 2) {
+                    this.$$(e.target).removeClass('animate-in-link-external');
                     this.$$(this.el + ' .work-infos > .external > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(galleryLine.elmts[0], 'AnimationEnd', function(e) {
-                countgallery++;
-                if (countgallery == 1) {
+                this.countgallery++;
+                if (this.countgallery == 1) {
                     this.$$(this.el + ' .work-infos > .gallery > .sprite').addClass('animate-sprite');
                 }
-                if (countgallery === 2) {
+                if (this.countgallery === 2) {
                     this.$$(e.target).removeClass('animate-in-link-gallery');
                     this.$$(this.el + ' .work-infos > .gallery > span').addClass('animate-span');
                 }
             }.bind(this));
+
             app.prefixedEventListener(infoBtn.elmts[0], 'AnimationEnd', function(e) {
-                counttitle++;
-                if (counttitle === 1) {
+                this.counttitle++;
+                if (this.counttitle === 1) {
                     this.$$(e.target).removeClass('animate-in-title');
                     this.$$(this.el + ' .infos > .btn > h2').addClass('animate-title-opacity');
                 }
@@ -47182,10 +47173,24 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
 
 
         this.animateIn = function() {
-            this.titleLink.addClass('animate-in-title');
+            this.countatech = 0;
+            this.countgallery = 0;
+            this.countexternal = 0;
+            this.counttitle = 0;
+            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
+            this.$$(this.el + ' .infos > .btn').addClass('animate-in-title');
             this.techLink.addClass('animate-in-link-tech');
             this.launchLink.addClass('animate-in-link-external');
             this.galleryLink.addClass('animate-in-link-gallery');
+        };
+
+        this.close = function() {
+            this.tech.destroy();
+
+            if (this.gallery) {
+                this.gallery.destroy();
+            }
+            this.info.execute();
         };
 
         this.destroy = function() {
@@ -47221,8 +47226,13 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
             this.$$(this.el + ' .infos > p').removeClass('animate-text-opacity');
         };
         this.callbackPageProject = function(section) {
-            this.info.destroy()
-            this.tech.destroy();
+
+            if (this.info) {
+                this.info.destroy();
+            }
+            if (this.tech) {
+                this.tech.destroy();
+            }
 
             if (this.gallery) {
                 this.gallery.destroy();
@@ -47244,14 +47254,12 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
         this.$$ = NoJQuery;
         this.projects = [];
         this.initialize = function() {
-            console.log('Work init');
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
         };
         this.execute = function() {
-            console.log('Work execute');
             this.setup();
             this.show();
             this.projetSelect();
@@ -47265,10 +47273,7 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
         };
 
         this.projetSelect = function() {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
-
+            this.projects = this.getProjects();
         };
         this.getProjects = function() {
             var ar = [],
@@ -47279,6 +47284,7 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
                 var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
                 pro.initialize();
                 ar[index] = pro;
+                pro.close();
             }.bind(this));
             projectsElmt = null;
             return ar;
@@ -47286,17 +47292,21 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
 
         this.showSection = function(project, section) {
             if (this.projects.length === 0) {
-                this.projects = this.getProjects();
+                this.projetSelect();
             }
 
             this.projects.map(function(elmt, index) {
                 if (elmt.key.toLowerCase() === project.toLowerCase()) {
                     elmt.callbackPageProject(section);
+                } else {
+                    elmt.close();
                 }
             });
+
         };
 
         this.destroy = function() {
+            this.loaded = false;
             this.hide();
             this.projects.map(function(elmt, index) {
                 elmt.destroy();
@@ -47432,8 +47442,6 @@ require([
         this.previousView;
         this.event = PubSub;
 
-        console.log('App');
-
         this.router = new Router(this.event);
         this.menu = new Menu(this);
         this.home = new Home(this);
@@ -47442,9 +47450,6 @@ require([
         this.navigator = new Navigator();
 
         this.initialize = function() {
-            console.log('App initialize');
-            this.event.subscribe('completed', this.complete.bind(this));
-
 
             //ADD FAST CLICK IF MOBILE BROWSING
             if (this.$$('html').hasClass('mobile')) {
@@ -47452,8 +47457,6 @@ require([
             }
 
             this.navigator = new Navigator();
-            this.navigator.addCommand('home', this.home);
-
             this.router.initialize(this.event);
             this.router.on('change', this.routerChange.bind(this));
             this.router.on('details', this.onRouterDetails.bind(this));
@@ -47463,83 +47466,64 @@ require([
             this.$$('main').removeClass('hidden');
             this.$$('.footer').removeClass('hidden');
             this.$$('.content').removeClass('hidden');
+
+            this.showConsoleGreetings();
         };
         this.routerChange = function(evt, data) {
-            console.log('App routerChange', evt, data);
+            if (data.length > 0 && data[0] !== 'home' && this.home.loaded === false) {
+                this.navigator.addCommand('home', this.home);
+                this.navigator.executeCommand();
+            }
+
             data.map(function(elmt, index) {
-                this.navigator.currentView = this[data[index]];
                 this.navigator.addCommand(data[index], this[data[index]]);
             }.bind(this));
+
+            if (data.length === 0) {
+                this.navigator.addCommand('home', this.home);
+            }
+
+            if (this.navigator.commands.length > 2) {
+                this.navigator.removeCommand();
+            }
 
             if (this.navigator.currentView) {
                 this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
             }
 
+            this.navigator.executeCommand();
 
-            if (this.navigator.previousCommand) {
-                console.log('App routerChange Previous View Destroy', this.navigator.previousCommand.key);
-                this.navigator.previousCommand.item.destroy();
-                this.navigator.removeCommand();
-                console.log('destroy', this.navigator);
-                this.navigator.currentCommand.item.execute();
-            }else{
-                this.navigator.executeCommand();
-            }            
-
-            //MINIMIZE HOME
-            if (data.length && this.navigator.currentCommand.key === 'home') {
-                this.home.minimize();
+            if(data.length<3)  {
+                this.navigator.subCommands=[];
             }
 
-            //EXECUTE NEXT COMMANDS
-            while (this.navigator.commands.length > 1) {
-                console.log('App routerChange While command', this.navigator.currentCommand.key);
-                this.navigator.nextCommand();
+
+            if (this.navigator.subCommands.length) {
+                this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
             }
 
         };
         this.onRouterDetails = function(evt, data) {
-            console.log('App onRouterDetails', evt, data);
-            this.onRouterChange(null, [data[0]]);
+            if (this.work.loaded === false) {
+                this.routerChange(null, [data[0]]);
+            }else{
+                this.work.show();
+            }
+
+            if(this.navigator.commands.length===0){
+                this.navigator.addCommand('home', this.home);
+                this.navigator.executeCommand();
+                this.routerChange(null, ['work']);
+            }
+
+            this.navigator.subCommands=[];
             this.navigator.subCommands.push({
                 project: data[1],
                 section: data[2]
             });
-        };
-        this.complete = function() {
-            // this.navigator.nextCommand();
 
-            // if (this.navigator.currentCommand === undefined) {
-            //     this.router.off('change');
-            //     this.event.unsubscribe('completed');
-            //     this.router.on('change', this.onRouterChangeNoAnimation.bind(this));
-            //     this.router.off('details');
-            //     this.router.on('details', this.onRouterChangeNoAnimationDetailsZ.bind(this));
+            this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
 
-            //     if (this.navigator.subCommands.length) {
-            //         this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
-            //     }
-            // }
-        };
-        this.onRouterChangeNoAnimation = function(evt, data) {
-            // var obj = { key: '', item: {} };
-            // if (data.length === 0) {
-            //     obj.key = 'home';
-            //     obj.item = this.home;
-            // } else {
-            //     obj.key = data[0];
-            //     obj.item = this[data[0]];
-            // }
-
-            // this.navigator.currentView = obj.item;
-            // this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
-            // this.navigator.addCommand(obj.key, obj.item);
-            // this.navigator.simpleCommand();
-        };
-
-        this.onRouterChangeNoAnimationDetailsZ = function(evt, data) {
-            // this.onRouterChange(null, [data[0]]);
-            // this.work.showSection(data[1], data[2]);
         };
         this.showConsoleGreetings = function() {
             console.clear();
