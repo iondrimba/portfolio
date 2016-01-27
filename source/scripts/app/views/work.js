@@ -4,7 +4,6 @@
         this.$$ = NoJQuery;
         this.projects = [];
         this.initialize = function() {
-            console.log('work initialize', WorkModel);
             this.setup();
         };
         this.setup = function() {

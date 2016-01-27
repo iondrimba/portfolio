@@ -1,17 +1,18 @@
 ﻿/* global Detector */
-define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
+define(['noJquery', 'text!source/templates/home.html', 'views/grid3d'], function(NoJQuery, template, Grid3D) {
     var Home = function(app) {
         this.el = '.home';
         this.$$ = NoJQuery;
         this.menu = app.menu;
         this.loaded = false;
 
-        this.initialize = function() {
-            console.log('Home init');
-
+        this.initialize = function() {            
             this.$$('body').removeClass('body-gradient');
             this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
+
+            //ADD TEMPLATE
+            this.$el.html(template);
 
             //INIT WEBGL GRID ONLY IDF SUPPORTED
             if (Detector.webgl) {
@@ -22,7 +23,6 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.loading-arrow').addClass('hidden');
         };
         this.execute = function() {
-            console.log('Home execute');
             if (Detector.webgl) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();

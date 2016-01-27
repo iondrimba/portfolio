@@ -1,5 +1,4 @@
 ﻿define([], function () {
-	console.log('model work');
     var WorkModel = {
         initialize: function () {
         },

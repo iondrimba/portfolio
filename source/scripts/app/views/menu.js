@@ -3,7 +3,6 @@
         this.el = '.menu';
         this.$$ = NoJQuery;
         this.initialize = function() {
-             console.log('Menu');
             this.setup();
             this.execute();
         };

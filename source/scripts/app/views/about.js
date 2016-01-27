@@ -5,11 +5,9 @@
         this.completed = false;
 
         this.initialize = function() {
-            console.log('About init', AboutModel);
             this.setup();
         };
         this.execute = function() {
-            console.log('About execute', this.template);
             this.setup();
             this.addAnimationsListeners();
             this.show();

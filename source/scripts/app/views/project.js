@@ -11,7 +11,6 @@
         this.counttitle = 0;
 
         this.initialize = function() {
-            console.log('Project INIT', template);
             this.setup();
             this.addAnimationListeners();
 

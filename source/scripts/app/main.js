@@ -40,13 +40,21 @@ require([
         this.about = new About(this);
 
         this.initialize = function() {
-            
+
             //NAVIGATOR
             this.navigator = new Navigator();
 
             //ROUTER
             this.router.initialize(this.event);
             this.router.on('change', this.routerChange.bind(this));
+            this.router.on('cmd', function(evt, paths) {
+                paths.map(function(path, index) {
+                    this.navigator.addCommand(path, this[path]);
+                }.bind(this));
+                this.navigator.commands.map(function(command, index) {
+                    this.navigator.executeCommand(index);
+                }.bind(this));
+            }.bind(this));
             this.router.on('details', this.onRouterDetails.bind(this));
             this.router.start();
 
@@ -81,8 +89,8 @@ require([
 
             this.navigator.executeCommand();
 
-            if(data.length<3)  {
-                this.navigator.subCommands=[];
+            if (data.length < 3) {
+                this.navigator.subCommands = [];
             }
 
             if (this.navigator.subCommands.length) {
@@ -93,17 +101,17 @@ require([
         this.onRouterDetails = function(evt, data) {
             if (this.work.loaded === false) {
                 this.routerChange(null, [data[0]]);
-            }else{
+            } else {
                 this.work.show();
             }
 
-            if(this.navigator.commands.length===0){
+            if (this.navigator.commands.length === 0) {
                 this.navigator.addCommand('home', this.home);
                 this.navigator.executeCommand();
                 this.routerChange(null, ['work']);
             }
 
-            this.navigator.subCommands=[];
+            this.navigator.subCommands = [];
             this.navigator.subCommands.push({
                 project: data[1],
                 section: data[2]

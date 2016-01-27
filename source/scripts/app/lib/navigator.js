@@ -16,33 +16,44 @@
 
             this.currentCommand = cmd;
 
-            if (this.commands.length > 2) {
-                this.previousCommand = this.commands[0];
-                this.commands.shift();
-            }
+            // if (this.commands.length > 2) {
+            //     this.previousCommand = this.commands[0];
+            //     this.commands.shift();
+            // }
 
-            this.currentView = this.commands[this.commands.length - 1].item;
+            this.currentView = this.commands[0].item;
         };
-        this.executeCommand = function() {
-            this.currentCommand = this.commands[this.commands.length - 1];
+        this.executeCommand = function(index) {                        
+            this.currentCommand = this.commands[index];            
+            this.currentView = this.commands[index].item;
+
             this.currentView.execute();
 
-            if (this.commands.length > 1) {
-                this.previousCommand = this.commands[0];
-                if (this.currentCommand.key !== this.previousCommand.key) {
-                    this.previousCommand.item.destroy();
-                }
+            console.log('execute', this.currentCommand.key);
+
+            if(this.commands.length>1) {
+                this.removeCommand();
             }
+
+            // if (this.commands.length > 1) {
+            //     this.previousCommand = this.commands[0];
+            //     if (this.currentCommand.key !== this.previousCommand.key) {
+            //         this.previousCommand.item.destroy();
+            //     }
+            // }
         };
         this.removeCommand = function() {
-            this.commands.pop();
-            this.currentCommand = this.commands[this.commands.length - 1];
+            //this.commands.pop();
+            //this.currentCommand = this.commands[this.commands.length - 1];
 
             if (this.currentView) {
                 this.currentView.destroy();
             }
-            this.previousCommand = null;
-            this.currentView = this.currentCommand.item;
+            console.log('remove');
+            this.commands.shift();
+            console.log(this.commands);
+            //this.previousCommand = null;
+            //this.currentView = this.currentCommand.item;
 
         };
     };
