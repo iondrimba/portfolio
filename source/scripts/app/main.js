@@ -30,7 +30,6 @@ require([
         };
 
         this.currentView;
-        this.previousView;
         this.event = PubSub;
 
         this.router = new Router(this.event);
@@ -46,15 +45,7 @@ require([
 
             //ROUTER
             this.router.initialize(this.event);
-            this.router.on('change', this.routerChange.bind(this));
-            this.router.on('cmd', function(evt, paths) {
-                paths.map(function(path, index) {
-                    this.navigator.addCommand(path, this[path]);
-                }.bind(this));
-                this.navigator.commands.map(function(command, index) {
-                    this.navigator.executeCommand(index);
-                }.bind(this));
-            }.bind(this));
+            this.router.on('change', this.routerChange.bind(this));           
             this.router.on('details', this.onRouterDetails.bind(this));
             this.router.start();
 
@@ -75,11 +66,17 @@ require([
                 this.navigator.addCommand(data[index], this[data[index]]);
             }.bind(this));
 
+            console.log('rout change', data);
+
             if (data.length === 0) {
+                console.log('rout add home', data);
                 this.navigator.addCommand('home', this.home);
             }
 
+            console.log('route commands', this.navigator.commands);
+
             if (this.navigator.commands.length > 2) {
+                console.log('route remove command', data);
                 this.navigator.removeCommand();
             }
 

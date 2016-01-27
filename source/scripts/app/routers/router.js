@@ -4,27 +4,10 @@
         this.njq = NoJQuery;
         this.initialize = function(event) {
             this.event = event;
-            page('*', function(ctx) {
-                var paths = ctx.path.split('/');
-                if (paths[0] === paths[1]) {
-                    paths[0] = 'home';
-                    paths.pop();
-                }
-
-                if (paths[0] == '') {
-                    paths[0] = 'home';
-                }
-
-                this.event.publish('cmd', paths);
-
-            }.bind(this));
-            // page('/', this.callbackPage.bind(this));
-            // page('/work', this.callbackPage.bind(this));
-            // page('/about', this.callbackPage.bind(this));
-            // page('/work/:project/:section', this.callbackPageDetails.bind(this));
-
-
-
+            page('/', this.callbackPage.bind(this));
+            page('/work', this.callbackPage.bind(this));
+            page('/about', this.callbackPage.bind(this));
+            page('/work/:project/:section', this.callbackPageDetails.bind(this));
         };
         this.start = function() {
             page();

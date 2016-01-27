@@ -49,6 +49,10 @@
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
+            
+            //ADD TEMPLATE
+            this.$el.html(template);
+
             this.firstLine = this.$$('fieldset:first-child');
             this.firstText = this.$$('fieldset:first-child').find('ul');
             this.secondLine = this.$$('fieldset:nth-child(2)');

@@ -1,4 +1,4 @@
-﻿define(['noJquery'], function(NoJQuery) {
+﻿define(['noJquery', 'text!source/templates/menu.html'], function(NoJQuery, template) {
     var Menu = function(app) {
         this.el = '.menu';
         this.$$ = NoJQuery;
@@ -11,6 +11,10 @@
             this.countAbout = 0;
             this.countWork = 0;
             this.$el = this.$$(this.el);
+
+            //ADD TEMPLATE
+            this.$el.html(template);
+
             this.btnWork = this.$$('.btn-work');
             this.btnAbout = this.$$('.btn-about');
             this.workLine = this.$$('.btn-work').find('.line-ph').find('i');

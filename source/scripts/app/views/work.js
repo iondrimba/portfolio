@@ -8,6 +8,9 @@
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
+              
+            //ADD TEMPLATE
+            this.$el.html(template);
         };
         this.execute = function() {
             this.setup();
