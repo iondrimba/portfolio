@@ -1,4 +1,8 @@
 ﻿define([], function () {
+<<<<<<< HEAD
+=======
+	console.log('model work');
+>>>>>>> 7bc3326
     var WorkModel = {
         initialize: function () {
         },

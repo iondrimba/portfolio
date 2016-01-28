@@ -18,6 +18,7 @@ var requirePaths = {
     vendors: 'source/scripts/vendors',
     noJquery: 'node_modules/nojquery/nojquery',
     TweenLite: 'source/scripts/vendors/TweenLite',
+    models: 'source/scripts/app/models',
     routers: 'source/scripts/app/routers'
 };
 
@@ -77,12 +78,10 @@ gulp.task('browser-sync', function() {
     });
 
 
-    gulp.watch("build/css/*.css").on('change', browserSync.reload)
-    gulp.watch("build/scripts/*.js").on('change', browserSync.reload)
-    gulp.watch("*.html").on('change', browserSync.reload)
+    gulp.watch("build/css/*.css").on('change', browserSync.reload);
+    gulp.watch("build/scripts/*.js").on('change', browserSync.reload);
+    gulp.watch("*.html").on('change', browserSync.reload);
 
-    gulp.watch('./source/styles/**/*.{sass,scss}', ['sass']);
-    gulp.watch('./source/scripts/**/*.js', ['requirejs:dev']);
 });
 
 

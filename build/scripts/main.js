@@ -2465,8 +2465,9 @@ define('routers/router',['noJquery', 'vendors/page'], function(NoJQuery, page) {
 define('lib/navigator',[], function() {
     'use strict';
     var Navigator = function Navigator() {
-        this.currentCommand = undefined;
-        this.previousCommand = undefined;
+        this.currentCommand;
+        this.previousCommand;
+        this.currentView;
         this.commands = [];
         this.subCommands = [];
         this.addCommand = function(key, item) {
@@ -2476,53 +2477,36 @@ define('lib/navigator',[], function() {
             };
 
             this.commands.push(cmd);
+
             this.currentCommand = cmd;
 
-            // if (this.previousCommand && this.commands.length > 1) {
-            //     this.previousCommand = this.commands[0];
-            //     if (this.commands.length > 1) {
-            //         this.commands.shift();
-            //     }
-            // }
+            if (this.commands.length > 2) {
+                this.previousCommand = this.commands[0];
+                this.commands.shift();
+            }
 
-            console.log('navigator addCommand', key);
+            this.currentView = this.commands[this.commands.length - 1].item;
         };
         this.executeCommand = function() {
-            console.log('navigator executeCommand',this.commands[0].key)
-            this.currentCommand = this.commands[0];
-            this.currentCommand.item.execute();
-        };
-        this.simpleCommand = function() {
-            if (this.previousCommand && this.previousCommand.key !== 'home') {
-                this.previousCommand.item.destroy();
-            } else {
-                this.previousCommand.item.minimize();
-            }
+            this.currentCommand = this.commands[this.commands.length - 1];
+            this.currentView.execute();
 
-            this.executeCommand();
-        };
-        this.removeCommand = function() {                        
-            this.currentCommand = this.commands[0];
-            this.commands = [];
-        };
-        this.nextCommand = function() {
             if (this.commands.length > 1) {
-                this.previousCommand = this.commands.shift();
-                this.currentCommand = this.commands[0];
-
-                this.executeCommand();
-                this.previousCommand = this.commands.shift();
+                this.previousCommand = this.commands[0];
+                if (this.currentCommand.key !== this.previousCommand.key) {
+                    this.previousCommand.item.destroy();
+                }
             }
-            // this.previousCommand = this.commands.shift();
-            // this.currentCommand = this.commands[0];
+        };
+        this.removeCommand = function() {
+            this.commands.pop();
+            this.currentCommand = this.commands[this.commands.length - 1];
 
-            // if (this.previousCommand) {
-            //     if (this.previousCommand.key === 'home' && this.currentCommand) {
-            //         this.previousCommand.item.minimize();
-            //     } else if (this.currentCommand) {
-            //         this.previousCommand.item.destroy();
-            //     }
-            // }
+            if (this.currentView) {
+                this.currentView.destroy();
+            }
+            this.previousCommand = null;
+            this.currentView = this.currentCommand.item;
 
         };
     };
@@ -46756,6 +46740,7 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
         this.el = '.home';
         this.$$ = NoJQuery;
         this.menu = app.menu;
+        this.loaded = false;
 
         this.initialize = function() {
             console.log('Home init');
@@ -46778,7 +46763,7 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
                 }
-            }                     
+            }
 
             //SHOW VIEW
             this.$el.removeClass('hidden');
@@ -46799,32 +46784,627 @@ define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').addClass('draw-in');
 
             this.menu.hide();
+
+            this.loaded = true;
         };
+
         this.minimize = function() {
-            this.$el.removeClass('show-full');
+            this.$$('.home').removeClass('show-full');
 
             //ANIMATE MINIMIZED VIEW
-            this.$el.addClass('show-min');
+            this.$$('.home').addClass('show-min');
 
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');
             this.$$('.scroll-down-button').removeClass('draw-in');
-
+            console.log('home minimize');
             this.menu.animate();
         };
+        this.destroy = function() {
+
+            this.minimize();
+        }
 
         this.initialize();
     };
     return Home;
 });
 
-define('views/gallery',['noJquery'], function(NoJQuery) {
-    var Gallery = function( el) {
-        this.el = '.gallery';
+/**
+ * @license RequireJS text 2.0.12 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved.
+ * Available via the MIT or new BSD license.
+ * see: http://github.com/requirejs/text for details
+ */
+/*jslint regexp: true */
+/*global require, XMLHttpRequest, ActiveXObject,
+  define, window, process, Packages,
+  java, location, Components, FileUtils */
+
+define('text',['module'], function (module) {
+    'use strict';
+
+    var text, fs, Cc, Ci, xpcIsWindows,
+        progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
+        xmlRegExp = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im,
+        bodyRegExp = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im,
+        hasLocation = typeof location !== 'undefined' && location.href,
+        defaultProtocol = hasLocation && location.protocol && location.protocol.replace(/\:/, ''),
+        defaultHostName = hasLocation && location.hostname,
+        defaultPort = hasLocation && (location.port || undefined),
+        buildMap = {},
+        masterConfig = (module.config && module.config()) || {};
+
+    text = {
+        version: '2.0.12',
+
+        strip: function (content) {
+            //Strips <?xml ...?> declarations so that external SVG and XML
+            //documents can be added to a document without worry. Also, if the string
+            //is an HTML document, only the part inside the body tag is returned.
+            if (content) {
+                content = content.replace(xmlRegExp, "");
+                var matches = content.match(bodyRegExp);
+                if (matches) {
+                    content = matches[1];
+                }
+            } else {
+                content = "";
+            }
+            return content;
+        },
+
+        jsEscape: function (content) {
+            return content.replace(/(['\\])/g, '\\$1')
+                .replace(/[\f]/g, "\\f")
+                .replace(/[\b]/g, "\\b")
+                .replace(/[\n]/g, "\\n")
+                .replace(/[\t]/g, "\\t")
+                .replace(/[\r]/g, "\\r")
+                .replace(/[\u2028]/g, "\\u2028")
+                .replace(/[\u2029]/g, "\\u2029");
+        },
+
+        createXhr: masterConfig.createXhr || function () {
+            //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
+            var xhr, i, progId;
+            if (typeof XMLHttpRequest !== "undefined") {
+                return new XMLHttpRequest();
+            } else if (typeof ActiveXObject !== "undefined") {
+                for (i = 0; i < 3; i += 1) {
+                    progId = progIds[i];
+                    try {
+                        xhr = new ActiveXObject(progId);
+                    } catch (e) {}
+
+                    if (xhr) {
+                        progIds = [progId];  // so faster next time
+                        break;
+                    }
+                }
+            }
+
+            return xhr;
+        },
+
+        /**
+         * Parses a resource name into its component parts. Resource names
+         * look like: module/name.ext!strip, where the !strip part is
+         * optional.
+         * @param {String} name the resource name
+         * @returns {Object} with properties "moduleName", "ext" and "strip"
+         * where strip is a boolean.
+         */
+        parseName: function (name) {
+            var modName, ext, temp,
+                strip = false,
+                index = name.indexOf("."),
+                isRelative = name.indexOf('./') === 0 ||
+                             name.indexOf('../') === 0;
+
+            if (index !== -1 && (!isRelative || index > 1)) {
+                modName = name.substring(0, index);
+                ext = name.substring(index + 1, name.length);
+            } else {
+                modName = name;
+            }
+
+            temp = ext || modName;
+            index = temp.indexOf("!");
+            if (index !== -1) {
+                //Pull off the strip arg.
+                strip = temp.substring(index + 1) === "strip";
+                temp = temp.substring(0, index);
+                if (ext) {
+                    ext = temp;
+                } else {
+                    modName = temp;
+                }
+            }
+
+            return {
+                moduleName: modName,
+                ext: ext,
+                strip: strip
+            };
+        },
+
+        xdRegExp: /^((\w+)\:)?\/\/([^\/\\]+)/,
+
+        /**
+         * Is an URL on another domain. Only works for browser use, returns
+         * false in non-browser environments. Only used to know if an
+         * optimized .js version of a text resource should be loaded
+         * instead.
+         * @param {String} url
+         * @returns Boolean
+         */
+        useXhr: function (url, protocol, hostname, port) {
+            var uProtocol, uHostName, uPort,
+                match = text.xdRegExp.exec(url);
+            if (!match) {
+                return true;
+            }
+            uProtocol = match[2];
+            uHostName = match[3];
+
+            uHostName = uHostName.split(':');
+            uPort = uHostName[1];
+            uHostName = uHostName[0];
+
+            return (!uProtocol || uProtocol === protocol) &&
+                   (!uHostName || uHostName.toLowerCase() === hostname.toLowerCase()) &&
+                   ((!uPort && !uHostName) || uPort === port);
+        },
+
+        finishLoad: function (name, strip, content, onLoad) {
+            content = strip ? text.strip(content) : content;
+            if (masterConfig.isBuild) {
+                buildMap[name] = content;
+            }
+            onLoad(content);
+        },
+
+        load: function (name, req, onLoad, config) {
+            //Name has format: some.module.filext!strip
+            //The strip part is optional.
+            //if strip is present, then that means only get the string contents
+            //inside a body tag in an HTML string. For XML/SVG content it means
+            //removing the <?xml ...?> declarations so the content can be inserted
+            //into the current doc without problems.
+
+            // Do not bother with the work if a build and text will
+            // not be inlined.
+            if (config && config.isBuild && !config.inlineText) {
+                onLoad();
+                return;
+            }
+
+            masterConfig.isBuild = config && config.isBuild;
+
+            var parsed = text.parseName(name),
+                nonStripName = parsed.moduleName +
+                    (parsed.ext ? '.' + parsed.ext : ''),
+                url = req.toUrl(nonStripName),
+                useXhr = (masterConfig.useXhr) ||
+                         text.useXhr;
+
+            // Do not load if it is an empty: url
+            if (url.indexOf('empty:') === 0) {
+                onLoad();
+                return;
+            }
+
+            //Load the text. Use XHR if possible and in a browser.
+            if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
+                text.get(url, function (content) {
+                    text.finishLoad(name, parsed.strip, content, onLoad);
+                }, function (err) {
+                    if (onLoad.error) {
+                        onLoad.error(err);
+                    }
+                });
+            } else {
+                //Need to fetch the resource across domains. Assume
+                //the resource has been optimized into a JS module. Fetch
+                //by the module name + extension, but do not include the
+                //!strip part to avoid file system issues.
+                req([nonStripName], function (content) {
+                    text.finishLoad(parsed.moduleName + '.' + parsed.ext,
+                                    parsed.strip, content, onLoad);
+                });
+            }
+        },
+
+        write: function (pluginName, moduleName, write, config) {
+            if (buildMap.hasOwnProperty(moduleName)) {
+                var content = text.jsEscape(buildMap[moduleName]);
+                write.asModule(pluginName + "!" + moduleName,
+                               "define(function () { return '" +
+                                   content +
+                               "';});\n");
+            }
+        },
+
+        writeFile: function (pluginName, moduleName, req, write, config) {
+            var parsed = text.parseName(moduleName),
+                extPart = parsed.ext ? '.' + parsed.ext : '',
+                nonStripName = parsed.moduleName + extPart,
+                //Use a '.js' file name so that it indicates it is a
+                //script that can be loaded across domains.
+                fileName = req.toUrl(parsed.moduleName + extPart) + '.js';
+
+            //Leverage own load() method to load plugin value, but only
+            //write out values that do not have the strip argument,
+            //to avoid any potential issues with ! in file names.
+            text.load(nonStripName, req, function (value) {
+                //Use own write() method to construct full module value.
+                //But need to create shell that translates writeFile's
+                //write() to the right interface.
+                var textWrite = function (contents) {
+                    return write(fileName, contents);
+                };
+                textWrite.asModule = function (moduleName, contents) {
+                    return write.asModule(moduleName, fileName, contents);
+                };
+
+                text.write(pluginName, nonStripName, textWrite, config);
+            }, config);
+        }
+    };
+
+    if (masterConfig.env === 'node' || (!masterConfig.env &&
+            typeof process !== "undefined" &&
+            process.versions &&
+            !!process.versions.node &&
+            !process.versions['node-webkit'])) {
+        //Using special require.nodeRequire, something added by r.js.
+        fs = require.nodeRequire('fs');
+
+        text.get = function (url, callback, errback) {
+            try {
+                var file = fs.readFileSync(url, 'utf8');
+                //Remove BOM (Byte Mark Order) from utf8 files if it is there.
+                if (file.indexOf('\uFEFF') === 0) {
+                    file = file.substring(1);
+                }
+                callback(file);
+            } catch (e) {
+                if (errback) {
+                    errback(e);
+                }
+            }
+        };
+    } else if (masterConfig.env === 'xhr' || (!masterConfig.env &&
+            text.createXhr())) {
+        text.get = function (url, callback, errback, headers) {
+            var xhr = text.createXhr(), header;
+            xhr.open('GET', url, true);
+
+            //Allow plugins direct access to xhr headers
+            if (headers) {
+                for (header in headers) {
+                    if (headers.hasOwnProperty(header)) {
+                        xhr.setRequestHeader(header.toLowerCase(), headers[header]);
+                    }
+                }
+            }
+
+            //Allow overrides specified in config
+            if (masterConfig.onXhr) {
+                masterConfig.onXhr(xhr, url);
+            }
+
+            xhr.onreadystatechange = function (evt) {
+                var status, err;
+                //Do not explicitly handle errors, those should be
+                //visible via console output in the browser.
+                if (xhr.readyState === 4) {
+                    status = xhr.status || 0;
+                    if (status > 399 && status < 600) {
+                        //An http 4xx or 5xx error. Signal an error.
+                        err = new Error(url + ' HTTP status: ' + status);
+                        err.xhr = xhr;
+                        if (errback) {
+                            errback(err);
+                        }
+                    } else {
+                        callback(xhr.responseText);
+                    }
+
+                    if (masterConfig.onXhrComplete) {
+                        masterConfig.onXhrComplete(xhr, url);
+                    }
+                }
+            };
+            xhr.send(null);
+        };
+    } else if (masterConfig.env === 'rhino' || (!masterConfig.env &&
+            typeof Packages !== 'undefined' && typeof java !== 'undefined')) {
+        //Why Java, why is this so awkward?
+        text.get = function (url, callback) {
+            var stringBuffer, line,
+                encoding = "utf-8",
+                file = new java.io.File(url),
+                lineSeparator = java.lang.System.getProperty("line.separator"),
+                input = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(file), encoding)),
+                content = '';
+            try {
+                stringBuffer = new java.lang.StringBuffer();
+                line = input.readLine();
+
+                // Byte Order Mark (BOM) - The Unicode Standard, version 3.0, page 324
+                // http://www.unicode.org/faq/utf_bom.html
+
+                // Note that when we use utf-8, the BOM should appear as "EF BB BF", but it doesn't due to this bug in the JDK:
+                // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4508058
+                if (line && line.length() && line.charAt(0) === 0xfeff) {
+                    // Eat the BOM, since we've already found the encoding on this file,
+                    // and we plan to concatenating this buffer with others; the BOM should
+                    // only appear at the top of a file.
+                    line = line.substring(1);
+                }
+
+                if (line !== null) {
+                    stringBuffer.append(line);
+                }
+
+                while ((line = input.readLine()) !== null) {
+                    stringBuffer.append(lineSeparator);
+                    stringBuffer.append(line);
+                }
+                //Make sure we return a JavaScript string and not a Java string.
+                content = String(stringBuffer.toString()); //String
+            } finally {
+                input.close();
+            }
+            callback(content);
+        };
+    } else if (masterConfig.env === 'xpconnect' || (!masterConfig.env &&
+            typeof Components !== 'undefined' && Components.classes &&
+            Components.interfaces)) {
+        //Avert your gaze!
+        Cc = Components.classes;
+        Ci = Components.interfaces;
+        Components.utils['import']('resource://gre/modules/FileUtils.jsm');
+        xpcIsWindows = ('@mozilla.org/windows-registry-key;1' in Cc);
+
+        text.get = function (url, callback) {
+            var inStream, convertStream, fileObj,
+                readData = {};
+
+            if (xpcIsWindows) {
+                url = url.replace(/\//g, '\\');
+            }
+
+            fileObj = new FileUtils.File(url);
+
+            //XPCOM, you so crazy
+            try {
+                inStream = Cc['@mozilla.org/network/file-input-stream;1']
+                           .createInstance(Ci.nsIFileInputStream);
+                inStream.init(fileObj, 1, 0, false);
+
+                convertStream = Cc['@mozilla.org/intl/converter-input-stream;1']
+                                .createInstance(Ci.nsIConverterInputStream);
+                convertStream.init(inStream, "utf-8", inStream.available(),
+                Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
+
+                convertStream.readString(inStream.available(), readData);
+                convertStream.close();
+                inStream.close();
+                callback(readData.value);
+            } catch (e) {
+                throw new Error((fileObj && fileObj.path || '') + ': ' + e);
+            }
+        };
+    }
+    return text;
+});
+
+
+define('text!source/templates/work.html',[],function () { return '<div class=\'work\'>\r\n   \r\n</div>\r\n';});
+
+define('models/work',[], function () {
+	console.log('model work');
+    var WorkModel = {
+        initialize: function () {
+        },
+        onModelChange: function (view, data) {
+        }
+    };
+    return WorkModel;
+});
+
+define('text!source/templates/project.html',[],function () { return '<div class=\'project\'>\r\n   \r\n</div>\r\n';});
+
+define('models/project',[], function () {
+    var ProjectModel = {
+        initialize: function () {
+        },
+        onModelChange: function (view, data) {
+        }
+    };
+    return ProjectModel;
+});
+
+define('text!source/templates/tech.html',[],function () { return '<div class="tech view hidden">\r\n    <a class="close" href="/work/musicbattl/info">\r\n        <label>✕</label>\r\n    </a>\r\n    <fieldset class="front-end">\r\n        <legend>\r\n            Front-End:\r\n        </legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>Javascript/jQuery</li>\r\n            <li>Sass</li>\r\n            <li>Handlebars</li>\r\n            <li>Backbone</li>\r\n            <li>Grunt</li>\r\n            <li>SoundCloud API</li>\r\n            <li>Design</li>\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset class="back-end">\r\n        <legend>Back-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>C#</li>\r\n            <li>WEBAPI</li>\r\n            <li>DI (Ninject)</li>\r\n            <li>SQL Server</li>\r\n            <li>SignalR</li>\r\n            <li>Azure</li>\r\n        </ul>\r\n    </fieldset>\r\n</div>\r\n';});
+
+define('models/tech',[], function () {
+    var TechModel ={
+        initialize: function () {
+        },
+        onModelChange: function (view, data) {
+        }
+    };
+    return TechModel;
+});
+define('views/tech',['noJquery', 'text!source/templates/tech.html', 'models/tech'], function(NoJQuery, template, TechModel) {
+    var Tech = function(options) {
+        this.el = options.el;
+        this.$$ = NoJQuery;
+
+        this.initialize = function() {
+            this.setup();
+        };
+
+        this.execute = function() {
+            this.setup();
+            this.addAnimationsListeners();
+            this.show()
+            this.animateIn();
+        };
+
+        this.addAnimationsListeners = function() {
+            var countleft = 0,
+                countright = 0;
+
+            this.$el = this.$$(this.el);
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
+            options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
+                countleft++;
+                if (countleft === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-left');
+                    this.$$(this.el + ' .front-end ul').addClass('animate-text');
+
+                }
+            }.bind(this));
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
+            options.app.prefixedEventListener(this.backendLine.elmts[0], 'AnimationEnd', function(e) {
+                countright++;
+                if (countright === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-right');
+                    this.$$(this.el + ' .back-end ul').addClass('animate-text');
+                }
+            }.bind(this));
+        };
+
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            this.frontendLine = this.$$(this.el + ' .front-end');
+            this.frontendText = this.$$(this.el + ' .front-end').find('ul');
+            this.backendLine = this.$$(this.el + ' .back-end');
+            this.backendText = this.$$(this.el + ' .back-end').find('ul');
+        };
+
+        this.show = function() {
+            this.$el.removeClass('hidden');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+
+
+        this.animateIn = function() {
+            this.frontendLine.addClass('animate-in-legend-left');
+            this.backendLine.addClass('animate-in-legend-right');
+        };
+
+        this.removeAnimation = function() {
+            this.frontendLine.removeClass('animate-in-legend-left');
+            this.backendLine.removeClass('animate-in-legend-right');
+            this.$$(this.el + 'ul').removeClass('animate-text');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeAnimation();
+        };
+
+        this.initialize();
+    };
+    return Tech;
+});
+
+
+define('text!source/templates/info.html',[],function () { return '<div class="info view hidden">\r\n    <div class="preview">\r\n        <div class="picture-mask picture-one">\r\n            <img src="/images/gallery1.jpg" />\r\n        </div>\r\n        <div class="picture-mask picture-two">\r\n            <img src="/images/gallery1.jpg" />\r\n        </div>\r\n        <div class="picture-mask picture-tree">\r\n            <img src="/images/gallery1.jpg" />\r\n        </div>\r\n        <div class="picture-mask picture-four">\r\n            <img src="/images/gallery1.jpg" />\r\n        </div>\r\n        <div class="picture-mask picture-five">\r\n            <img src="/images/gallery1.jpg" />\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
+
+define('models/info',[], function () {
+    var InfoModel = {
+        initialize: function () {
+        },
+        onModelChange: function (view, data) {
+        }
+    };
+    return InfoModel;
+});
+define('views/info',['noJquery', 'text!source/templates/info.html', 'models/info'], function(NoJQuery, template, InfoModel) {
+    var Info = function(options) {
+        this.el = options.el;
         this.$$ = NoJQuery;
         this.initialize = function() {
             this.setup();
         };
+
+        this.execute = function() {
+            this.setup();
+            this.show();
+            this.animateIn();
+        };
+
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+        };
+
+        this.show = function() {
+            this.$el.removeClass('hidden');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+
+        this.animateIn = function() {
+
+            this.$$(this.el + ' .picture-one').addClass('picture-one-animatein');
+            this.$$(this.el + ' .picture-two').addClass('picture-two-animatein');
+            this.$$(this.el + ' .picture-tree').addClass('picture-tree-animatein');
+            this.$$(this.el + ' .picture-four').addClass('picture-four-animatein');
+            this.$$(this.el + ' .picture-five').addClass('picture-five-animatein');
+        };
+
+        this.removeAnimation = function() {
+            this.$$(this.el + ' .picture-one').removeClass('picture-one-animatein');
+            this.$$(this.el + ' .picture-two').removeClass('picture-two-animatein');
+            this.$$(this.el + ' .picture-tree').removeClass('picture-tree-animatein');
+            this.$$(this.el + ' .picture-four').removeClass('picture-four-animatein');
+            this.$$(this.el + ' .picture-five').removeClass('picture-five-animatein');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeAnimation();
+        };
+
+        this.initialize();
+    };
+    return Info;
+});
+
+
+define('text!source/templates/gallery.html',[],function () { return '<div class="gallery view hidden">\r\n    <a class="close" href="/work/musicbattl/info">✕</a>\r\n    <div class="images-ph">\r\n        <a class="rounded-button prev">\r\n            <div class="svg-ph">\r\n                <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                    <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                </svg>\r\n            </div>\r\n            <i class="arrow" title="arrow icon"></i>\r\n        </a>\r\n        <div class="image-list">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <div class="ph">\r\n                <img src="/images/gallery1.jpg" />\r\n                <img src="/images/musicbattl2.jpg" />\r\n                <img src="/images/musicbattl3.jpg" />\r\n                <img src="/images/musicbattl4.jpg" />\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n        <a class="rounded-button next">\r\n            <div class="svg-ph">\r\n                <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                    <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                </svg>\r\n            </div>\r\n            <i class="arrow" title="arrow icon"></i>\r\n        </a>\r\n        <div class="images-menu">\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n        </div>\r\n    </div>\r\n    <div class="clearfix"></div>\r\n</div>\r\n';});
+
+define('models/gallery',[], function () {
+    var Gallery = {
+        initialize: function () {
+        },
+        onModelChange: function (view, data) {
+        }
+    };
+    return Gallery;
+});
+define('views/gallery',['noJquery', 'text!source/templates/gallery.html', 'models/gallery'], function(NoJQuery, template, GalleryModel) {
+    
+    var Gallery = function( el) {
+        this.el = '.gallery';
+        this.$$ = NoJQuery;
+
+        this.initialize = function() {
+            this.setup();
+        };
+        
         this.setup = function() {
             this.total = 4;
             this.current = 0;
@@ -46937,151 +47517,24 @@ define('views/gallery',['noJquery'], function(NoJQuery) {
             this.prev();
         };
     };
+
     return Gallery;
 });
 
-define('views/tech',['noJquery'], function(NoJQuery) {
-    var Tech = function(options) {
-        this.el = options.el;
-        this.$$ = NoJQuery;
-
-        this.initialize = function() {
-            this.setup();
-        };
-
-        this.execute = function() {
-            this.setup();
-            this.addAnimationsListeners();
-            this.show()
-            this.animateIn();
-        };
-
-        this.addAnimationsListeners = function() {
-            var countleft = 0,
-                countright = 0;
-
-            this.$el = this.$$(this.el);
-
-            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
-            options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
-                countleft++;
-                if (countleft === 2) {
-                    this.$$(e.target).removeClass('animate-in-legend-left');
-                    this.$$(this.el + ' .front-end ul').addClass('animate-text');
-
-                }
-            }.bind(this));
-
-            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
-            options.app.prefixedEventListener(this.backendLine.elmts[0], 'AnimationEnd', function(e) {
-                countright++;
-                if (countright === 2) {
-                    this.$$(e.target).removeClass('animate-in-legend-right');
-                    this.$$(this.el + ' .back-end ul').addClass('animate-text');
-                }
-            }.bind(this));
-        };
-
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-            this.frontendLine = this.$$(this.el + ' .front-end');
-            this.frontendText = this.$$(this.el + ' .front-end').find('ul');
-            this.backendLine = this.$$(this.el + ' .back-end');
-            this.backendText = this.$$(this.el + ' .back-end').find('ul');
-        };
-
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
-
-
-        this.animateIn = function() {
-            this.frontendLine.addClass('animate-in-legend-left');
-            this.backendLine.addClass('animate-in-legend-right');
-        };
-
-        this.removeAnimation = function() {
-            this.frontendLine.removeClass('animate-in-legend-left');
-            this.backendLine.removeClass('animate-in-legend-right');
-            this.$$(this.el + 'ul').removeClass('animate-text');
-        };
-
-        this.destroy = function() {
-            this.hide();
-            this.removeAnimation();
-        };
-
-        this.initialize();
-    };
-    return Tech;
-});
-
-define('views/info',['noJquery'], function(NoJQuery) {
-    var Info = function(options) {
-        this.el = options.el;
-        this.$$ = NoJQuery;
-        this.initialize = function() {
-            this.setup();
-        };
-
-        this.execute = function() {
-            this.setup();
-            this.show();
-            this.animateIn();
-        };
-
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-        };
-
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
-
-        this.animateIn = function() {
-
-            this.$$(this.el + ' .picture-one').addClass('picture-one-animatein');
-            this.$$(this.el + ' .picture-two').addClass('picture-two-animatein');
-            this.$$(this.el + ' .picture-tree').addClass('picture-tree-animatein');
-            this.$$(this.el + ' .picture-four').addClass('picture-four-animatein');
-            this.$$(this.el + ' .picture-five').addClass('picture-five-animatein');
-        };
-
-        this.removeAnimation = function() {
-            this.$$(this.el + ' .picture-one').removeClass('picture-one-animatein');
-            this.$$(this.el + ' .picture-two').removeClass('picture-two-animatein');
-            this.$$(this.el + ' .picture-tree').removeClass('picture-tree-animatein');
-            this.$$(this.el + ' .picture-four').removeClass('picture-four-animatein');
-            this.$$(this.el + ' .picture-five').removeClass('picture-five-animatein');
-        };
-
-        this.destroy = function() {
-            this.hide();
-            this.removeAnimation();
-        };
-
-        this.initialize();
-    };
-    return Info;
-});
-
-define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info'], function(NoJQuery, Gallery, Tech, Info) {
+define('views/project',['noJquery', 'text!source/templates/project.html', 'models/project', 'views/tech', 'views/info', 'views/gallery'], function(NoJQuery, template,  ProjectModel, Tech, Info, Gallery) {
     var Project = function(app, el) {
         this.el = '.project';
         this.$$ = NoJQuery;
         this.key = '';
         this.router = app.router;
         this.routerHandler = null;
+        this.countatech = 0;
+        this.countgallery = 0;
+        this.countexternal = 0;
+        this.counttitle = 0;
 
         this.initialize = function() {
+            console.log('Project INIT', template);
             this.setup();
             this.addAnimationListeners();
 
@@ -47116,55 +47569,50 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
             this.techLink = this.$$(this.el + ' .work-infos > .tech');
             this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
             this.launchLink = this.$$(this.el + ' .work-infos > .external');
-            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
         };
 
         this.addAnimationListeners = function() {
-            var countatech = 0,
-                countgallery = 0,
-                countexternal = 0,
-                counttitle = 0,
-                techLine = this.$$(this.el + ' .work-infos > .tech'),
+            var techLine = this.$$(this.el + ' .work-infos > .tech'),
                 externalLine = this.$$(this.el + ' .work-infos > .external'),
                 galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
-                infoBtn = this.$$(this.el).find('.info').find('.btn');
+                infoBtn = this.$$(this.el + ' .infos > .btn');
 
             app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
-                countatech++;
-                if (countatech == 1) {
+                this.countatech++;
+                if (this.countatech == 1) {
                     this.$$(this.el + ' .work-infos > .tech > .sprite').addClass('animate-sprite');
                 }
-                if (countatech === 2) {
+                if (this.countatech === 2) {
                     this.$$(e.target).removeClass('animate-in-link-tech');
                     this.$$(this.el + ' .work-infos > .tech > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(externalLine.elmts[0], 'AnimationEnd', function(e) {
-                countexternal++;
-                if (countexternal == 1) {
+                this.countexternal++;
+                if (this.countexternal == 1) {
                     this.$$(this.el + ' .work-infos > .external > .sprite').addClass('animate-sprite');
                 }
-                if (countexternal === 2) {
-
-                    this.$$(e.target).removeClass('animate-in-link-gallery');
+                if (this.countexternal === 2) {
+                    this.$$(e.target).removeClass('animate-in-link-external');
                     this.$$(this.el + ' .work-infos > .external > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(galleryLine.elmts[0], 'AnimationEnd', function(e) {
-                countgallery++;
-                if (countgallery == 1) {
+                this.countgallery++;
+                if (this.countgallery == 1) {
                     this.$$(this.el + ' .work-infos > .gallery > .sprite').addClass('animate-sprite');
                 }
-                if (countgallery === 2) {
+                if (this.countgallery === 2) {
                     this.$$(e.target).removeClass('animate-in-link-gallery');
                     this.$$(this.el + ' .work-infos > .gallery > span').addClass('animate-span');
                 }
             }.bind(this));
+
             app.prefixedEventListener(infoBtn.elmts[0], 'AnimationEnd', function(e) {
-                counttitle++;
-                if (counttitle === 1) {
+                this.counttitle++;
+                if (this.counttitle === 1) {
                     this.$$(e.target).removeClass('animate-in-title');
                     this.$$(this.el + ' .infos > .btn > h2').addClass('animate-title-opacity');
                 }
@@ -47182,10 +47630,24 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
 
 
         this.animateIn = function() {
-            this.titleLink.addClass('animate-in-title');
+            this.countatech = 0;
+            this.countgallery = 0;
+            this.countexternal = 0;
+            this.counttitle = 0;
+            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
+            this.$$(this.el + ' .infos > .btn').addClass('animate-in-title');
             this.techLink.addClass('animate-in-link-tech');
             this.launchLink.addClass('animate-in-link-external');
             this.galleryLink.addClass('animate-in-link-gallery');
+        };
+
+        this.close = function() {
+            this.tech.destroy();
+
+            if (this.gallery) {
+                this.gallery.destroy();
+            }
+            this.info.execute();
         };
 
         this.destroy = function() {
@@ -47221,8 +47683,13 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
             this.$$(this.el + ' .infos > p').removeClass('animate-text-opacity');
         };
         this.callbackPageProject = function(section) {
-            this.info.destroy()
-            this.tech.destroy();
+
+            if (this.info) {
+                this.info.destroy();
+            }
+            if (this.tech) {
+                this.tech.destroy();
+            }
 
             if (this.gallery) {
                 this.gallery.destroy();
@@ -47238,20 +47705,19 @@ define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info']
     return Project;
 });
 
-define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
+define('views/work',['noJquery', 'text!source/templates/work.html', 'models/work', 'views/project'], function(NoJQuery, template, WorkModel, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = NoJQuery;
         this.projects = [];
         this.initialize = function() {
-            console.log('Work init');
+            console.log('work initialize', WorkModel);
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
         };
         this.execute = function() {
-            console.log('Work execute');
             this.setup();
             this.show();
             this.projetSelect();
@@ -47265,10 +47731,7 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
         };
 
         this.projetSelect = function() {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
-
+            this.projects = this.getProjects();
         };
         this.getProjects = function() {
             var ar = [],
@@ -47279,6 +47742,7 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
                 var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
                 pro.initialize();
                 ar[index] = pro;
+                pro.close();
             }.bind(this));
             projectsElmt = null;
             return ar;
@@ -47286,17 +47750,21 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
 
         this.showSection = function(project, section) {
             if (this.projects.length === 0) {
-                this.projects = this.getProjects();
+                this.projetSelect();
             }
 
             this.projects.map(function(elmt, index) {
                 if (elmt.key.toLowerCase() === project.toLowerCase()) {
                     elmt.callbackPageProject(section);
+                } else {
+                    elmt.close();
                 }
             });
+
         };
 
         this.destroy = function() {
+            this.loaded = false;
             this.hide();
             this.projects.map(function(elmt, index) {
                 elmt.destroy();
@@ -47309,17 +47777,30 @@ define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
     return Work;
 });
 
-define('views/about',['noJquery'], function(NoJQuery) {
+
+define('text!source/templates/about.html',[],function () { return '<div class="about hidden">\r\n    <p>\r\n        Hi, my name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.\r\n        <br /> I\'m focused on front-end development with javascript and back-end development with C#(.NET).\r\n        <br />\r\n        <br>Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.\r\n        <br />\r\n        <br /> Thanks for stopping by =]\r\n    </p>\r\n    <div class="skills-set">\r\n        <fieldset>\r\n            <legend>Front-End:</legend>\r\n            <div class="line-ph">\r\n                <i></i>\r\n            </div>\r\n            <ul>\r\n                <li>Javascript/jQuery</li>\r\n                <li>Sass/Less</li>\r\n                <li>Handlebars</li>\r\n                <li>Backbone</li>\r\n                <li>Grunt/Gulp/npm</li>\r\n                <li>CSS3</li>\r\n                <li>HTML5</li>\r\n                <li>Bootstrap</li>\r\n            </ul>\r\n        </fieldset>\r\n        <fieldset>\r\n            <legend>Back-End:</legend>\r\n            <div class="line-ph">\r\n                <i></i>\r\n            </div>\r\n            <ul>\r\n                <li>C#</li>\r\n                <li>MVC </li>\r\n                <li>Web API</li>\r\n                <li>Web Forms</li>\r\n                <li>WPF</li>\r\n                <li>SQL Server</li>\r\n            </ul>\r\n        </fieldset>\r\n        <fieldset>\r\n            <legend>Design:</legend>\r\n            <div class="line-ph">\r\n                <i></i>\r\n            </div>\r\n            <ul>\r\n                <li>Photoshop</li>\r\n                <li>Flash</li>\r\n            </ul>\r\n        </fieldset>\r\n    </div>\r\n    <br />\r\n    <br />\r\n    <div class="about-project">\r\n        <strong>About this project:</strong>\r\n        <p>\r\n            No jQuery\r\n            <br /> CSS3 animations\r\n            <br /> Html5 Pushstate\r\n            <br /> Responsive\r\n            <br /> 3D Grid: ThreeJs + TweenMax\r\n            <br /> Routing system: Page.Js\r\n        </p>\r\n    </div>\r\n</div>\r\n';});
+
+define('models/about',[], function () {
+    var About = {
+        initialize: function () {
+        },
+        onModelChange: function (view, data) {
+        }
+    };
+    return About;
+});
+define('views/about',['noJquery', 'text!source/templates/about.html', 'models/about'], function(NoJQuery, template, AboutModel) {
     var About = function(app) {
         this.el = '.about';
         this.$$ = NoJQuery;
         this.completed = false;
+
         this.initialize = function() {
-            console.log('About init');
+            console.log('About init', AboutModel);
             this.setup();
         };
         this.execute = function() {
-            console.log('About execute');
+            console.log('About execute', this.template);
             this.setup();
             this.addAnimationsListeners();
             this.show();
@@ -47432,28 +47913,18 @@ require([
         this.previousView;
         this.event = PubSub;
 
-        console.log('App');
-
         this.router = new Router(this.event);
         this.menu = new Menu(this);
         this.home = new Home(this);
         this.work = new Work(this);
         this.about = new About(this);
-        this.navigator = new Navigator();
 
         this.initialize = function() {
-            console.log('App initialize');
-            this.event.subscribe('completed', this.complete.bind(this));
-
-
-            //ADD FAST CLICK IF MOBILE BROWSING
-            if (this.$$('html').hasClass('mobile')) {
-                FastClick.attach(document.body, {});
-            }
-
+            
+            //NAVIGATOR
             this.navigator = new Navigator();
-            this.navigator.addCommand('home', this.home);
 
+            //ROUTER
             this.router.initialize(this.event);
             this.router.on('change', this.routerChange.bind(this));
             this.router.on('details', this.onRouterDetails.bind(this));
@@ -47463,83 +47934,63 @@ require([
             this.$$('main').removeClass('hidden');
             this.$$('.footer').removeClass('hidden');
             this.$$('.content').removeClass('hidden');
+
+            //this.showConsoleGreetings();
         };
         this.routerChange = function(evt, data) {
-            console.log('App routerChange', evt, data);
+            if (data.length > 0 && data[0] !== 'home' && this.home.loaded === false) {
+                this.navigator.addCommand('home', this.home);
+                this.navigator.executeCommand();
+            }
+
             data.map(function(elmt, index) {
-                this.navigator.currentView = this[data[index]];
                 this.navigator.addCommand(data[index], this[data[index]]);
             }.bind(this));
+
+            if (data.length === 0) {
+                this.navigator.addCommand('home', this.home);
+            }
+
+            if (this.navigator.commands.length > 2) {
+                this.navigator.removeCommand();
+            }
 
             if (this.navigator.currentView) {
                 this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
             }
 
+            this.navigator.executeCommand();
 
-            if (this.navigator.previousCommand) {
-                console.log('App routerChange Previous View Destroy', this.navigator.previousCommand.key);
-                this.navigator.previousCommand.item.destroy();
-                this.navigator.removeCommand();
-                console.log('destroy', this.navigator);
-                this.navigator.currentCommand.item.execute();
-            }else{
-                this.navigator.executeCommand();
-            }            
-
-            //MINIMIZE HOME
-            if (data.length && this.navigator.currentCommand.key === 'home') {
-                this.home.minimize();
+            if(data.length<3)  {
+                this.navigator.subCommands=[];
             }
 
-            //EXECUTE NEXT COMMANDS
-            while (this.navigator.commands.length > 1) {
-                console.log('App routerChange While command', this.navigator.currentCommand.key);
-                this.navigator.nextCommand();
+            if (this.navigator.subCommands.length) {
+                this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
             }
 
         };
         this.onRouterDetails = function(evt, data) {
-            console.log('App onRouterDetails', evt, data);
-            this.onRouterChange(null, [data[0]]);
+            if (this.work.loaded === false) {
+                this.routerChange(null, [data[0]]);
+            }else{
+                this.work.show();
+            }
+
+            if(this.navigator.commands.length===0){
+                this.navigator.addCommand('home', this.home);
+                this.navigator.executeCommand();
+                this.routerChange(null, ['work']);
+            }
+
+            this.navigator.subCommands=[];
             this.navigator.subCommands.push({
                 project: data[1],
                 section: data[2]
             });
-        };
-        this.complete = function() {
-            // this.navigator.nextCommand();
 
-            // if (this.navigator.currentCommand === undefined) {
-            //     this.router.off('change');
-            //     this.event.unsubscribe('completed');
-            //     this.router.on('change', this.onRouterChangeNoAnimation.bind(this));
-            //     this.router.off('details');
-            //     this.router.on('details', this.onRouterChangeNoAnimationDetailsZ.bind(this));
+            this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
 
-            //     if (this.navigator.subCommands.length) {
-            //         this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
-            //     }
-            // }
-        };
-        this.onRouterChangeNoAnimation = function(evt, data) {
-            // var obj = { key: '', item: {} };
-            // if (data.length === 0) {
-            //     obj.key = 'home';
-            //     obj.item = this.home;
-            // } else {
-            //     obj.key = data[0];
-            //     obj.item = this[data[0]];
-            // }
-
-            // this.navigator.currentView = obj.item;
-            // this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
-            // this.navigator.addCommand(obj.key, obj.item);
-            // this.navigator.simpleCommand();
-        };
-
-        this.onRouterChangeNoAnimationDetailsZ = function(evt, data) {
-            // this.onRouterChange(null, [data[0]]);
-            // this.work.showSection(data[1], data[2]);
         };
         this.showConsoleGreetings = function() {
             console.clear();
