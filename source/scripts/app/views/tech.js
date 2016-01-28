@@ -1,4 +1,4 @@
-﻿define(['noJquery', 'text!source/templates/tech.html', 'models/tech'], function(NoJQuery, template, TechModel) {
+﻿define(['noJquery'], function(NoJQuery) {
     var Tech = function(options) {
         this.el = options.el;
         this.$$ = NoJQuery;

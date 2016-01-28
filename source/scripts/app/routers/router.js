@@ -2,8 +2,8 @@
 
     var Router = function() {
         this.njq = NoJQuery;
-        this.initialize = function(event) {
-            this.event = event;
+        this.initialize = function(PubSub) {
+            this.pubsub = PubSub;
             page('/', this.callbackPage.bind(this));
             page('/work', this.callbackPage.bind(this));
             page('/about', this.callbackPage.bind(this));
@@ -13,10 +13,10 @@
             page();
         };
         this.on = function(eventName, callback) {
-            this.event.subscribe(eventName, callback);
+            this.pubsub.subscribe(eventName, callback);
         };
         this.off = function(eventName) {
-            this.event.unsubscribe(eventName);
+            this.pubsub.unsubscribe(eventName);
             this.eventName = '';
         };
         this.callbackPage = function(ctx) {
@@ -32,11 +32,11 @@
                 total = paths.length;
 
             for (i; i < total; i++) {
-                if (paths[i] !== '') {
+                if (paths[i] !== '' && paths[i] !== 'home') {
                     commands.push(paths[i]);
                 }
             }
-            this.event.publish(event, commands);
+            this.pubsub.publish(event, commands);
         };
     };
     return Router;

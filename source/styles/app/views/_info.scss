@@ -1,0 +1,54 @@
+﻿@import "../_variables.scss";
+html.notmobile {
+    .infos {
+        a:hover {
+            transform: translateY(-5%);
+            transition: all .2s;
+        }
+    }
+}
+
+.infos {
+    p {
+        width: 90%;
+        padding-bottom: 5%;
+        opacity: 0;
+        transform: translate3d(0, 0, 0);
+    }
+    .sprite {
+        background: url('/images/sprite.png') no-repeat;
+        width: 40px;
+        height: 35px;
+    }
+    .sprite-tech {
+        background-position: 0 -2px;
+    }
+    .sprite-external {
+        background-position: -113px -3px;
+    }
+    .sprite-images {
+        background-position: -52px -3px;
+    }
+    a.tech,
+    a.gallery,
+    a.external {
+        display: inline-block;
+        position: relative;
+        will-change: transform;
+        span {
+            display: block;
+            opacity: 0;
+            padding-bottom: 10px;
+        }
+        .sprite {
+            opacity: 0;
+        }
+    }
+    a.gallery,
+    a.external {
+        margin-left: 20px;
+        .sprite {
+            margin-left: 8px;
+        }
+    }
+}

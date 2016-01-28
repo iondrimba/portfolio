@@ -1,0 +1,55 @@
+﻿@import "../_variables.scss";
+.line-ph i {
+    width: 100%;
+    display: inline-block;
+    border-bottom: solid 1px #000;
+    transform: scale(0, 1);
+    transform-origin: top left;
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+
+@keyframes scaleLineIn {
+    from {
+        transform: scale(0, 1);
+        transform-origin: top left;
+    }
+    to {
+        transform: scale(1, 1);
+        transform-origin: top left;
+    }
+}
+
+@-moz-keyframes scaleLineOut {
+    from {
+        transform: scale(1, 1);
+        transform-origin: top right;
+    }
+    to {
+        transform: scale(0, 1);
+        transform-origin: top right;
+    }
+}
+
+@-webkit-keyframes scaleLineOut {
+    from {
+        transform: scale(1, 1);
+        transform-origin: top right;
+    }
+    to {
+        transform: scale(0, 1);
+        transform-origin: top right;
+    }
+}
+
+@keyframes scaleLineOut {
+    from {
+        transform: scale(1, 1);
+        transform-origin: top right;
+    }
+    to {
+        transform: scale(0, 1);
+        transform-origin: top right;
+    }
+}

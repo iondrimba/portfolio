@@ -1,0 +1,184 @@
+﻿@import "../_variables.scss";
+html.notmobile {
+    .picture-mask:hover {
+        transform: translateY(-5%) rotate(45deg);
+    }
+}
+
+.work {
+    .info {
+        height: 315px;
+        .preview {
+            position: relative;
+            height: 310px;
+            overflow: hidden;
+            display: block;
+            will-change: transform;
+        }
+    }
+    .picture-mask {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+        width: 190px;
+        height: 190px;
+        transform: rotate(45deg);
+        will-change: transform;
+    }
+    .picture-mask img {
+        transform: rotate(-45deg);
+        position: absolute;
+    }
+    .picture-one {
+        margin-top: 60px;
+        margin-left: 120px;
+        img {
+            top: -100%;
+            left: -180%;
+        }
+    }
+    .sbp .picture-one {
+        img {
+            top: -210%;
+        }
+    }
+    .picture-two {
+        margin-top: 272px;
+        margin-left: 230px;
+        img {
+            top: -91%;
+            left: -296%;
+        }
+    }
+    .picture-tree {
+        margin-top: 232px;
+        margin-left: 290px;
+        img {
+            top: -173%;
+            left: -117%;
+        }
+    }
+    .sbp .picture-tree {
+        img {
+            top: -383%;
+            left: -147%;
+        }
+    }
+    .picture-four {
+        margin-top: 132px;
+        margin-left: 260px;
+        img {
+            top: -173%;
+            left: -117%;
+        }
+    }
+    .sbp .picture-four {
+        img {
+            top: -245%;
+        }
+    }
+    .picture-five {
+        margin-top: 285px;
+        margin-left: 330px;
+        img {
+            top: -89%;
+            left: -101%;
+        }
+    }
+    .sbp .picture-five {
+        img {
+            top: -300%;
+        }
+    }
+}
+
+.picture-one-animatein {
+    animation: picture-one-animatein .5s .1s 1 forwards $easeOutBack;
+}
+
+.picture-two-animatein {
+    animation: picture-two-animatein .5s .3s 1 forwards $easeOutBack;
+}
+
+.picture-tree-animatein {
+    animation: picture-tree-animatein .5s .6s 1 forwards $easeOutBack;
+}
+
+.picture-four-animatein {
+    animation: picture-four-animatein .5s .8s 1 forwards $easeOutBack;
+}
+
+.picture-five-animatein {
+    animation: picture-five-animatein .5s 1s 1 forwards $easeOutBack;
+}
+
+@-moz-keyframes picture-one-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 180px, 180px, 0);
+    }
+}
+
+@-webkit-keyframes picture-one-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 180px, 180px, 0);
+    }
+}
+
+@keyframes picture-one-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 180px, 180px, 0);
+    }
+}
+
+@keyframes picture-two-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 46px, 46px, 0);
+    }
+}
+
+@keyframes picture-tree-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 26px, 26px, 0);
+    }
+}
+
+@keyframes picture-four-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 26px, 26px, 0);
+    }
+}
+
+@keyframes picture-four-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 18px, 18px, 0);
+    }
+}
+
+@keyframes picture-five-animatein {
+    from {
+        clip: rect(90px, 0, 0, 90px);
+    }
+    to {
+        clip: rect(0, 30px, 30px, 0);
+    }
+}

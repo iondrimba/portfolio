@@ -1,25 +1,22 @@
-﻿define(['noJquery', 'text!source/templates/work.html', 'models/work', 'views/project'], function(NoJQuery, template, WorkModel, Project) {
+﻿define(['noJquery', 'views/project'], function(NoJQuery, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = NoJQuery;
+        this.router = app.router;
+        this.completed = false;
         this.projects = [];
         this.initialize = function() {
-<<<<<<< HEAD
-            console.log('work initialize', WorkModel);
-=======
->>>>>>> local
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
-              
-            //ADD TEMPLATE
-            this.$el.html(template);
         };
         this.execute = function() {
             this.setup();
             this.show();
             this.projetSelect();
+            this.completed = true;
+            app.event.publish('completed');
         };
 
         this.show = function() {
@@ -30,7 +27,10 @@
         };
 
         this.projetSelect = function() {
-            this.projects = this.getProjects();
+            if (this.projects.length === 0) {
+                this.projects = this.getProjects();
+            }
+
         };
         this.getProjects = function() {
             var ar = [],
@@ -41,7 +41,6 @@
                 var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
                 pro.initialize();
                 ar[index] = pro;
-                pro.close();
             }.bind(this));
             projectsElmt = null;
             return ar;
@@ -49,21 +48,17 @@
 
         this.showSection = function(project, section) {
             if (this.projects.length === 0) {
-                this.projetSelect();
+                this.projects = this.getProjects();
             }
 
             this.projects.map(function(elmt, index) {
                 if (elmt.key.toLowerCase() === project.toLowerCase()) {
                     elmt.callbackPageProject(section);
-                } else {
-                    elmt.close();
                 }
             });
-
         };
 
         this.destroy = function() {
-            this.loaded = false;
             this.hide();
             this.projects.map(function(elmt, index) {
                 elmt.destroy();

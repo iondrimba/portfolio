@@ -1,0 +1,60 @@
+﻿@import "../_variables.scss";
+.rounded-button {
+    display: block;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.scroll-down-button {
+    transform: translateY(-96px) translateX(109px);
+    margin-top: -40px;
+    .arrow {
+        width: 15%;
+        height: 15%;
+        transform: translateX(-50%) translateY(-50%) rotate(135deg);
+        margin-top: -50%;
+        left: 50%;
+        position: absolute;
+    }
+    .svg-ph {
+        height: 60px;
+        width: 60px;
+        overflow: hidden;
+        svg {
+            transform: rotate(180deg) translateX(79%) translateY(41%);
+        }
+    }
+}
+
+html.notmobile {
+    .social-icons {
+        .sprite:hover {
+            transform: translateY(-20%);
+            transition: all .2s ease;
+        }
+    }
+}
+
+.social-icons {
+    .sprite {
+        background: url('/images/social.png') no-repeat;
+        width: 35px;
+        height: 34px;
+        display: block;
+        display: inline-block;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .github {
+        background-position: 0 0;
+    }
+    .coderwall {
+        background-position: -45px 0;
+    }
+    .linkedin {
+        background-position: -96px 0;
+    }
+}

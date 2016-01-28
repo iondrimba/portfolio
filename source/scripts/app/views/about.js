@@ -1,25 +1,18 @@
-﻿define(['noJquery', 'text!source/templates/about.html', 'models/about'], function(NoJQuery, template, AboutModel) {
+﻿define(['noJquery'], function(NoJQuery) {
     var About = function(app) {
         this.el = '.about';
         this.$$ = NoJQuery;
         this.completed = false;
-
         this.initialize = function() {
-<<<<<<< HEAD
-            console.log('About init', AboutModel);
             this.setup();
         };
         this.execute = function() {
-            console.log('About execute', this.template);
-=======
-            this.setup();
-        };
-        this.execute = function() {
->>>>>>> local
             this.setup();
             this.addAnimationsListeners();
             this.show();
             this.animateIn();
+            this.completed = true;
+            app.event.publish('completed');
         };
         this.addAnimationsListeners = function() {
             var countleft = 0,
@@ -57,10 +50,6 @@
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
-            
-            //ADD TEMPLATE
-            this.$el.html(template);
-
             this.firstLine = this.$$('fieldset:first-child');
             this.firstText = this.$$('fieldset:first-child').find('ul');
             this.secondLine = this.$$('fieldset:nth-child(2)');

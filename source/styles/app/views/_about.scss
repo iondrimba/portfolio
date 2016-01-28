@@ -1,0 +1,85 @@
+﻿@-moz-document url-prefix() {
+    fieldset {
+        .line-ph i {
+            top: -11%!important;
+        }
+    }
+}
+
+.about {
+    margin-bottom: 50px;
+    > p {
+        padding-bottom: 5%;
+        opacity: 0;
+    }
+    h2 {
+        padding-bottom: 20px;
+    }
+    .about-project {
+        font-size: 9pt;
+        opacity: 0;
+        display: inline-block;
+        margin-top: 20px;
+        p {
+            line-height: 16pt;
+            font-style: italic;
+        }
+    }
+    fieldset {
+        position: relative;
+        padding: 0 0.0 0.75em;
+        display: block;
+        float: left;
+        .line-ph i {
+            top: 5%;
+        }
+        ul {
+            opacity: 0;
+        }
+    }
+    legend {
+        opacity: 0;
+    }
+    .skills-set {
+        float: left;
+        width: 100%;
+        fieldset:not(:first-child) {
+            margin-left: 10%;
+        }
+    }
+    .animate-in-legend-left {
+        .line-ph i {            
+            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+        }
+        legend {
+            
+            animation: fadeIn .5s .7s 1 forwards;
+        }
+    }
+    .animate-in-legend-center {
+        .line-ph i {            
+            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+        }
+        legend {            
+            animation: fadeIn .5s .7s 1 forwards;
+        }
+    }
+    .animate-in-legend-right {
+        .line-ph i {
+            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+        }
+        legend {
+            animation: fadeIn .5s .7s 1 forwards;
+        }
+    }
+    .animate-text {
+        animation: fadeIn .2s 0s 1 forwards;
+    }
+    .animate-text-project {
+        animation: fadeIn .5s 1s 1 forwards;
+    }
+}
+
+.animate-text-opacity-about {
+    animation: fadeIn .5s .3s 1 forwards;
+}

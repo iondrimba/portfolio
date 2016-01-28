@@ -1,17 +1,12 @@
-﻿define(['noJquery', 'text!source/templates/project.html', 'models/project', 'views/tech', 'views/info', 'views/gallery'], function(NoJQuery, template,  ProjectModel, Tech, Info, Gallery) {
+﻿define(['noJquery', 'views/gallery', 'views/tech', 'views/info'], function(NoJQuery, Gallery, Tech, Info) {
     var Project = function(app, el) {
         this.el = '.project';
         this.$$ = NoJQuery;
         this.key = '';
         this.router = app.router;
         this.routerHandler = null;
-        this.countatech = 0;
-        this.countgallery = 0;
-        this.countexternal = 0;
-        this.counttitle = 0;
 
         this.initialize = function() {
-            console.log('Project INIT', template);
             this.setup();
             this.addAnimationListeners();
 
@@ -29,7 +24,7 @@
             });
 
             //INIT GALLERY VIEW
-            this.gallery = new Gallery(this.el + '> .views >.gallery');
+            this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
             this.gallery.initialize();
 
             this.show();
@@ -46,50 +41,55 @@
             this.techLink = this.$$(this.el + ' .work-infos > .tech');
             this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
             this.launchLink = this.$$(this.el + ' .work-infos > .external');
+            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
         };
 
         this.addAnimationListeners = function() {
-            var techLine = this.$$(this.el + ' .work-infos > .tech'),
+            var countatech = 0,
+                countgallery = 0,
+                countexternal = 0,
+                counttitle = 0,
+                techLine = this.$$(this.el + ' .work-infos > .tech'),
                 externalLine = this.$$(this.el + ' .work-infos > .external'),
                 galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
-                infoBtn = this.$$(this.el + ' .infos > .btn');
+                infoBtn = this.$$(this.el).find('.info').find('.btn');
 
             app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
-                this.countatech++;
-                if (this.countatech == 1) {
+                countatech++;
+                if (countatech == 1) {
                     this.$$(this.el + ' .work-infos > .tech > .sprite').addClass('animate-sprite');
                 }
-                if (this.countatech === 2) {
+                if (countatech === 2) {
                     this.$$(e.target).removeClass('animate-in-link-tech');
                     this.$$(this.el + ' .work-infos > .tech > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(externalLine.elmts[0], 'AnimationEnd', function(e) {
-                this.countexternal++;
-                if (this.countexternal == 1) {
+                countexternal++;
+                if (countexternal == 1) {
                     this.$$(this.el + ' .work-infos > .external > .sprite').addClass('animate-sprite');
                 }
-                if (this.countexternal === 2) {
-                    this.$$(e.target).removeClass('animate-in-link-external');
+                if (countexternal === 2) {
+
+                    this.$$(e.target).removeClass('animate-in-link-gallery');
                     this.$$(this.el + ' .work-infos > .external > span').addClass('animate-span');
                 }
             }.bind(this));
 
             app.prefixedEventListener(galleryLine.elmts[0], 'AnimationEnd', function(e) {
-                this.countgallery++;
-                if (this.countgallery == 1) {
+                countgallery++;
+                if (countgallery == 1) {
                     this.$$(this.el + ' .work-infos > .gallery > .sprite').addClass('animate-sprite');
                 }
-                if (this.countgallery === 2) {
+                if (countgallery === 2) {
                     this.$$(e.target).removeClass('animate-in-link-gallery');
                     this.$$(this.el + ' .work-infos > .gallery > span').addClass('animate-span');
                 }
             }.bind(this));
-
             app.prefixedEventListener(infoBtn.elmts[0], 'AnimationEnd', function(e) {
-                this.counttitle++;
-                if (this.counttitle === 1) {
+                counttitle++;
+                if (counttitle === 1) {
                     this.$$(e.target).removeClass('animate-in-title');
                     this.$$(this.el + ' .infos > .btn > h2').addClass('animate-title-opacity');
                 }
@@ -107,24 +107,10 @@
 
 
         this.animateIn = function() {
-            this.countatech = 0;
-            this.countgallery = 0;
-            this.countexternal = 0;
-            this.counttitle = 0;
-            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
-            this.$$(this.el + ' .infos > .btn').addClass('animate-in-title');
+            this.titleLink.addClass('animate-in-title');
             this.techLink.addClass('animate-in-link-tech');
             this.launchLink.addClass('animate-in-link-external');
             this.galleryLink.addClass('animate-in-link-gallery');
-        };
-
-        this.close = function() {
-            this.tech.destroy();
-
-            if (this.gallery) {
-                this.gallery.destroy();
-            }
-            this.info.execute();
         };
 
         this.destroy = function() {
@@ -160,13 +146,8 @@
             this.$$(this.el + ' .infos > p').removeClass('animate-text-opacity');
         };
         this.callbackPageProject = function(section) {
-
-            if (this.info) {
-                this.info.destroy();
-            }
-            if (this.tech) {
-                this.tech.destroy();
-            }
+            this.info.destroy()
+            this.tech.destroy();
 
             if (this.gallery) {
                 this.gallery.destroy();

@@ -1,18 +1,16 @@
 ﻿/* global Detector */
-define(['noJquery', 'text!source/templates/home.html', 'views/grid3d'], function(NoJQuery, template, Grid3D) {
+define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
     var Home = function(app) {
         this.el = '.home';
         this.$$ = NoJQuery;
+        this.completed = false;
         this.menu = app.menu;
-        this.loaded = false;
 
-        this.initialize = function() {            
+        this.initialize = function() {
+
             this.$$('body').removeClass('body-gradient');
             this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
-
-            //ADD TEMPLATE
-            this.$el.html(template);
 
             //INIT WEBGL GRID ONLY IDF SUPPORTED
             if (Detector.webgl) {
@@ -29,11 +27,15 @@ define(['noJquery', 'text!source/templates/home.html', 'views/grid3d'], function
                 }
             }
 
+            //app.showConsoleGretings();                          
+
             //SHOW VIEW
             this.$el.removeClass('hidden');
 
             //OPEN FULL MODE
             this.full();
+
+            app.event.publish('completed');
         };
 
         this.full = function() {
@@ -46,28 +48,23 @@ define(['noJquery', 'text!source/templates/home.html', 'views/grid3d'], function
             this.$$('.scroll-down-button').removeClass('hidden');
             this.$$('body').removeClass('show-scroll');
             this.$$('.scroll-down-button').addClass('draw-in');
+            this.completed = true;
 
             this.menu.hide();
-
-            this.loaded = true;
         };
-
         this.minimize = function() {
-            this.$$('.home').removeClass('show-full');
+            this.$el.removeClass('show-full');
 
             //ANIMATE MINIMIZED VIEW
-            this.$$('.home').addClass('show-min');
+            this.$el.addClass('show-min');
 
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');
             this.$$('.scroll-down-button').removeClass('draw-in');
-            console.log('home minimize');
+            this.completed = true;
+
             this.menu.animate();
         };
-        this.destroy = function() {
-
-            this.minimize();
-        }
 
         this.initialize();
     };

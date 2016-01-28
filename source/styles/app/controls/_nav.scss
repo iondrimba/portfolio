@@ -1,0 +1,172 @@
+﻿@import "../_variables.scss";
+nav {
+    color: $base-color;
+    width: 100%;
+    background-color: $base-color;
+    height: 90px;
+    font-size: 1rem;
+    padding-bottom: 30px;
+    position: relative;
+    .menu {
+        position: absolute;
+        right: 0;
+        width: 100%;
+        top: 20px;
+        text-align: left;
+        a {
+            display: inline-block;
+            .text-ph {
+                display: block;
+                overflow: hidden;
+                height: 20px;
+                border-bottom: solid 2px transparent;
+                span {
+                    opacity: 0;
+                }
+            }
+        }
+        a:first-child {
+            margin-right: 20px;
+        }
+    }
+    .pre-animate-mask {
+        width: 0;
+        opacity: 0;
+    }
+    .active {
+        i {
+            transform: scale(1, 1);
+        }
+    }
+    .arrows {
+        width: 288px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        height: 86px;
+    }
+    .main-arrow {
+        background-color: $base-color;
+        margin-left: 50%;
+        left: -25px;
+        position: relative;
+        top: -20px;
+        border-left-color: lighten($arrow-color, 30);
+        border-right-color: lighten($arrow-color, 0);
+        border-top-color: lighten($arrow-color, 5);
+        border-bottom-color: lighten($arrow-color, 30);
+    }
+    .arrow-half-down.first,
+    .arrow-half-down.second,
+    .arrow-half-down.third {
+        top: -20px;
+        position: absolute;
+    }
+    .arrow-half-down.first {
+        left: -25px;
+        border-right-color: lighten($arrow-color, 5);
+    }
+    .arrow-half-down.second {
+        left: 32px;
+        border-right-color: lighten($arrow-color, 7);
+        border-bottom-color: lighten($arrow-color, 2);
+    }
+    .arrow-half-down.third {
+        left: 208px;
+        border-right-color: lighten($arrow-color, 7);
+        border-bottom-color: lighten($arrow-color, 2);
+    }
+    .arrow-full {
+        position: absolute;
+        margin-left: 50%;
+    }
+    .arrow-full.second {
+        left: -140px;
+        top: 9px;
+        border-left-color: lighten($arrow-color, 10);
+        border-right-color: lighten($arrow-color, 5);
+        border-top-color: lighten($arrow-color, 0);
+        border-bottom-color: lighten($arrow-color, 5);
+    }
+    .arrow-full.third {
+        left: -80px;
+        top: 8px;
+        border-left-color: lighten($arrow-color, 0);
+        border-right-color: lighten($arrow-color, 10);
+        border-top-color: lighten($arrow-color, 10);
+        border-bottom-color: lighten($arrow-color, 3);
+    }
+    .arrow-full.fourth {
+        left: -51px;
+        top: 37px;
+        border-left-color: lighten($arrow-color, 5);
+        border-right-color: lighten($arrow-color, 10);
+        border-top-color: lighten($arrow-color, 0);
+        border-bottom-color: lighten($arrow-color, 10);
+    }
+    .arrow-full.fifth {
+        left: 5px;
+        top: 37px;
+        border-left-color: lighten($arrow-color, 0);
+        border-right-color: lighten($arrow-color, 15);
+        border-top-color: lighten($arrow-color, 5);
+        border-bottom-color: lighten($arrow-color, 3);
+    }
+    .arrow-full.sixth {
+        left: 34px;
+        top: 8px;
+        border-left-color: lighten($arrow-color, 15);
+        border-right-color: lighten($arrow-color, 5);
+        border-top-color: lighten($arrow-color, 15);
+        border-bottom-color: lighten($arrow-color, 2);
+    }
+    .arrow-half-up.first {
+        left: 237px;
+        position: absolute;
+        top: 9px;
+        border-left-color: lighten($arrow-color, 5);
+        border-top-color: lighten($arrow-color, 2);
+    }
+}
+
+.text-animation {
+    position: relative;
+}
+
+.animate-line-fixed {
+    transform: scale(1, 1) !important;
+    top: 100% !important;
+    opacity: 0;
+}
+
+.active-button {
+    i {
+        opacity: 1;
+    }
+}
+
+.animate-line {
+    animation: scaleLineIn .5s, scaleLineOut 1s .5s;
+}
+
+.animate-span span {
+    animation: fadeIn .5s 1.5s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+
+.animate-line-about {
+    transform: scale(0, 1);
+    animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+
+.animate-span-about span {
+    animation: fadeIn .5s 1.4s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}

@@ -1,0 +1,82 @@
+﻿@import "../_variables.scss";
+
+@media only screen and (max-width:768px) and (min-width:481px) {
+
+    .content {
+        width: 90%;
+    }
+
+    .home {
+        h1 {
+            font-size: 2.4rem;
+            text-align: center;
+
+            span {
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    .gallery .prev {
+        left: 1%;
+        z-index: 1;
+    }
+
+    .tech.view:not(.hidden) {
+        background-color: #fff;
+        width: 240%;
+        left: -100%;
+        position: relative;
+        margin-top: -2px;
+        margin-left: -10px;
+        height: 250px;
+    }
+
+    .preview {
+        display: none !important;
+    }
+    
+    .infos p {
+        width: 200%;
+    }
+
+    .work .btn {
+        h2 {
+            width: 190%;
+            font-size: 1.1rem;
+        }
+    }
+
+    .gallery .next {
+        right: 1%;
+        z-index: 2;
+    }
+
+    .prev, .next {
+        display: none;
+    }
+
+    .gallery .image-list {
+        height: 100%;
+    }
+
+        .gallery .image-list .ph {
+            position: relative;
+        }
+
+    .gallery .images-ph {
+        width: 200%;
+    }
+
+    .ph img {
+        width: 100%;
+    }
+
+    @-moz-document url-prefix() {
+        .animate-in-link-tech, .animate-in-link-gallery, .animate-in-link-external, .animate-in-legend-left, .animate-in-legend-right {
+            .line-ph i {
+                top: -11% !important;
+            }
+        }
+    }
+}

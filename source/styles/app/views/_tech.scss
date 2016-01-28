@@ -1,0 +1,71 @@
+﻿@import "../_variables.scss";
+html.notmobile {
+    .tech.view {
+        .close:hover {
+            label {
+                transform: rotate(360deg);
+                transform-origin: center center;
+                transition: all .5s ease-in-out;
+            }
+        }
+    }
+}
+
+.tech.view {
+    top: 60px;
+    position: relative;
+    will-change: transform;
+    .close {
+        top: 0;
+        position: relative;
+        height: 20px;
+        left: 0;
+        label {
+            cursor: pointer;
+            padding: 11px;
+            left: 0;
+            position: relative;
+        }
+    }
+    .line-ph i {
+        top: 5%;
+    }
+    fieldset {
+        position: relative;
+        display: block;
+        float: left;
+        ul {
+            opacity: 0;
+        }
+    }
+    legend {
+        opacity: 0;
+    }
+    fieldset:first-child {
+        width: 20%;
+        margin-left: 10%;
+    }
+    fieldset:last-child {
+        margin-left: 10%;
+    }
+    .animate-in-legend-left {
+        .line-ph i {
+            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
+        }
+        legend {
+            animation: fadeIn .5s .7s 1 forwards;
+        }
+    }
+    .animate-in-legend-right {
+        .line-ph i {
+            animation: scaleLineIn .5s .5s, scaleLineOut .5s 1s;
+        }
+        legend {
+            -webkit-animation: fadeIn .5s 1.2s 1 forwards;
+            animation: fadeIn .5s 1.2s 1 forwards;
+        }
+    }
+    .animate-text {
+        animation: fadeIn .2s 0s 1 forwards;
+    }
+}
