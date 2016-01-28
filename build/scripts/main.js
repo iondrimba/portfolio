@@ -2472,7 +2472,7 @@ define('lib/navigator',[], function () {
 
             this.commands.push(cmd);
             this.currentCommand = cmd;
-
+            
             if (this.previousCommand && this.commands.length > 1) {
                 this.previousCommand = this.commands[0];
                 if (this.commands.length > 1) {
@@ -47440,10 +47440,12 @@ require([
             this.navigator = new Navigator();
             this.navigator.addCommand('home', this.home, undefined);
 
-            this.router.initialize(PubSub);
-            this.routerChangeAnimated = this.onRouterChange.bind(this);
-            this.router.on('change', this.routerChangeAnimated);
-            this.router.on('details', this.onRouterChangeNoAnimationDetails.bind(this));
+
+            //ROUTER
+            this.router.initialize(this.event);
+            this.router.on('change', this.routerChange.bind(this));
+            this.router.on('details', this.onRouterDetails.bind(this));
+
             this.router.start();
 
             //LET ELEMENTS VISIBLE
@@ -47451,15 +47453,36 @@ require([
             this.$$('.footer').removeClass('hidden');
             this.$$('.content').removeClass('hidden');
         };
-        this.onRouterChange = function (evt, data) {
-            for (var i = 0; i < data.length; i++) {
-                this.navigator.currentView = this[data[i]];
-                this.navigator.addCommand(data[i], this[data[i]]);
+
+        this.routerChange = function(evt, data) {
+            if (data.length > 0 && data[0] !== 'home' && this.home.loaded === false) {
+                this.navigator.addCommand('home', this.home);
+                this.navigator.executeCommand();
             }
+
+            data.map(function(elmt, index) {
+                this.navigator.addCommand(data[index], this[data[index]]);
+            }.bind(this));
+
+            console.log('rout change', data);
+
+            if (data.length === 0) {
+                console.log('rout add home', data);
+                this.navigator.addCommand('home', this.home);
+            }
+
+            console.log('route commands', this.navigator.commands);
 
             if (this.navigator.currentView) {
                 this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
             }
+
+            if (this.navigator.commands.length > 1) {
+                console.log('route remove command', data);
+                this.navigator.removeCommand();
+            }
+
+
 
             this.navigator.executeCommand();
         };

@@ -10,7 +10,7 @@
 
             this.commands.push(cmd);
             this.currentCommand = cmd;
-
+            
             if (this.previousCommand && this.commands.length > 1) {
                 this.previousCommand = this.commands[0];
                 if (this.commands.length > 1) {
