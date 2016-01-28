@@ -45,7 +45,7 @@ require([
 
             //ROUTER
             this.router.initialize(this.event);
-            this.router.on('change', this.routerChange.bind(this));           
+            this.router.on('change', this.routerChange.bind(this));
             this.router.on('details', this.onRouterDetails.bind(this));
             this.router.start();
 
@@ -75,14 +75,16 @@ require([
 
             console.log('route commands', this.navigator.commands);
 
-            if (this.navigator.commands.length > 2) {
+            if (this.navigator.currentView) {
+                this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
+            }
+
+            if (this.navigator.commands.length > 1) {
                 console.log('route remove command', data);
                 this.navigator.removeCommand();
             }
 
-            if (this.navigator.currentView) {
-                this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
-            }
+
 
             this.navigator.executeCommand();
 

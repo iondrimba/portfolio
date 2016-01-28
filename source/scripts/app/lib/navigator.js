@@ -26,7 +26,7 @@
             this.currentView = this.commands[this.commands.length-1].item;
 
             this.currentView.execute();
-            if (this.commands.length > 1) {
+            if (this.commands.length > 2) {
                 this.removeCommand();
             }
         };
