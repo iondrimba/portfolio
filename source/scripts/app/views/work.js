@@ -4,11 +4,17 @@
         this.$$ = NoJQuery;
         this.projects = [];
         this.initialize = function() {
+<<<<<<< HEAD
             console.log('work initialize', WorkModel);
+=======
+>>>>>>> local
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
+              
+            //ADD TEMPLATE
+            this.$el.html(template);
         };
         this.execute = function() {
             this.setup();

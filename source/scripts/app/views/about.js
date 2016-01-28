@@ -5,11 +5,17 @@
         this.completed = false;
 
         this.initialize = function() {
+<<<<<<< HEAD
             console.log('About init', AboutModel);
             this.setup();
         };
         this.execute = function() {
             console.log('About execute', this.template);
+=======
+            this.setup();
+        };
+        this.execute = function() {
+>>>>>>> local
             this.setup();
             this.addAnimationsListeners();
             this.show();
@@ -51,6 +57,10 @@
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
+            
+            //ADD TEMPLATE
+            this.$el.html(template);
+
             this.firstLine = this.$$('fieldset:first-child');
             this.firstText = this.$$('fieldset:first-child').find('ul');
             this.secondLine = this.$$('fieldset:nth-child(2)');

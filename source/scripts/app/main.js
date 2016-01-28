@@ -30,7 +30,6 @@ require([
         };
 
         this.currentView;
-        this.previousView;
         this.event = PubSub;
 
         this.router = new Router(this.event);
@@ -40,13 +39,17 @@ require([
         this.about = new About(this);
 
         this.initialize = function() {
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> local
             //NAVIGATOR
             this.navigator = new Navigator();
 
             //ROUTER
             this.router.initialize(this.event);
-            this.router.on('change', this.routerChange.bind(this));
+            this.router.on('change', this.routerChange.bind(this));           
             this.router.on('details', this.onRouterDetails.bind(this));
             this.router.start();
 
@@ -67,6 +70,7 @@ require([
                 this.navigator.addCommand(data[index], this[data[index]]);
             }.bind(this));
 
+<<<<<<< HEAD
             if (data.length === 0) {
                 this.navigator.addCommand('home', this.home);
             }
@@ -83,6 +87,30 @@ require([
 
             if(data.length<3)  {
                 this.navigator.subCommands=[];
+=======
+            console.log('rout change', data);
+
+            if (data.length === 0) {
+                console.log('rout add home', data);
+                this.navigator.addCommand('home', this.home);
+            }
+
+            console.log('route commands', this.navigator.commands);
+
+            if (this.navigator.commands.length > 2) {
+                console.log('route remove command', data);
+                this.navigator.removeCommand();
+            }
+
+            if (this.navigator.currentView) {
+                this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
+            }
+
+            this.navigator.executeCommand();
+
+            if (data.length < 3) {
+                this.navigator.subCommands = [];
+>>>>>>> local
             }
 
             if (this.navigator.subCommands.length) {
@@ -93,17 +121,29 @@ require([
         this.onRouterDetails = function(evt, data) {
             if (this.work.loaded === false) {
                 this.routerChange(null, [data[0]]);
+<<<<<<< HEAD
             }else{
                 this.work.show();
             }
 
             if(this.navigator.commands.length===0){
+=======
+            } else {
+                this.work.show();
+            }
+
+            if (this.navigator.commands.length === 0) {
+>>>>>>> local
                 this.navigator.addCommand('home', this.home);
                 this.navigator.executeCommand();
                 this.routerChange(null, ['work']);
             }
 
+<<<<<<< HEAD
             this.navigator.subCommands=[];
+=======
+            this.navigator.subCommands = [];
+>>>>>>> local
             this.navigator.subCommands.push({
                 project: data[1],
                 section: data[2]
