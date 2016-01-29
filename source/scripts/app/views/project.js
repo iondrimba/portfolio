@@ -1,7 +1,7 @@
-﻿define(['noJquery', 'views/gallery', 'views/tech', 'views/info'], function(NoJQuery, Gallery, Tech, Info) {
+﻿define(['views/gallery', 'views/tech', 'views/info'], function(Gallery, Tech, Info) {
     var Project = function(app, el) {
         this.el = '.project';
-        this.$$ = NoJQuery;
+        this.$$ = app.$$;
         this.key = '';
         this.router = app.router;
         this.routerHandler = null;
@@ -24,8 +24,8 @@
             });
 
             //INIT GALLERY VIEW
-            this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
-            this.gallery.initialize();
+            // this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
+            // this.gallery.initialize();
 
             this.show();
             this.animateIn();

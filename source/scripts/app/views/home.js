@@ -1,12 +1,10 @@
 ﻿/* global Detector */
-define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
+define(['views/grid3d'], function(Grid3D) {
     var Home = function(app) {
         this.el = '.home';
-        this.$$ = NoJQuery;
-        this.completed = false;
-        this.menu = app.menu;
-
-        this.initialize = function() {
+        this.$$ = app.$$;        
+        this.loaded = false;
+        this.init = function() {
 
             this.$$('body').removeClass('body-gradient');
             this.$$(this.el).addClass('body-gradient');
@@ -27,18 +25,16 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
                 }
             }
 
-            //app.showConsoleGretings();                          
-
             //SHOW VIEW
             this.$el.removeClass('hidden');
 
             //OPEN FULL MODE
-            this.full();
+            this.show();
 
-            app.event.publish('completed');
+            this.loaded = true;
         };
 
-        this.full = function() {
+        this.show = function() {
 
             this.$el.removeClass('show-min');
 
@@ -48,11 +44,9 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').removeClass('hidden');
             this.$$('body').removeClass('show-scroll');
             this.$$('.scroll-down-button').addClass('draw-in');
-            this.completed = true;
 
-            this.menu.hide();
         };
-        this.minimize = function() {
+        this.hide = function() {
             this.$el.removeClass('show-full');
 
             //ANIMATE MINIMIZED VIEW
@@ -61,12 +55,8 @@ define(['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');
             this.$$('.scroll-down-button').removeClass('draw-in');
-            this.completed = true;
-
-            this.menu.animate();
         };
 
-        this.initialize();
     };
     return Home;
 });

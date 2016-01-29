@@ -640,7 +640,7 @@
                 loading.style.display = 'block';
                 loading.className += 'animate-in';
 
-                if (window.app && window.app.home.completed) {
+                if (window.app && window.app.controller.home.loaded) {
                     clearTimeout(hanldetimeout);
                 }
 

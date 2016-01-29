@@ -1,29 +1,17 @@
-﻿define(['noJquery', 'views/project'], function(NoJQuery, Project) {
+﻿define(['views/project'], function(Project) {
     var Work = function(app) {
         this.el = '.work';
-        this.$$ = NoJQuery;
-        this.router = app.router;
-        this.completed = false;
+        this.$$ = app.$$;
         this.projects = [];
-        this.initialize = function() {
+        this.init = function() {
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
         };
         this.execute = function() {
-            this.setup();
-            this.show();
-            this.projetSelect();
-            this.completed = true;
-            app.event.publish('completed');
-        };
-
-        this.show = function() {
             this.$el.removeClass('hidden');
-        };
-        this.hide = function() {
-            this.$el.addClass('hidden');
+            this.projetSelect();
         };
 
         this.projetSelect = function() {
@@ -58,15 +46,13 @@
             });
         };
 
-        this.destroy = function() {
-            this.hide();
+        this.hide = function() {
+            this.$el.addClass('hidden');
             this.projects.map(function(elmt, index) {
                 elmt.destroy();
             });
             this.projects = [];
         };
-
-        this.initialize();
     };
     return Work;
 });

@@ -1,1090 +1,3 @@
-/*
-Copyright (c) 2010,2011,2012,2013,2014 Morgan Roderick http://roderick.dk
-License: MIT - http://mrgnrdrck.mit-license.org
-
-https://github.com/mroderick/PubSubJS
-*/
-(function (root, factory){
-	'use strict';
-
-    if (typeof define === 'function' && define.amd){
-        // AMD. Register as an anonymous module.
-        define('vendors/pubsub',['exports'], factory);
-
-    } else if (typeof exports === 'object'){
-        // CommonJS
-        factory(exports);
-
-    } else {
-        // Browser globals
-        var PubSub = {};
-        root.PubSub = PubSub;
-        factory(PubSub);
-    }
-}(( typeof window === 'object' && window ) || this, function (PubSub){
-	'use strict';
-
-	var messages = {},
-		lastUid = -1;
-
-	function hasKeys(obj){
-		var key;
-
-		for (key in obj){
-			if ( obj.hasOwnProperty(key) ){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 *	Returns a function that throws the passed exception, for use as argument for setTimeout
-	 *	@param { Object } ex An Error object
-	 */
-	function throwException( ex ){
-		return function reThrowException(){
-			throw ex;
-		};
-	}
-
-	function callSubscriberWithDelayedExceptions( subscriber, message, data ){
-		try {
-			subscriber( message, data );
-		} catch( ex ){
-			setTimeout( throwException( ex ), 0);
-		}
-	}
-
-	function callSubscriberWithImmediateExceptions( subscriber, message, data ){
-		subscriber( message, data );
-	}
-
-	function deliverMessage( originalMessage, matchedMessage, data, immediateExceptions ){
-		var subscribers = messages[matchedMessage],
-			callSubscriber = immediateExceptions ? callSubscriberWithImmediateExceptions : callSubscriberWithDelayedExceptions,
-			s;
-
-		if ( !messages.hasOwnProperty( matchedMessage ) ) {
-			return;
-		}
-
-		for (s in subscribers){
-			if ( subscribers.hasOwnProperty(s)){
-				callSubscriber( subscribers[s], originalMessage, data );
-			}
-		}
-	}
-
-	function createDeliveryFunction( message, data, immediateExceptions ){
-		return function deliverNamespaced(){
-			var topic = String( message ),
-				position = topic.lastIndexOf( '.' );
-
-			// deliver the message as it is now
-			deliverMessage(message, message, data, immediateExceptions);
-
-			// trim the hierarchy and deliver message to each level
-			while( position !== -1 ){
-				topic = topic.substr( 0, position );
-				position = topic.lastIndexOf('.');
-				deliverMessage( message, topic, data, immediateExceptions );
-			}
-		};
-	}
-
-	function messageHasSubscribers( message ){
-		var topic = String( message ),
-			found = Boolean(messages.hasOwnProperty( topic ) && hasKeys(messages[topic])),
-			position = topic.lastIndexOf( '.' );
-
-		while ( !found && position !== -1 ){
-			topic = topic.substr( 0, position );
-			position = topic.lastIndexOf( '.' );
-			found = Boolean(messages.hasOwnProperty( topic ) && hasKeys(messages[topic]));
-		}
-
-		return found;
-	}
-
-	function publish( message, data, sync, immediateExceptions ){
-		var deliver = createDeliveryFunction( message, data, immediateExceptions ),
-			hasSubscribers = messageHasSubscribers( message );
-
-		if ( !hasSubscribers ){
-			return false;
-		}
-
-		if ( sync === true ){
-			deliver();
-		} else {
-			setTimeout( deliver, 0 );
-		}
-		return true;
-	}
-
-	/**
-	 *	PubSub.publish( message[, data] ) -> Boolean
-	 *	- message (String): The message to publish
-	 *	- data: The data to pass to subscribers
-	 *	Publishes the the message, passing the data to it's subscribers
-	**/
-	PubSub.publish = function( message, data ){
-		return publish( message, data, false, PubSub.immediateExceptions );
-	};
-
-	/**
-	 *	PubSub.publishSync( message[, data] ) -> Boolean
-	 *	- message (String): The message to publish
-	 *	- data: The data to pass to subscribers
-	 *	Publishes the the message synchronously, passing the data to it's subscribers
-	**/
-	PubSub.publishSync = function( message, data ){
-		return publish( message, data, true, PubSub.immediateExceptions );
-	};
-
-	/**
-	 *	PubSub.subscribe( message, func ) -> String
-	 *	- message (String): The message to subscribe to
-	 *	- func (Function): The function to call when a new message is published
-	 *	Subscribes the passed function to the passed message. Every returned token is unique and should be stored if
-	 *	you need to unsubscribe
-	**/
-	PubSub.subscribe = function( message, func ){
-		if ( typeof func !== 'function'){
-			return false;
-		}
-
-		// message is not registered yet
-		if ( !messages.hasOwnProperty( message ) ){
-			messages[message] = {};
-		}
-
-		// forcing token as String, to allow for future expansions without breaking usage
-		// and allow for easy use as key names for the 'messages' object
-		var token = 'uid_' + String(++lastUid);
-		messages[message][token] = func;
-
-		// return token for unsubscribing
-		return token;
-	};
-
-	/* Public: Clears all subscriptions
-	 */
-	PubSub.clearAllSubscriptions = function clearAllSubscriptions(){
-		messages = {};
-	};
-
-	/*Public: Clear subscriptions by the topic
-	*/
-	PubSub.clearSubscriptions = function clearSubscriptions(topic){
-		var m; 
-		for (m in messages){
-			if (messages.hasOwnProperty(m) && m.indexOf(topic) === 0){
-				delete messages[m];
-			}
-		}
-	};
-
-	/* Public: removes subscriptions.
-	 * When passed a token, removes a specific subscription.
-	 * When passed a function, removes all subscriptions for that function
-	 * When passed a topic, removes all subscriptions for that topic (hierarchy)
-	 *
-	 * value - A token, function or topic to unsubscribe.
-	 *
-	 * Examples
-	 *
-	 *		// Example 1 - unsubscribing with a token
-	 *		var token = PubSub.subscribe('mytopic', myFunc);
-	 *		PubSub.unsubscribe(token);
-	 *
-	 *		// Example 2 - unsubscribing with a function
-	 *		PubSub.unsubscribe(myFunc);
-	 *
-	 *		// Example 3 - unsubscribing a topic
-	 *		PubSub.unsubscribe('mytopic');
-	 */
-	PubSub.unsubscribe = function(value){
-		var isTopic    = typeof value === 'string' && messages.hasOwnProperty(value),
-			isToken    = !isTopic && typeof value === 'string',
-			isFunction = typeof value === 'function',
-			result = false,
-			m, message, t;
-
-		if (isTopic){
-			delete messages[value];
-			return;
-		}
-
-		for ( m in messages ){
-			if ( messages.hasOwnProperty( m ) ){
-				message = messages[m];
-
-				if ( isToken && message[value] ){
-					delete message[value];
-					result = value;
-					// tokens are unique, so we can just stop here
-					break;
-				}
-
-				if (isFunction) {
-					for ( t in message ){
-						if (message.hasOwnProperty(t) && message[t] === value){
-							delete message[t];
-							result = true;
-						}
-					}
-				}
-			}
-		}
-
-		return result;
-	};
-}));
-
-;(function () {
-	'use strict';
-
-	/**
-	 * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
-	 *
-	 * @codingstandard ftlabs-jsv2
-	 * @copyright The Financial Times Limited [All Rights Reserved]
-	 * @license MIT License (see LICENSE.txt)
-	 */
-
-	/*jslint browser:true, node:true*/
-	/*global define, Event, Node*/
-
-
-	/**
-	 * Instantiate fast-clicking listeners on the specified layer.
-	 *
-	 * @constructor
-	 * @param {Element} layer The layer to listen on
-	 * @param {Object} [options={}] The options to override the defaults
-	 */
-	function FastClick(layer, options) {
-		var oldOnClick;
-
-		options = options || {};
-
-		/**
-		 * Whether a click is currently being tracked.
-		 *
-		 * @type boolean
-		 */
-		this.trackingClick = false;
-
-
-		/**
-		 * Timestamp for when click tracking started.
-		 *
-		 * @type number
-		 */
-		this.trackingClickStart = 0;
-
-
-		/**
-		 * The element being tracked for a click.
-		 *
-		 * @type EventTarget
-		 */
-		this.targetElement = null;
-
-
-		/**
-		 * X-coordinate of touch start event.
-		 *
-		 * @type number
-		 */
-		this.touchStartX = 0;
-
-
-		/**
-		 * Y-coordinate of touch start event.
-		 *
-		 * @type number
-		 */
-		this.touchStartY = 0;
-
-
-		/**
-		 * ID of the last touch, retrieved from Touch.identifier.
-		 *
-		 * @type number
-		 */
-		this.lastTouchIdentifier = 0;
-
-
-		/**
-		 * Touchmove boundary, beyond which a click will be cancelled.
-		 *
-		 * @type number
-		 */
-		this.touchBoundary = options.touchBoundary || 10;
-
-
-		/**
-		 * The FastClick layer.
-		 *
-		 * @type Element
-		 */
-		this.layer = layer;
-
-		/**
-		 * The minimum time between tap(touchstart and touchend) events
-		 *
-		 * @type number
-		 */
-		this.tapDelay = options.tapDelay || 200;
-
-		/**
-		 * The maximum time for a tap
-		 *
-		 * @type number
-		 */
-		this.tapTimeout = options.tapTimeout || 700;
-
-		if (FastClick.notNeeded(layer)) {
-			return;
-		}
-
-		// Some old versions of Android don't have Function.prototype.bind
-		function bind(method, context) {
-			return function() { return method.apply(context, arguments); };
-		}
-
-
-		var methods = ['onMouse', 'onClick', 'onTouchStart', 'onTouchMove', 'onTouchEnd', 'onTouchCancel'];
-		var context = this;
-		for (var i = 0, l = methods.length; i < l; i++) {
-			context[methods[i]] = bind(context[methods[i]], context);
-		}
-
-		// Set up event handlers as required
-		if (deviceIsAndroid) {
-			layer.addEventListener('mouseover', this.onMouse, true);
-			layer.addEventListener('mousedown', this.onMouse, true);
-			layer.addEventListener('mouseup', this.onMouse, true);
-		}
-
-		layer.addEventListener('click', this.onClick, true);
-		layer.addEventListener('touchstart', this.onTouchStart, false);
-		layer.addEventListener('touchmove', this.onTouchMove, false);
-		layer.addEventListener('touchend', this.onTouchEnd, false);
-		layer.addEventListener('touchcancel', this.onTouchCancel, false);
-
-		// Hack is required for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
-		// which is how FastClick normally stops click events bubbling to callbacks registered on the FastClick
-		// layer when they are cancelled.
-		if (!Event.prototype.stopImmediatePropagation) {
-			layer.removeEventListener = function(type, callback, capture) {
-				var rmv = Node.prototype.removeEventListener;
-				if (type === 'click') {
-					rmv.call(layer, type, callback.hijacked || callback, capture);
-				} else {
-					rmv.call(layer, type, callback, capture);
-				}
-			};
-
-			layer.addEventListener = function(type, callback, capture) {
-				var adv = Node.prototype.addEventListener;
-				if (type === 'click') {
-					adv.call(layer, type, callback.hijacked || (callback.hijacked = function(event) {
-						if (!event.propagationStopped) {
-							callback(event);
-						}
-					}), capture);
-				} else {
-					adv.call(layer, type, callback, capture);
-				}
-			};
-		}
-
-		// If a handler is already declared in the element's onclick attribute, it will be fired before
-		// FastClick's onClick handler. Fix this by pulling out the user-defined handler function and
-		// adding it as listener.
-		if (typeof layer.onclick === 'function') {
-
-			// Android browser on at least 3.2 requires a new reference to the function in layer.onclick
-			// - the old one won't work if passed to addEventListener directly.
-			oldOnClick = layer.onclick;
-			layer.addEventListener('click', function(event) {
-				oldOnClick(event);
-			}, false);
-			layer.onclick = null;
-		}
-	}
-
-	/**
-	* Windows Phone 8.1 fakes user agent string to look like Android and iPhone.
-	*
-	* @type boolean
-	*/
-	var deviceIsWindowsPhone = navigator.userAgent.indexOf("Windows Phone") >= 0;
-
-	/**
-	 * Android requires exceptions.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsAndroid = navigator.userAgent.indexOf('Android') > 0 && !deviceIsWindowsPhone;
-
-
-	/**
-	 * iOS requires exceptions.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !deviceIsWindowsPhone;
-
-
-	/**
-	 * iOS 4 requires an exception for select elements.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsIOS4 = deviceIsIOS && (/OS 4_\d(_\d)?/).test(navigator.userAgent);
-
-
-	/**
-	 * iOS 6.0-7.* requires the target element to be manually derived
-	 *
-	 * @type boolean
-	 */
-	var deviceIsIOSWithBadTarget = deviceIsIOS && (/OS [6-7]_\d/).test(navigator.userAgent);
-
-	/**
-	 * BlackBerry requires exceptions.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsBlackBerry10 = navigator.userAgent.indexOf('BB10') > 0;
-
-	/**
-	 * Determine whether a given element requires a native click.
-	 *
-	 * @param {EventTarget|Element} target Target DOM element
-	 * @returns {boolean} Returns true if the element needs a native click
-	 */
-	FastClick.prototype.needsClick = function(target) {
-		switch (target.nodeName.toLowerCase()) {
-
-		// Don't send a synthetic click to disabled inputs (issue #62)
-		case 'button':
-		case 'select':
-		case 'textarea':
-			if (target.disabled) {
-				return true;
-			}
-
-			break;
-		case 'input':
-
-			// File inputs need real clicks on iOS 6 due to a browser bug (issue #68)
-			if ((deviceIsIOS && target.type === 'file') || target.disabled) {
-				return true;
-			}
-
-			break;
-		case 'label':
-		case 'iframe': // iOS8 homescreen apps can prevent events bubbling into frames
-		case 'video':
-			return true;
-		}
-
-		return (/\bneedsclick\b/).test(target.className);
-	};
-
-
-	/**
-	 * Determine whether a given element requires a call to focus to simulate click into element.
-	 *
-	 * @param {EventTarget|Element} target Target DOM element
-	 * @returns {boolean} Returns true if the element requires a call to focus to simulate native click.
-	 */
-	FastClick.prototype.needsFocus = function(target) {
-		switch (target.nodeName.toLowerCase()) {
-		case 'textarea':
-			return true;
-		case 'select':
-			return !deviceIsAndroid;
-		case 'input':
-			switch (target.type) {
-			case 'button':
-			case 'checkbox':
-			case 'file':
-			case 'image':
-			case 'radio':
-			case 'submit':
-				return false;
-			}
-
-			// No point in attempting to focus disabled inputs
-			return !target.disabled && !target.readOnly;
-		default:
-			return (/\bneedsfocus\b/).test(target.className);
-		}
-	};
-
-
-	/**
-	 * Send a click event to the specified element.
-	 *
-	 * @param {EventTarget|Element} targetElement
-	 * @param {Event} event
-	 */
-	FastClick.prototype.sendClick = function(targetElement, event) {
-		var clickEvent, touch;
-
-		// On some Android devices activeElement needs to be blurred otherwise the synthetic click will have no effect (#24)
-		if (document.activeElement && document.activeElement !== targetElement) {
-			document.activeElement.blur();
-		}
-
-		touch = event.changedTouches[0];
-
-		// Synthesise a click event, with an extra attribute so it can be tracked
-		clickEvent = document.createEvent('MouseEvents');
-		clickEvent.initMouseEvent(this.determineEventType(targetElement), true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
-		clickEvent.forwardedTouchEvent = true;
-		targetElement.dispatchEvent(clickEvent);
-	};
-
-	FastClick.prototype.determineEventType = function(targetElement) {
-
-		//Issue #159: Android Chrome Select Box does not open with a synthetic click event
-		if (deviceIsAndroid && targetElement.tagName.toLowerCase() === 'select') {
-			return 'mousedown';
-		}
-
-		return 'click';
-	};
-
-
-	/**
-	 * @param {EventTarget|Element} targetElement
-	 */
-	FastClick.prototype.focus = function(targetElement) {
-		var length;
-
-		// Issue #160: on iOS 7, some input elements (e.g. date datetime month) throw a vague TypeError on setSelectionRange. These elements don't have an integer value for the selectionStart and selectionEnd properties, but unfortunately that can't be used for detection because accessing the properties also throws a TypeError. Just check the type instead. Filed as Apple bug #15122724.
-		if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
-			length = targetElement.value.length;
-			targetElement.setSelectionRange(length, length);
-		} else {
-			targetElement.focus();
-		}
-	};
-
-
-	/**
-	 * Check whether the given target element is a child of a scrollable layer and if so, set a flag on it.
-	 *
-	 * @param {EventTarget|Element} targetElement
-	 */
-	FastClick.prototype.updateScrollParent = function(targetElement) {
-		var scrollParent, parentElement;
-
-		scrollParent = targetElement.fastClickScrollParent;
-
-		// Attempt to discover whether the target element is contained within a scrollable layer. Re-check if the
-		// target element was moved to another parent.
-		if (!scrollParent || !scrollParent.contains(targetElement)) {
-			parentElement = targetElement;
-			do {
-				if (parentElement.scrollHeight > parentElement.offsetHeight) {
-					scrollParent = parentElement;
-					targetElement.fastClickScrollParent = parentElement;
-					break;
-				}
-
-				parentElement = parentElement.parentElement;
-			} while (parentElement);
-		}
-
-		// Always update the scroll top tracker if possible.
-		if (scrollParent) {
-			scrollParent.fastClickLastScrollTop = scrollParent.scrollTop;
-		}
-	};
-
-
-	/**
-	 * @param {EventTarget} targetElement
-	 * @returns {Element|EventTarget}
-	 */
-	FastClick.prototype.getTargetElementFromEventTarget = function(eventTarget) {
-
-		// On some older browsers (notably Safari on iOS 4.1 - see issue #56) the event target may be a text node.
-		if (eventTarget.nodeType === Node.TEXT_NODE) {
-			return eventTarget.parentNode;
-		}
-
-		return eventTarget;
-	};
-
-
-	/**
-	 * On touch start, record the position and scroll offset.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onTouchStart = function(event) {
-		var targetElement, touch, selection;
-
-		// Ignore multiple touches, otherwise pinch-to-zoom is prevented if both fingers are on the FastClick element (issue #111).
-		if (event.targetTouches.length > 1) {
-			return true;
-		}
-
-		targetElement = this.getTargetElementFromEventTarget(event.target);
-		touch = event.targetTouches[0];
-
-		if (deviceIsIOS) {
-
-			// Only trusted events will deselect text on iOS (issue #49)
-			selection = window.getSelection();
-			if (selection.rangeCount && !selection.isCollapsed) {
-				return true;
-			}
-
-			if (!deviceIsIOS4) {
-
-				// Weird things happen on iOS when an alert or confirm dialog is opened from a click event callback (issue #23):
-				// when the user next taps anywhere else on the page, new touchstart and touchend events are dispatched
-				// with the same identifier as the touch event that previously triggered the click that triggered the alert.
-				// Sadly, there is an issue on iOS 4 that causes some normal touch events to have the same identifier as an
-				// immediately preceeding touch event (issue #52), so this fix is unavailable on that platform.
-				// Issue 120: touch.identifier is 0 when Chrome dev tools 'Emulate touch events' is set with an iOS device UA string,
-				// which causes all touch events to be ignored. As this block only applies to iOS, and iOS identifiers are always long,
-				// random integers, it's safe to to continue if the identifier is 0 here.
-				if (touch.identifier && touch.identifier === this.lastTouchIdentifier) {
-					event.preventDefault();
-					return false;
-				}
-
-				this.lastTouchIdentifier = touch.identifier;
-
-				// If the target element is a child of a scrollable layer (using -webkit-overflow-scrolling: touch) and:
-				// 1) the user does a fling scroll on the scrollable layer
-				// 2) the user stops the fling scroll with another tap
-				// then the event.target of the last 'touchend' event will be the element that was under the user's finger
-				// when the fling scroll was started, causing FastClick to send a click event to that layer - unless a check
-				// is made to ensure that a parent layer was not scrolled before sending a synthetic click (issue #42).
-				this.updateScrollParent(targetElement);
-			}
-		}
-
-		this.trackingClick = true;
-		this.trackingClickStart = event.timeStamp;
-		this.targetElement = targetElement;
-
-		this.touchStartX = touch.pageX;
-		this.touchStartY = touch.pageY;
-
-		// Prevent phantom clicks on fast double-tap (issue #36)
-		if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
-			event.preventDefault();
-		}
-
-		return true;
-	};
-
-
-	/**
-	 * Based on a touchmove event object, check whether the touch has moved past a boundary since it started.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.touchHasMoved = function(event) {
-		var touch = event.changedTouches[0], boundary = this.touchBoundary;
-
-		if (Math.abs(touch.pageX - this.touchStartX) > boundary || Math.abs(touch.pageY - this.touchStartY) > boundary) {
-			return true;
-		}
-
-		return false;
-	};
-
-
-	/**
-	 * Update the last position.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onTouchMove = function(event) {
-		if (!this.trackingClick) {
-			return true;
-		}
-
-		// If the touch has moved, cancel the click tracking
-		if (this.targetElement !== this.getTargetElementFromEventTarget(event.target) || this.touchHasMoved(event)) {
-			this.trackingClick = false;
-			this.targetElement = null;
-		}
-
-		return true;
-	};
-
-
-	/**
-	 * Attempt to find the labelled control for the given label element.
-	 *
-	 * @param {EventTarget|HTMLLabelElement} labelElement
-	 * @returns {Element|null}
-	 */
-	FastClick.prototype.findControl = function(labelElement) {
-
-		// Fast path for newer browsers supporting the HTML5 control attribute
-		if (labelElement.control !== undefined) {
-			return labelElement.control;
-		}
-
-		// All browsers under test that support touch events also support the HTML5 htmlFor attribute
-		if (labelElement.htmlFor) {
-			return document.getElementById(labelElement.htmlFor);
-		}
-
-		// If no for attribute exists, attempt to retrieve the first labellable descendant element
-		// the list of which is defined here: http://www.w3.org/TR/html5/forms.html#category-label
-		return labelElement.querySelector('button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea');
-	};
-
-
-	/**
-	 * On touch end, determine whether to send a click event at once.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onTouchEnd = function(event) {
-		var forElement, trackingClickStart, targetTagName, scrollParent, touch, targetElement = this.targetElement;
-
-		if (!this.trackingClick) {
-			return true;
-		}
-
-		// Prevent phantom clicks on fast double-tap (issue #36)
-		if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
-			this.cancelNextClick = true;
-			return true;
-		}
-
-		if ((event.timeStamp - this.trackingClickStart) > this.tapTimeout) {
-			return true;
-		}
-
-		// Reset to prevent wrong click cancel on input (issue #156).
-		this.cancelNextClick = false;
-
-		this.lastClickTime = event.timeStamp;
-
-		trackingClickStart = this.trackingClickStart;
-		this.trackingClick = false;
-		this.trackingClickStart = 0;
-
-		// On some iOS devices, the targetElement supplied with the event is invalid if the layer
-		// is performing a transition or scroll, and has to be re-detected manually. Note that
-		// for this to function correctly, it must be called *after* the event target is checked!
-		// See issue #57; also filed as rdar://13048589 .
-		if (deviceIsIOSWithBadTarget) {
-			touch = event.changedTouches[0];
-
-			// In certain cases arguments of elementFromPoint can be negative, so prevent setting targetElement to null
-			targetElement = document.elementFromPoint(touch.pageX - window.pageXOffset, touch.pageY - window.pageYOffset) || targetElement;
-			targetElement.fastClickScrollParent = this.targetElement.fastClickScrollParent;
-		}
-
-		targetTagName = targetElement.tagName.toLowerCase();
-		if (targetTagName === 'label') {
-			forElement = this.findControl(targetElement);
-			if (forElement) {
-				this.focus(targetElement);
-				if (deviceIsAndroid) {
-					return false;
-				}
-
-				targetElement = forElement;
-			}
-		} else if (this.needsFocus(targetElement)) {
-
-			// Case 1: If the touch started a while ago (best guess is 100ms based on tests for issue #36) then focus will be triggered anyway. Return early and unset the target element reference so that the subsequent click will be allowed through.
-			// Case 2: Without this exception for input elements tapped when the document is contained in an iframe, then any inputted text won't be visible even though the value attribute is updated as the user types (issue #37).
-			if ((event.timeStamp - trackingClickStart) > 100 || (deviceIsIOS && window.top !== window && targetTagName === 'input')) {
-				this.targetElement = null;
-				return false;
-			}
-
-			this.focus(targetElement);
-			this.sendClick(targetElement, event);
-
-			// Select elements need the event to go through on iOS 4, otherwise the selector menu won't open.
-			// Also this breaks opening selects when VoiceOver is active on iOS6, iOS7 (and possibly others)
-			if (!deviceIsIOS || targetTagName !== 'select') {
-				this.targetElement = null;
-				event.preventDefault();
-			}
-
-			return false;
-		}
-
-		if (deviceIsIOS && !deviceIsIOS4) {
-
-			// Don't send a synthetic click event if the target element is contained within a parent layer that was scrolled
-			// and this tap is being used to stop the scrolling (usually initiated by a fling - issue #42).
-			scrollParent = targetElement.fastClickScrollParent;
-			if (scrollParent && scrollParent.fastClickLastScrollTop !== scrollParent.scrollTop) {
-				return true;
-			}
-		}
-
-		// Prevent the actual click from going though - unless the target node is marked as requiring
-		// real clicks or if it is in the whitelist in which case only non-programmatic clicks are permitted.
-		if (!this.needsClick(targetElement)) {
-			event.preventDefault();
-			this.sendClick(targetElement, event);
-		}
-
-		return false;
-	};
-
-
-	/**
-	 * On touch cancel, stop tracking the click.
-	 *
-	 * @returns {void}
-	 */
-	FastClick.prototype.onTouchCancel = function() {
-		this.trackingClick = false;
-		this.targetElement = null;
-	};
-
-
-	/**
-	 * Determine mouse events which should be permitted.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onMouse = function(event) {
-
-		// If a target element was never set (because a touch event was never fired) allow the event
-		if (!this.targetElement) {
-			return true;
-		}
-
-		if (event.forwardedTouchEvent) {
-			return true;
-		}
-
-		// Programmatically generated events targeting a specific element should be permitted
-		if (!event.cancelable) {
-			return true;
-		}
-
-		// Derive and check the target element to see whether the mouse event needs to be permitted;
-		// unless explicitly enabled, prevent non-touch click events from triggering actions,
-		// to prevent ghost/doubleclicks.
-		if (!this.needsClick(this.targetElement) || this.cancelNextClick) {
-
-			// Prevent any user-added listeners declared on FastClick element from being fired.
-			if (event.stopImmediatePropagation) {
-				event.stopImmediatePropagation();
-			} else {
-
-				// Part of the hack for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
-				event.propagationStopped = true;
-			}
-
-			// Cancel the event
-			event.stopPropagation();
-			event.preventDefault();
-
-			return false;
-		}
-
-		// If the mouse event is permitted, return true for the action to go through.
-		return true;
-	};
-
-
-	/**
-	 * On actual clicks, determine whether this is a touch-generated click, a click action occurring
-	 * naturally after a delay after a touch (which needs to be cancelled to avoid duplication), or
-	 * an actual click which should be permitted.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onClick = function(event) {
-		var permitted;
-
-		// It's possible for another FastClick-like library delivered with third-party code to fire a click event before FastClick does (issue #44). In that case, set the click-tracking flag back to false and return early. This will cause onTouchEnd to return early.
-		if (this.trackingClick) {
-			this.targetElement = null;
-			this.trackingClick = false;
-			return true;
-		}
-
-		// Very odd behaviour on iOS (issue #18): if a submit element is present inside a form and the user hits enter in the iOS simulator or clicks the Go button on the pop-up OS keyboard the a kind of 'fake' click event will be triggered with the submit-type input element as the target.
-		if (event.target.type === 'submit' && event.detail === 0) {
-			return true;
-		}
-
-		permitted = this.onMouse(event);
-
-		// Only unset targetElement if the click is not permitted. This will ensure that the check for !targetElement in onMouse fails and the browser's click doesn't go through.
-		if (!permitted) {
-			this.targetElement = null;
-		}
-
-		// If clicks are permitted, return true for the action to go through.
-		return permitted;
-	};
-
-
-	/**
-	 * Remove all FastClick's event listeners.
-	 *
-	 * @returns {void}
-	 */
-	FastClick.prototype.destroy = function() {
-		var layer = this.layer;
-
-		if (deviceIsAndroid) {
-			layer.removeEventListener('mouseover', this.onMouse, true);
-			layer.removeEventListener('mousedown', this.onMouse, true);
-			layer.removeEventListener('mouseup', this.onMouse, true);
-		}
-
-		layer.removeEventListener('click', this.onClick, true);
-		layer.removeEventListener('touchstart', this.onTouchStart, false);
-		layer.removeEventListener('touchmove', this.onTouchMove, false);
-		layer.removeEventListener('touchend', this.onTouchEnd, false);
-		layer.removeEventListener('touchcancel', this.onTouchCancel, false);
-	};
-
-
-	/**
-	 * Check whether FastClick is needed.
-	 *
-	 * @param {Element} layer The layer to listen on
-	 */
-	FastClick.notNeeded = function(layer) {
-		var metaViewport;
-		var chromeVersion;
-		var blackberryVersion;
-		var firefoxVersion;
-
-		// Devices that don't support touch don't need FastClick
-		if (typeof window.ontouchstart === 'undefined') {
-			return true;
-		}
-
-		// Chrome version - zero for other browsers
-		chromeVersion = +(/Chrome\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
-
-		if (chromeVersion) {
-
-			if (deviceIsAndroid) {
-				metaViewport = document.querySelector('meta[name=viewport]');
-
-				if (metaViewport) {
-					// Chrome on Android with user-scalable="no" doesn't need FastClick (issue #89)
-					if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-						return true;
-					}
-					// Chrome 32 and above with width=device-width or less don't need FastClick
-					if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
-						return true;
-					}
-				}
-
-			// Chrome desktop doesn't need FastClick (issue #15)
-			} else {
-				return true;
-			}
-		}
-
-		if (deviceIsBlackBerry10) {
-			blackberryVersion = navigator.userAgent.match(/Version\/([0-9]*)\.([0-9]*)/);
-
-			// BlackBerry 10.3+ does not require Fastclick library.
-			// https://github.com/ftlabs/fastclick/issues/251
-			if (blackberryVersion[1] >= 10 && blackberryVersion[2] >= 3) {
-				metaViewport = document.querySelector('meta[name=viewport]');
-
-				if (metaViewport) {
-					// user-scalable=no eliminates click delay.
-					if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-						return true;
-					}
-					// width=device-width (or less than device-width) eliminates click delay.
-					if (document.documentElement.scrollWidth <= window.outerWidth) {
-						return true;
-					}
-				}
-			}
-		}
-
-		// IE10 with -ms-touch-action: none or manipulation, which disables double-tap-to-zoom (issue #97)
-		if (layer.style.msTouchAction === 'none' || layer.style.touchAction === 'manipulation') {
-			return true;
-		}
-
-		// Firefox version - zero for other browsers
-		firefoxVersion = +(/Firefox\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
-
-		if (firefoxVersion >= 27) {
-			// Firefox 27+ does not have tap delay if the content is not zoomable - https://bugzilla.mozilla.org/show_bug.cgi?id=922896
-
-			metaViewport = document.querySelector('meta[name=viewport]');
-			if (metaViewport && (metaViewport.content.indexOf('user-scalable=no') !== -1 || document.documentElement.scrollWidth <= window.outerWidth)) {
-				return true;
-			}
-		}
-
-		// IE11: prefixed -ms-touch-action is no longer supported and it's recomended to use non-prefixed version
-		// http://msdn.microsoft.com/en-us/library/windows/apps/Hh767313.aspx
-		if (layer.style.touchAction === 'none' || layer.style.touchAction === 'manipulation') {
-			return true;
-		}
-
-		return false;
-	};
-
-
-	/**
-	 * Factory method for creating a FastClick object
-	 *
-	 * @param {Element} layer The layer to listen on
-	 * @param {Object} [options={}] The options to override the defaults
-	 */
-	FastClick.attach = function(layer, options) {
-		return new FastClick(layer, options);
-	};
-
-
-	if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
-
-		// AMD. Register as an anonymous module.
-		define('vendors/fastclick',[],function() {
-			return FastClick;
-		});
-	} else if (typeof module !== 'undefined' && module.exports) {
-		module.exports = FastClick.attach;
-		module.exports.FastClick = FastClick;
-	} else {
-		window.FastClick = FastClick;
-	}
-}());
-
 (function(root, factory) {
     if (typeof exports === 'object') {
         // CommonJS
@@ -1494,7 +407,7 @@ https://github.com/mroderick/PubSubJS
     };
     return new NoJQuery();
 }));
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define('vendors/page',[],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.page=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define('page',[],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.page=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (process){
   /* globals require, module */
 
@@ -2206,12 +1119,16 @@ process.chdir = function (dir) {
 };
 
 },{}],3:[function(require,module,exports){
-var isArray = require('isarray');
+var isarray = require('isarray')
 
 /**
  * Expose `pathToRegexp`.
  */
-module.exports = pathToRegexp;
+module.exports = pathToRegexp
+module.exports.parse = parse
+module.exports.compile = compile
+module.exports.tokensToFunction = tokensToFunction
+module.exports.tokensToRegExp = tokensToRegExp
 
 /**
  * The main path matching regexp utility.
@@ -2225,12 +1142,175 @@ var PATH_REGEXP = new RegExp([
   // Match Express-style parameters and un-named parameters with a prefix
   // and optional suffixes. Matches appear as:
   //
-  // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?"]
-  // "/route(\\d+)" => [undefined, undefined, undefined, "\d+", undefined]
-  '([\\/.])?(?:\\:(\\w+)(?:\\(((?:\\\\.|[^)])*)\\))?|\\(((?:\\\\.|[^)])*)\\))([+*?])?',
-  // Match regexp special characters that are always escaped.
-  '([.+*?=^!:${}()[\\]|\\/])'
-].join('|'), 'g');
+  // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?", undefined]
+  // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined, undefined]
+  // "/*"            => ["/", undefined, undefined, undefined, undefined, "*"]
+  '([\\/.])?(?:(?:\\:(\\w+)(?:\\(((?:\\\\.|[^()])+)\\))?|\\(((?:\\\\.|[^()])+)\\))([+*?])?|(\\*))'
+].join('|'), 'g')
+
+/**
+ * Parse a string for the raw tokens.
+ *
+ * @param  {String} str
+ * @return {Array}
+ */
+function parse (str) {
+  var tokens = []
+  var key = 0
+  var index = 0
+  var path = ''
+  var res
+
+  while ((res = PATH_REGEXP.exec(str)) != null) {
+    var m = res[0]
+    var escaped = res[1]
+    var offset = res.index
+    path += str.slice(index, offset)
+    index = offset + m.length
+
+    // Ignore already escaped sequences.
+    if (escaped) {
+      path += escaped[1]
+      continue
+    }
+
+    // Push the current path onto the tokens.
+    if (path) {
+      tokens.push(path)
+      path = ''
+    }
+
+    var prefix = res[2]
+    var name = res[3]
+    var capture = res[4]
+    var group = res[5]
+    var suffix = res[6]
+    var asterisk = res[7]
+
+    var repeat = suffix === '+' || suffix === '*'
+    var optional = suffix === '?' || suffix === '*'
+    var delimiter = prefix || '/'
+    var pattern = capture || group || (asterisk ? '.*' : '[^' + delimiter + ']+?')
+
+    tokens.push({
+      name: name || key++,
+      prefix: prefix || '',
+      delimiter: delimiter,
+      optional: optional,
+      repeat: repeat,
+      pattern: escapeGroup(pattern)
+    })
+  }
+
+  // Match any characters still remaining.
+  if (index < str.length) {
+    path += str.substr(index)
+  }
+
+  // If the path exists, push it onto the end.
+  if (path) {
+    tokens.push(path)
+  }
+
+  return tokens
+}
+
+/**
+ * Compile a string to a template function for the path.
+ *
+ * @param  {String}   str
+ * @return {Function}
+ */
+function compile (str) {
+  return tokensToFunction(parse(str))
+}
+
+/**
+ * Expose a method for transforming tokens into the path function.
+ */
+function tokensToFunction (tokens) {
+  // Compile all the tokens into regexps.
+  var matches = new Array(tokens.length)
+
+  // Compile all the patterns before compilation.
+  for (var i = 0; i < tokens.length; i++) {
+    if (typeof tokens[i] === 'object') {
+      matches[i] = new RegExp('^' + tokens[i].pattern + '$')
+    }
+  }
+
+  return function (obj) {
+    var path = ''
+    var data = obj || {}
+
+    for (var i = 0; i < tokens.length; i++) {
+      var token = tokens[i]
+
+      if (typeof token === 'string') {
+        path += token
+
+        continue
+      }
+
+      var value = data[token.name]
+      var segment
+
+      if (value == null) {
+        if (token.optional) {
+          continue
+        } else {
+          throw new TypeError('Expected "' + token.name + '" to be defined')
+        }
+      }
+
+      if (isarray(value)) {
+        if (!token.repeat) {
+          throw new TypeError('Expected "' + token.name + '" to not repeat, but received "' + value + '"')
+        }
+
+        if (value.length === 0) {
+          if (token.optional) {
+            continue
+          } else {
+            throw new TypeError('Expected "' + token.name + '" to not be empty')
+          }
+        }
+
+        for (var j = 0; j < value.length; j++) {
+          segment = encodeURIComponent(value[j])
+
+          if (!matches[i].test(segment)) {
+            throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
+          }
+
+          path += (j === 0 ? token.prefix : token.delimiter) + segment
+        }
+
+        continue
+      }
+
+      segment = encodeURIComponent(value)
+
+      if (!matches[i].test(segment)) {
+        throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
+      }
+
+      path += token.prefix + segment
+    }
+
+    return path
+  }
+}
+
+/**
+ * Escape a regular expression string.
+ *
+ * @param  {String} str
+ * @return {String}
+ */
+function escapeString (str) {
+  return str.replace(/([.+*?=^!:${}()[\]|\/])/g, '\\$1')
+}
 
 /**
  * Escape the capturing group by escaping special characters and meaning.
@@ -2239,7 +1319,7 @@ var PATH_REGEXP = new RegExp([
  * @return {String}
  */
 function escapeGroup (group) {
-  return group.replace(/([=!:$\/()])/g, '\\$1');
+  return group.replace(/([=!:$\/()])/g, '\\$1')
 }
 
 /**
@@ -2250,8 +1330,8 @@ function escapeGroup (group) {
  * @return {RegExp}
  */
 function attachKeys (re, keys) {
-  re.keys = keys;
-  return re;
+  re.keys = keys
+  return re
 }
 
 /**
@@ -2261,7 +1341,7 @@ function attachKeys (re, keys) {
  * @return {String}
  */
 function flags (options) {
-  return options.sensitive ? '' : 'i';
+  return options.sensitive ? '' : 'i'
 }
 
 /**
@@ -2273,20 +1353,22 @@ function flags (options) {
  */
 function regexpToRegexp (path, keys) {
   // Use a negative lookahead to match only capturing groups.
-  var groups = path.source.match(/\((?!\?)/g);
+  var groups = path.source.match(/\((?!\?)/g)
 
   if (groups) {
     for (var i = 0; i < groups.length; i++) {
       keys.push({
-        name:      i,
+        name: i,
+        prefix: null,
         delimiter: null,
-        optional:  false,
-        repeat:    false
-      });
+        optional: false,
+        repeat: false,
+        pattern: null
+      })
     }
   }
 
-  return attachKeys(path, keys);
+  return attachKeys(path, keys)
 }
 
 /**
@@ -2298,61 +1380,101 @@ function regexpToRegexp (path, keys) {
  * @return {RegExp}
  */
 function arrayToRegexp (path, keys, options) {
-  var parts = [];
+  var parts = []
 
   for (var i = 0; i < path.length; i++) {
-    parts.push(pathToRegexp(path[i], keys, options).source);
+    parts.push(pathToRegexp(path[i], keys, options).source)
   }
 
-  var regexp = new RegExp('(?:' + parts.join('|') + ')', flags(options));
-  return attachKeys(regexp, keys);
+  var regexp = new RegExp('(?:' + parts.join('|') + ')', flags(options))
+
+  return attachKeys(regexp, keys)
 }
 
 /**
- * Replace the specific tags with regexp strings.
+ * Create a path regexp from string input.
  *
  * @param  {String} path
  * @param  {Array}  keys
- * @return {String}
+ * @param  {Object} options
+ * @return {RegExp}
  */
-function replacePath (path, keys) {
-  var index = 0;
+function stringToRegexp (path, keys, options) {
+  var tokens = parse(path)
+  var re = tokensToRegExp(tokens, options)
 
-  function replace (_, escaped, prefix, key, capture, group, suffix, escape) {
-    if (escaped) {
-      return escaped;
+  // Attach keys back to the regexp.
+  for (var i = 0; i < tokens.length; i++) {
+    if (typeof tokens[i] !== 'string') {
+      keys.push(tokens[i])
     }
-
-    if (escape) {
-      return '\\' + escape;
-    }
-
-    var repeat   = suffix === '+' || suffix === '*';
-    var optional = suffix === '?' || suffix === '*';
-
-    keys.push({
-      name:      key || index++,
-      delimiter: prefix || '/',
-      optional:  optional,
-      repeat:    repeat
-    });
-
-    prefix = prefix ? ('\\' + prefix) : '';
-    capture = escapeGroup(capture || group || '[^' + (prefix || '\\/') + ']+?');
-
-    if (repeat) {
-      capture = capture + '(?:' + prefix + capture + ')*';
-    }
-
-    if (optional) {
-      return '(?:' + prefix + '(' + capture + '))?';
-    }
-
-    // Basic parameter support.
-    return prefix + '(' + capture + ')';
   }
 
-  return path.replace(PATH_REGEXP, replace);
+  return attachKeys(re, keys)
+}
+
+/**
+ * Expose a function for taking tokens and returning a RegExp.
+ *
+ * @param  {Array}  tokens
+ * @param  {Array}  keys
+ * @param  {Object} options
+ * @return {RegExp}
+ */
+function tokensToRegExp (tokens, options) {
+  options = options || {}
+
+  var strict = options.strict
+  var end = options.end !== false
+  var route = ''
+  var lastToken = tokens[tokens.length - 1]
+  var endsWithSlash = typeof lastToken === 'string' && /\/$/.test(lastToken)
+
+  // Iterate over the tokens and create our regexp string.
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i]
+
+    if (typeof token === 'string') {
+      route += escapeString(token)
+    } else {
+      var prefix = escapeString(token.prefix)
+      var capture = token.pattern
+
+      if (token.repeat) {
+        capture += '(?:' + prefix + capture + ')*'
+      }
+
+      if (token.optional) {
+        if (prefix) {
+          capture = '(?:' + prefix + '(' + capture + '))?'
+        } else {
+          capture = '(' + capture + ')?'
+        }
+      } else {
+        capture = prefix + '(' + capture + ')'
+      }
+
+      route += capture
+    }
+  }
+
+  // In non-strict mode we allow a slash at the end of match. If the path to
+  // match already ends with a slash, we remove it for consistency. The slash
+  // is valid at the end of a path match, not in the middle. This is important
+  // in non-ending mode, where "/test/" shouldn't match "/test//route".
+  if (!strict) {
+    route = (endsWithSlash ? route.slice(0, -2) : route) + '(?:\\/(?=$))?'
+  }
+
+  if (end) {
+    route += '$'
+  } else {
+    // In non-ending mode, we need the capturing groups to match as much as
+    // possible by using a positive lookahead to the end or next path segment.
+    route += strict && endsWithSlash ? '' : '(?=\\/|$)'
+  }
+
+  return new RegExp('^' + route, flags(options))
 }
 
 /**
@@ -2368,45 +1490,24 @@ function replacePath (path, keys) {
  * @return {RegExp}
  */
 function pathToRegexp (path, keys, options) {
-  keys = keys || [];
+  keys = keys || []
 
-  if (!isArray(keys)) {
-    options = keys;
-    keys = [];
+  if (!isarray(keys)) {
+    options = keys
+    keys = []
   } else if (!options) {
-    options = {};
+    options = {}
   }
 
   if (path instanceof RegExp) {
-    return regexpToRegexp(path, keys, options);
+    return regexpToRegexp(path, keys, options)
   }
 
-  if (isArray(path)) {
-    return arrayToRegexp(path, keys, options);
+  if (isarray(path)) {
+    return arrayToRegexp(path, keys, options)
   }
 
-  var strict = options.strict;
-  var end = options.end !== false;
-  var route = replacePath(path, keys);
-  var endsWithSlash = path.charAt(path.length - 1) === '/';
-
-  // In non-strict mode we allow a slash at the end of match. If the path to
-  // match already ends with a slash, we remove it for consistency. The slash
-  // is valid at the end of a path match, not in the middle. This is important
-  // in non-ending mode, where "/test/" shouldn't match "/test//route".
-  if (!strict) {
-    route = (endsWithSlash ? route.slice(0, -2) : route) + '(?:\\/(?=$))?';
-  }
-
-  if (end) {
-    route += '$';
-  } else {
-    // In non-ending mode, we need the capturing groups to match as much as
-    // possible by using a positive lookahead to the end or next path segment.
-    route += strict && endsWithSlash ? '' : '(?=\\/|$)';
-  }
-
-  return attachKeys(new RegExp('^' + route, flags(options)), keys);
+  return stringToRegexp(path, keys, options)
 }
 
 },{"isarray":4}],4:[function(require,module,exports){
@@ -2416,103 +1517,1665 @@ module.exports = Array.isArray || function (arr) {
 
 },{}]},{},[1])(1)
 });
-define('routers/router',['noJquery', 'vendors/page'], function(NoJQuery, page) {
+define('views/menu',[], function() {
+    var Menu = function(app) {
+        this.el = '.menu';
+        this.$$ = app.$$;
+        this.init = function() {
+            this.setup();
+        };
 
-    var Router = function() {
+        this.setup = function() {
+            this.countAbout = 0;
+            this.countWork = 0;
+            this.$el = this.$$(this.el);
+            this.btnWork = this.$$('.btn-work');
+            this.btnAbout = this.$$('.btn-about');
+            this.workLine = this.$$('.btn-work > .line-ph > i');
+            this.aboutLine = this.$$('.btn-about > .line-ph > i');
+
+            this.addAnimationsListeners();
+        };
+
+        this.execute = function() {
+            console.log('menu execute');
+            this.hide();
+            setTimeout(function(){
+                this.animate();
+                clearTimeout();
+            }.bind(this),10);
+        };
+        this.animate = function() {
+            console.log('menu animate');
+            this.$$('.btn-work > .text-ph').addClass('animate-span');
+            this.$$('.btn-work > .line-ph > i').addClass('animate-line');
+
+            this.$$('.btn-about > .text-ph').addClass('animate-span-about');
+            this.$$('.btn-about > .line-ph > i').addClass('animate-line-about');
+        };
+
+        this.addAnimationsListeners = function() {
+            app.prefixedEventListener(this.workLine.elmts[0], 'AnimationEnd', function(e) {
+                console.log('aaaa', this.countWork);
+                this.countWork++;
+                if (this.countWork === 2) {
+                    this.$$(e.target).removeClass('animate-line');
+                    this.$$(e.target).addClass('animate-line-fixed');
+                    if (this.currentItem) {
+                        this.deactivateButton();
+                        this.activateButton(this.currentItem);
+                    }
+                }
+            }.bind(this));
+            app.prefixedEventListener(this.aboutLine.elmts[0], 'AnimationEnd', function(e) {
+                this.countAbout++;
+                if (this.countAbout === 2) {
+                    this.$$(e.target).removeClass('animate-line-about');
+                    this.$$(e.target).addClass('animate-line-fixed');
+                    if (this.currentItem) {
+                        this.deactivateButton();
+                        this.activateButton(this.currentItem);
+                    }
+                }
+            }.bind(this));
+        };
+
+        this.hide = function() {
+            this.countAbout = 0;
+            this.countWork = 0;
+            this.$$('.btn-work > .text-ph').removeClass('animate-span');
+            this.$$('.btn-work > .line-ph > i').removeClass('animate-line');
+
+            this.$$('.btn-about > .text-ph').removeClass('animate-span-about');
+            this.$$('.btn-about > .line-ph > i').removeClass('animate-line-about');
+
+            this.btnWork.removeClass('active-button');
+            this.btnAbout.removeClass('active-button');
+
+            this.$$('.btn-work > .line-ph > i').removeClass('animate-line-fixed');
+            this.$$('.btn-about').find('.line-ph').find('i').removeClass('animate-line-fixed');
+
+            console.log('menu hide');
+        };
+
+        this.activateMenu = function(view) {
+            this.currentItem = view;
+            console.log('activateMenu', view, this);
+            if (this.countAbout > 1 && this.countWork > 1) {
+                this.deactivateButton();
+                this.activateButton(view);
+            }
+        };
+
+        this.deactivateButton = function() {
+            this.btnWork.removeClass('active-button');
+            this.btnAbout.removeClass('active-button');
+        };
+
+        this.activateButton = function(view) {
+            try {
+                this.$$('.btn-' + view).addClass('active-button');
+            } catch (e) {};
+        };
+    };
+    return Menu;
+});
+
+define('lib/NoJQuery',[], function () {
+    'use strict';    
+    var NoJQuery = {
+        ajax: {
+            getJson: function ajaxGet(url, onSuccess, onError) {
+                var request = new XMLHttpRequest(),
+                    dataSuccess,
+                    dataError;
+
+                request.open('GET', url, true);
+
+                request.onload = function onload(evt) {
+                    var options = {};
+                    options.evt = evt;
+                    options.request = request;
+                    options.onSuccess = onSuccess;
+                    options.onError = onError;
+                    options.dataSuccess = dataSuccess;
+                    options.dataError = dataError;
+
+                    NoJQuery.ajax.jsonRequestOnLoad(options);
+                };
+                request.onerror = function onerror() {
+                    onError();
+                };
+                request.send();
+            },
+            postJson: function ajaxPost(url, data, onSuccess, onError) {
+                var request = new XMLHttpRequest(),
+                    dataSuccess,
+                    dataError;
+
+                request.open('POST', url, true);
+                request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                request.onload = function onload(evt) {
+                    var options = {};
+                    options.evt = evt;
+                    options.request = request;
+                    options.onSuccess = onSuccess;
+                    options.onError = onError;
+                    options.dataSuccess = dataSuccess;
+                    options.dataError = dataError;
+
+                    NoJQuery.ajax.jsonRequestOnLoad(options);
+                };
+                request.onerror = function onerror() {
+                    onError();
+                };
+                request.send(data);
+            },
+            get: function ajaxGet(url, onSuccess, onError) {
+                var request = new XMLHttpRequest(),
+                    dataSuccess,
+                    dataError;
+
+                request.open('GET', url, true);
+
+                request.onload = function onload(evt) {
+                    var options = {};
+                    options.evt = evt;
+                    options.request = request;
+                    options.onSuccess = onSuccess;
+                    options.onError = onError;
+                    options.dataSuccess = dataSuccess;
+                    options.dataError = dataError;
+
+                    NoJQuery.ajax.requestOnLoad(options);
+                };
+                request.onerror = function onerror() {
+                    onError();
+                };
+                request.send();
+            },
+            onLoad: function (options, returnData) {
+                if (options.request.status >= 200 && options.request.status < 400) {
+                    options.dataSuccess = returnData;
+                    options.onSuccess(options.dataSuccess);
+                } else {
+                    options.dataError = { message: options.evt.currentTarget.responseURL + ' - ' + options.evt.currentTarget.statusText, statusText: options.evt.currentTarget.statusText, responseURL: options.evt.currentTarget.responseURL, status: options.evt.currentTarget.status };
+                    options.onError();
+                }
+            },
+            jsonRequestOnLoad: function (options) {
+                NoJQuery.ajax.onLoad(options, JSON.parse(options.request.responseText));
+            },
+            requestOnLoad: function (options) {
+                NoJQuery.ajax.onLoad(options, options.request.responseText);
+            }
+        },
+        select: function (selector) {
+            var elmts = document.querySelectorAll(selector);
+
+            if (elmts.length === 0) {
+                throw "No element(s) found for '" + selector + "'";
+            }
+            return elmts;
+        },
+        find: function (selector) {
+            var elmts = document.querySelectorAll(selector),
+                count = 0;
+
+            count = elmts.length;
+
+            return count;
+        },
+        closestParent: function (child, className) {
+            if (!child || child === document) {
+                return null;
+            }
+            if (child.classList.contains(className)) {
+                return child;
+            } else {
+                return NoJQuery.closestParent(child.parentNode, className);
+            }
+        },
+        on: function (el, eventName, eventHandler) {
+            el.addEventListener(eventName, eventHandler);
+        },
+        off: function (el, eventName, eventHandler) {
+            el.removeEventListener(eventName, eventHandler);
+        },
+        addClass: function (elmts, className, dontRedraw) {
+            for (var i = 0; i < elmts.length; i++) {
+                if (!dontRedraw) {
+                    this.redraw(elmts[i]);
+                }                
+                if (elmts[i].classList) {
+                    elmts[i].classList.add(className);                    
+                } else {
+                    elmts[i].className += ' ' + className;
+                }
+            }
+        },
+        hasClass: function (elmt, className) {
+            var result = false;
+            if (elmt.classList) {
+                result = elmt.classList.contains(className);
+            } else {
+                result = new RegExp('(^| )' + className + '( |$)', 'gi').test(elmt.className);
+            }
+
+            return result;
+        },
+        removeClass: function (elmts, className) {
+            for (var i = 0; i < elmts.length; i++) {
+                if (elmts[i].classList) {
+                    elmts[i].classList.remove(className);
+                } else {
+                    elmts[i].className = elmts[i].className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+                }
+            }
+        },
+        redraw: function(elmt) {
+            elmt.offsetHeight;
+        },
+        containsSelector: function (elmt, selector) {
+            var result = elmt.querySelector(selector) !== null;
+            return result;
+        },
+        each: function (selector, eachFunc) {
+            var elmts = document.querySelectorAll(selector);
+            Array.prototype.forEach.call(elmts, function (el, i) {
+                eachFunc(el, i);
+            });
+        },
+        empty: function (elmt) {
+            elmt.innerHTML = '';
+        },
+        getAttr: function (elmt, attr) {
+            var result = elmt.getAttribute(attr);
+            return result;
+        },
+        setAttr: function (elmt, attr, val) {
+            elmt.setAttribute(attr, val);
+        },
+        remove: function (elmt) {
+            elmt.parentNode.removeChild(NoJQuery.elmt);
+        },
+        prev: function (elmt) {
+            var prevElmt = elmt.previousElementSibling;
+            return prevElmt;
+        },
+        next: function (elmt) {
+            var nextElmt = elmt.nextElementSibling;
+            return nextElmt;
+        },
+        proxy: function (fn, context) {
+            fn.bind(context);
+        },
+        html: function (elmt, string) {
+            elmt.innerHTML = string;
+        },
+        text: function (elmt, string) {
+            elmt.textContent = string;
+        },
+        append: function (elmt, el) {
+            elmt.appendChild(el);
+        },
+        prepend: function (elmt, el) {
+            var parent = elmt;
+            parent.insertBefore(el, parent.firstChild);
+        },
+        parseHtml: function (str) {
+            var tmp = document.implementation.createHTMLDocument();
+            tmp.body.innerHTML = str;
+            return tmp.body.children;
+        }
+    };
+
+    return NoJQuery;
+});
+/* global TweenLite */
+define('views/AnimateColors',['lib/NoJQuery'], function (NoJQuery) {
+    var AnimateColors = function (Grid3D) {
+        this.el = 'grid3d';
         this.njq = NoJQuery;
-        this.initialize = function(PubSub) {
-            this.pubsub = PubSub;
-            page('/', this.callbackPage.bind(this));
-            page('/work', this.callbackPage.bind(this));
-            page('/about', this.callbackPage.bind(this));
-            page('/work/:project/:section', this.callbackPageDetails.bind(this));
+        this.grid = Grid3D;
+        this.totalColors = this.grid.colors.length;
+        this.duration = 2;
+        this.delay = 1000 * this.duration;
+
+        function hexToRgbTreeJs(hex) {
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16) / 255,
+                g: parseInt(result[2], 16) / 255,
+                b: parseInt(result[3], 16) / 255
+            } : null;
+        }
+
+        function TweenProp(prop, rgb, material, duration) {
+            TweenLite.to(prop, duration, {
+                r: rgb.r, g: rgb.g, b: rgb.b, onUpdate: function (material) {
+                    material.verticesNeedUpdate = true;                    
+                }, onUpdateParams: [material]
+            });
+        }
+
+        this.getRandomIndex = function () {
+            return Math.floor(Math.random() * (this.totalColors - 1));
         };
-        this.start = function() {
-            page();
+
+        this.initialize = function () {
+            setInterval(function () {
+                var index = this.getRandomIndex();
+                this.changeColors(index);
+
+            }.bind(this), this.delay);            
         };
-        this.on = function(eventName, callback) {
-            this.pubsub.subscribe(eventName, callback);
+
+        this.changeColors = function (index) {            
+            var rgbColor = hexToRgbTreeJs(this.grid.colors[index].materialColor),
+                rgbSpecular = hexToRgbTreeJs(this.grid.colors[index].specularColor);
+
+            //MATERIAL COLOR
+            TweenProp(this.grid.materials[0].color, rgbColor, this.grid.materials[0], this.duration);
+
+            //SPECULAR
+            TweenProp(this.grid.materials[0].specular, rgbSpecular, this.grid.materials[0], this.duration);
+
+            //MATERIAL AUX COLOR
+            TweenProp(this.grid.materialsAux[0].color, rgbColor, this.grid.materialsAux[0], this.duration);
+
+            //SPECULAR AUX
+            TweenProp(this.grid.materialsAux[0].specular, rgbSpecular, this.grid.materialsAux[0], this.duration);
+
+            
         };
-        this.off = function(eventName) {
-            this.pubsub.unsubscribe(eventName);
-            this.eventName = '';
+
+        this.execute = function () {
         };
-        this.callbackPage = function(ctx) {
-            this.addPubSub('change', ctx);
+
+        this.initialize();
+    };
+    return AnimateColors;
+});
+/* global THREE */
+/* global Detector */
+define('views/grid3d',['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColors) {
+    var Grid3D = function () {
+        this.el = 'grid3d';
+        this.njq = NoJQuery;
+        this.completed = false;
+
+        this.initialize = function () {            
+
+            this.camera;
+            this.scene;
+            this.renderer;
+            this.mouseX = 0;
+            this.mouseY = 0;
+
+            this.ambient;
+            this.materials;
+            this.materialsAux;
+            this.light;
+
+            this.colors = [];
+            this.colors[0] = { materialColor: '#094AAE', specularColor: '#1BE4DC' };
+            this.colors[1] = { materialColor: '#ff0000', specularColor: '#ff6a00' };
+            this.colors[2] = { materialColor: '#094AAE', specularColor: '#ff0000' };
+            this.colors[3] = { materialColor: '#01052e', specularColor: '#094AAE' };
+            this.colors[4] = { materialColor: '#240058', specularColor: '#ff7c0d' };
+            this.colors[5] = { materialColor: '#240058', specularColor: '#4cff00' };
+            this.colors[6] = { materialColor: '#000000', specularColor: '#4e4e4e' };
+            this.colors[7] = { materialColor: '#01273d', specularColor: '#8500fa' };
+
+            this.colorIndex = 0;
+            this.baseColor = '#000';
+            this.ambientColor = '#000';
+            this.directionalColor = '#fff';
+            this.materialColor = this.colors[this.colorIndex].materialColor;
+            this.specularColor = this.colors[this.colorIndex].specularColor;
+
+            this.objPlain;
+            this.objUp;
+            this.objDown;
+            this.gridGroup;
+
+            this.executed = false;
+            this.windowHalfX = window.innerWidth / 2;
+            this.windowHalfY = window.innerHeight / 2;
+
         };
-        this.callbackPageDetails = function(ctx) {
-            this.addPubSub('details', ctx);
+
+        this.onMouseMove = function (event) {
+            this.mouseX = (event.clientX - this.windowHalfX) * 10;
+            this.mouseY = (event.clientY - this.windowHalfY) * 10;
         };
-        this.addPubSub = function(event, ctx) {
-            var paths = ctx.path.split('/'),
-                commands = [],
-                i = 0,
-                total = paths.length;
+
+        this.onWindowResize = function () {
+            this.windowHalfX = window.innerWidth / 2;
+            this.windowHalfY = window.innerHeight / 2;
+
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+
+        this.initGrid = function () {
+            
+            
+            window.addEventListener('mousemove', this.onMouseMove.bind(this));
+
+            window.addEventListener('resize', this.onWindowResize.bind(this), false);
+
+            this.container = document.getElementsByClassName(this.el)[0];
+
+            this.gridGroup = new THREE.Object3D();
+            
+            this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            this.renderer.setClearColor(this.baseColor, 1);
+            this.renderer.setPixelRatio(window.devicePixelRatio);
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.container.appendChild(this.renderer.domElement);
+
+            this.scene = new THREE.Scene();            
+            this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+            this.camera.position.set(0, 0, 500);
+
+            this.camera.target = new THREE.Vector3();
+
+            this.ambient = new THREE.AmbientLight(this.ambientColor);
+            this.scene.add(this.ambient);
+
+            this.light = new THREE.DirectionalLight(this.directionalColor, 0.3);
+            this.light.position.set(0, 200, 500);
+            this.scene.add(this.light);
+
+            this.materials = [];
+
+            this.materialsAux = [];
+
+            this.materials.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
+
+            this.objPlain = this.addPlainObj(this.scene, this.materials);
+
+            this.objUp = this.addExtrudeUpObj(this.scene, this.materials);
+
+            this.objDown = this.addExtrudeDownObj(this.scene, this.materials);
+        };
+
+        this.addExtrudeUpObj = function (scene, materials) {
+            var triangleMaterial = materials[0],
+                triangleGeometry,
+                triangleGeometry1,
+                triangleGeometry2,
+                triangleGeometry3,
+                triangleGeometry4,
+                triangleGeometry5,
+                triangleMesh0,
+                triangleMesh1,
+                triangleMesh2,
+                triangleMesh3,
+                triangleMesh4,
+                triangleMesh5,
+                obj;
+
+            triangleGeometry = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -52.5, 0)]);
+            triangleGeometry1 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -52.5, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry2 = this.positionVertices([new THREE.Vector3(0, -48, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(53.9, 0, 0)]);
+            triangleGeometry3 = this.positionVertices([new THREE.Vector3(-53.9, 0, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(0, -48, 0)]);
+            triangleGeometry4 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 52.5, 0)]);
+            triangleGeometry5 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 52.5, 0), new THREE.Vector3(0, -50, 0)]);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial);
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            obj = new THREE.Object3D();
+            obj.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+            scene.add(obj);
+
+            obj.position.x = -1000;
+
+            return obj;
+        };
+
+        this.addExtrudeDownObj = function (scene, materials) {
+            var triangleMaterial = materials[0],
+                triangleGeometry,
+                triangleGeometry1,
+                triangleGeometry2,
+                triangleGeometry3,
+                triangleGeometry4,
+                triangleGeometry5,
+                obj,
+                triangleMesh0,
+                triangleMesh1,
+                triangleMesh2,
+                triangleMesh3,
+                triangleMesh4,
+                triangleMesh5;
+
+            triangleGeometry = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -52.5, 0)]);
+            triangleGeometry1 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -52.5, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry2 = this.positionVertices([new THREE.Vector3(0, -48, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(53.9, 0, 0)]);
+            triangleGeometry3 = this.positionVertices([new THREE.Vector3(-53.9, 0, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(0, -48, 0)]);
+            triangleGeometry4 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 52.5, 0)]);
+            triangleGeometry5 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 52.5, 0), new THREE.Vector3(0, -50, 0)]);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial);
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            obj = new THREE.Object3D();
+            obj.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+            scene.add(obj);
+
+            obj.position.x = -1000;
+
+            return obj;
+        };
+
+        this.addPlainObj = function (scene, materials) {
+            var triangleMaterial = materials[0],
+                triangleGeometry,
+                triangleGeometry1,
+                triangleGeometry2,
+                triangleGeometry3,
+                triangleGeometry4,
+                triangleGeometry5,
+                triangleMesh0,
+                triangleMesh1,
+                triangleMesh2,
+                triangleMesh3,
+                triangleMesh4,
+                triangleMesh5,
+                group,
+                obj;
+
+            triangleGeometry = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
+            triangleGeometry1 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry2 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry3 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
+            triangleGeometry4 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
+            triangleGeometry5 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
+
+            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial);
+            triangleMesh0.name = 'triangleMesh0';
+
+            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
+            triangleMesh1.name = 'triangleMesh1';
+
+            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
+            triangleMesh2.name = 'triangleMesh2';
+            triangleMesh2.position.y = -50;
+            triangleMesh2.position.x = -50;
+
+            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
+            triangleMesh3.name = 'triangleMesh3';
+            triangleMesh3.position.y = -50;
+            triangleMesh3.position.x = 50;
+
+            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
+            triangleMesh4.name = 'triangleMesh4';
+            triangleMesh4.position.y = -100;
+            triangleMesh4.position.x = 0;
+
+            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
+            triangleMesh5.name = 'triangleMesh5';
+            triangleMesh5.position.y = -100;
+            triangleMesh5.position.x = 0;
+
+            group = new THREE.Object3D();
+            group.name = 'group';
+            group.add(triangleMesh0)
+            .add(triangleMesh1)
+            .add(triangleMesh2)
+            .add(triangleMesh3)
+            .add(triangleMesh4)
+            .add(triangleMesh5);
+
+            obj = new THREE.Object3D();
+            obj.add(group);
+            scene.add(obj);
+            obj.position.x = -1000;
+
+            return obj;
+        };
+
+        this.positionVertices = function (vector3dList) {
+            var triangle = new THREE.Geometry();
+
+            triangle.vertices.push(vector3dList[0]);
+            triangle.vertices.push(vector3dList[1]);
+            triangle.vertices.push(vector3dList[2]);
+
+            triangle.faces.push(new THREE.Face3(0, 1, 2));
+
+            return triangle;
+        };
+
+        this.animate = function () {
+            requestAnimationFrame(this.animate.bind(this));
+            this.render();
+        };
+
+        this.render = function () {
+            this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
+            this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
+
+            this.camera.lookAt(this.scene.position);
+
+            this.renderer.render(this.scene, this.camera);
+        };
+
+        this.showValXUp = function (obj, index, value) {
+            obj.children[index].rotation.x = value;
+        };
+        this.showValYUp = function (obj, index, value) {
+            obj.children[index].rotation.y = value;
+        };
+        this.showValPXUp = function (obj, index, value) {
+            obj.children[index].position.x = value;
+        };
+        this.showValPYUp = function (obj, index, value) {
+            obj.children[index].position.z = value;
+        };
+        this.showValPZUp = function (obj, index, value) {
+            obj.children[index].position.y = value;
+        };
+
+        this.animateFaceDown = function (target) {
+            var i = 0,
+                total = target.children.length,
+                targetChild,
+                rotation,
+                position,
+                childDown;
+
+            target.position.z = -30;
+            target.position.y = 5;
 
             for (i; i < total; i++) {
-                if (paths[i] !== '' && paths[i] !== 'home') {
-                    commands.push(paths[i]);
+                targetChild = target.children[i];
+
+                rotation = targetChild.rotation;
+                position = targetChild.position;
+                childDown = this.objDown.children[i];
+
+                rotation.x = childDown.rotation.x;
+                rotation.y = childDown.rotation.y;
+                rotation.z = childDown.rotation.z;
+
+                position.x = childDown.position.x;
+                position.y = childDown.position.y;
+                position.z = childDown.position.z;
+            }
+        };
+
+        this.animateFaceUp = function (target) {
+            var i = 0,
+                rotation,
+                position,
+                childUp,
+                total = target.children.length,
+                targetChild;
+
+            for (i; i < total; i++) {
+                targetChild = target.children[i];
+                childUp = this.objUp.children[i];
+
+                rotation = targetChild.rotation,
+                position = targetChild.position;
+
+                rotation.x = childUp.rotation.x;
+                rotation.y = childUp.rotation.y;
+                rotation.z = childUp.rotation.z;
+
+                position.x = childUp.position.x;
+                position.y = childUp.position.y;
+                position.z = childUp.position.z;
+
+                targetChild.geometry.vertices[0].x = childUp.geometry.vertices[0].x;
+                targetChild.geometry.vertices[0].y = childUp.geometry.vertices[0].y;
+                targetChild.geometry.vertices[0].z = childUp.geometry.vertices[0].z;
+
+                targetChild.geometry.vertices[1].x = childUp.geometry.vertices[1].x;
+                targetChild.geometry.vertices[1].y = childUp.geometry.vertices[1].y;
+                targetChild.geometry.vertices[1].z = childUp.geometry.vertices[1].z;
+
+                targetChild.geometry.vertices[2].x = childUp.geometry.vertices[2].x;
+                targetChild.geometry.vertices[2].y = childUp.geometry.vertices[2].y;
+                targetChild.geometry.vertices[2].z = childUp.geometry.vertices[2].z;
+
+                targetChild.geometry.verticesNeedUpdate = true;
+            }
+        };
+
+        this.prepareGrid = function () {
+            var groudSource = new THREE.Object3D();
+
+            groudSource.add(this.objDown)
+            .add(this.objUp)
+            .add(this.objPlain);
+
+            this.scene.add(groudSource);
+
+            groudSource.position.x = -1000;
+        };
+
+        this.buildGrid = function () {
+            var posAnterior = 0,
+                anchorY = 1000,
+                i = 0, 
+                cols = 13,
+                lines = 25,
+                objY;
+
+            for (i; i < cols; i++) {
+                posAnterior = -((195) * i) + anchorY;
+
+                if (i > 0) {
+                    if ((i % 2 === 0)) {
+                        posAnterior = -((196) * i) + anchorY;
+                    }
+                }
+
+                for (var j = 0; j < lines; j++) {
+                    objY = this.objPlain.clone();
+                    objY.position.x = -(1150) + 99 * j;
+
+                    if (i % 2) {
+                        objY.animated = 'up';
+                        this.animateFaceUp(objY.children[0]);
+                    } else {
+                        objY.animated = 'down';
+                        this.animateFaceDown(objY.children[0]);
+                    }
+
+                    this.addAuxiliaryFaces(objY);
+
+                    objY.position.y = posAnterior; 
+
+                    this.gridGroup.add(objY);
                 }
             }
-            this.pubsub.publish(event, commands);
-        };
-    };
-    return Router;
-});
+ 
+            this.scene.add(this.gridGroup);
 
-define('lib/navigator',[], function () {
-    'use strict';
-    var Navigator = function Navigator() {
-        this.currentCommand = undefined;
-        this.previousCommand = undefined;
-        this.commands = [];
-        this.subCommands = [];
-        this.addCommand = function (key, item) {
-            var cmd = { item: item, key: key };
-
-            this.commands.push(cmd);
-            this.currentCommand = cmd;
+            this.gridGroup.rotateZ(-0.4);
             
-            if (this.previousCommand && this.commands.length > 1) {
-                this.previousCommand = this.commands[0];
-                if (this.commands.length > 1) {
-                    this.commands.shift();
-                }
-            }
+            this.njq.removeClass(this.njq.select('.grid3d'), 'visible-false');
         };
-        this.executeCommand = function () {
-            this.currentCommand = this.commands[0];
-            this.currentCommand.item.execute();
-        };
-        this.simpleCommand = function () {
-            if (this.previousCommand && this.previousCommand.key !== 'home') {
-                this.previousCommand.item.destroy();
+
+        this.addAuxiliaryFaces = function (pai) {
+            var triangleGeometry,
+                auxmesh,
+                aux,
+                triangleGeometryDown,
+                auxmeshDown,
+                auxDown;
+
+            this.materialsAux.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
+
+            triangleGeometry = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 51, 0)]);
+            auxmesh = new THREE.Mesh(triangleGeometry, this.materialsAux[0]);
+            auxmesh.name = 'auxmesh';
+            aux = new THREE.Object3D();
+            aux.add(auxmesh);
+
+            triangleGeometryDown = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -51, 0)]);
+            auxmeshDown = new THREE.Mesh(triangleGeometryDown, this.materialsAux[0]);
+            auxmeshDown.name = 'auxmeshDown';
+            auxDown = new THREE.Object3D();
+            auxDown.add(auxmeshDown);
+
+            if (pai.animated === 'down') {
+                aux.position.y = -143;
+                aux.position.x = -49.5;
+                aux.position.z = -15;
+                aux.rotation.x = -0.18;
+
+                auxDown.position.y = 53;
+                auxDown.position.x = -49.5;
+                auxDown.rotation.x = 0.18;
+                auxDown.position.z = aux.position.z;
+            } else if (pai.animated === 'up') {
+                aux.position.y = -148;
+                aux.position.x = -49.5;
+                aux.position.z = -15;
+                aux.rotation.x = 0.18;
+
+                auxDown.position.y = 48;
+                auxDown.position.x = -49.5;
+                auxDown.rotation.x = -0.18;
+                auxDown.position.z = aux.position.z;
             } else {
-                this.previousCommand.item.minimize();
+                aux.position.y = -150;
+                aux.position.x = -50;
+
+                auxDown.position.y = 50;
+                auxDown.position.x = -50;
             }
 
-            this.executeCommand();
+            pai.add(aux);
+            pai.add(auxDown);
         };
-        this.nextCommand = function () {
-            this.previousCommand = this.commands.shift();
-            this.currentCommand = this.commands[0];
 
-            if (this.previousCommand) {
-                if (this.previousCommand.key === 'home' && this.currentCommand) {
-                    this.previousCommand.item.minimize();
-                } else if (this.currentCommand) {
-                    this.previousCommand.item.destroy();
+        this.execute = function () {
+            this.initGrid();
+
+            this.animate();
+
+            this.showValXUp(this.objUp, 0, -0.3);
+            this.showValYUp(this.objUp, 0, -0.13);
+
+            this.showValXUp(this.objUp, 1, -0.3);
+            this.showValYUp(this.objUp, 1, 0.13);
+
+            this.showValYUp(this.objUp, 2, -0.41);
+            this.showValPXUp(this.objUp, 2, -49.61);
+            this.showValPYUp(this.objUp, 2, -6);
+
+            this.showValXUp(this.objUp, 4, 0.3);
+            this.showValYUp(this.objUp, 4, 0.13);
+
+            this.showValYUp(this.objUp, 3, 0.41);
+            this.showValPXUp(this.objUp, 3, 49.61);
+            this.showValPYUp(this.objUp, 3, -6);
+
+            this.showValXUp(this.objUp, 5, 0.3);
+            this.showValYUp(this.objUp, 5, -0.13);
+
+            /*--------------------------------*/
+
+            this.showValXUp(this.objDown, 0, 0.3);
+            this.showValYUp(this.objDown, 0, 0.13);
+
+            this.showValXUp(this.objDown, 1, 0.3);
+            this.showValYUp(this.objDown, 1, -0.13);
+
+            this.showValYUp(this.objDown, 2, 0.41);
+            this.showValPXUp(this.objDown, 2, -49.61);
+            this.showValPYUp(this.objDown, 2, 6);
+
+            this.showValXUp(this.objDown, 4, -0.3);
+            this.showValYUp(this.objDown, 4, -0.13);
+
+            this.showValYUp(this.objDown, 3, -0.41);
+            this.showValPXUp(this.objDown, 3, 49.61);
+            this.showValPYUp(this.objDown, 3, 6);
+
+            this.showValXUp(this.objDown, 5, -0.3);
+            this.showValYUp(this.objDown, 5, 0.13);
+
+            this.prepareGrid();
+
+            this.buildGrid();
+
+            this.animateColors = new AnimateColors(this);
+            this.animateColors.execute();
+
+            this.executed = true;
+        };
+
+        this.initialize();
+    };
+    return Grid3D;
+});
+/* global Detector */
+define('views/home',['views/grid3d'], function(Grid3D) {
+    var Home = function(app) {
+        this.el = '.home';
+        this.$$ = app.$$;        
+        this.loaded = false;
+        this.init = function() {
+
+            this.$$('body').removeClass('body-gradient');
+            this.$$(this.el).addClass('body-gradient');
+            this.$el = this.$$(this.el);
+
+            //INIT WEBGL GRID ONLY IDF SUPPORTED
+            if (Detector.webgl) {
+                this.grid3D = new Grid3D();
+            }
+
+            //HIDE LOADER
+            this.$$('.loading-arrow').addClass('hidden');
+        };
+        this.execute = function() {
+            if (Detector.webgl) {
+                if (this.grid3D.executed == false) {
+                    this.grid3D.execute();
                 }
             }
 
-            if (this.currentCommand) {
-                this.executeCommand();
+            //SHOW VIEW
+            this.$el.removeClass('hidden');
+
+            //OPEN FULL MODE
+            this.show();
+
+            this.loaded = true;
+        };
+
+        this.show = function() {
+
+            this.$el.removeClass('show-min');
+
+            //ANIMATE FULL VIEW
+            this.$el.addClass('show-full');
+
+            this.$$('.scroll-down-button').removeClass('hidden');
+            this.$$('body').removeClass('show-scroll');
+            this.$$('.scroll-down-button').addClass('draw-in');
+
+        };
+        this.hide = function() {
+            this.$el.removeClass('show-full');
+
+            //ANIMATE MINIMIZED VIEW
+            this.$el.addClass('show-min');
+
+            this.$$('.scroll-down-button').addClass('hidden');
+            this.$$('body').addClass('show-scroll');
+            this.$$('.scroll-down-button').removeClass('draw-in');
+        };
+
+    };
+    return Home;
+});
+
+define('views/gallery',['noJquery'], function(NoJQuery) {
+    var Gallery = function(router, el) {
+        this.el = '.gallery';
+        this.$$ = NoJQuery;
+        this.initialize = function() {
+            this.setup();
+        };
+        this.setup = function() {
+            this.total = 4;
+            this.current = 0;
+            this.el = el;
+            this.view = this.$$(this.el);
+            this.btnNext = this.$$(this.el + ' .next');
+            this.btnPrev = this.$$(this.el + ' .prev');
+        };
+        this.addListeners = function() {
+            var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
+
+            this.nextHandler = this.onNextClick.bind(this);
+            this.prevHandler = this.onPrevClick.bind(this);
+
+            this.btnNext.on('click', this.nextHandler);
+            this.btnPrev.on('click', this.prevHandler);
+
+            menuItens.map(function(elmt, index) {
+                elmt.onclick = this.onMenuItemClick.bind(this, index);
+            }.bind(this));
+
+        };
+        this.show = function() {
+            this.view.removeClass('hidden');
+        };
+
+        this.drawSVGButtons = function() {
+            this.$$('.next').addClass('draw-in');
+            this.$$('.prev').addClass('draw-in');
+        };
+
+        this.animateLine = function() {
+            this.$$(this.el + ' .image-list ').addClass('animate-in-upper-line');
+        };
+
+        this.start = function() {
+            this.current = 0;
+
+            this.addListeners();
+
+            this.show();
+
+            this.drawSVGButtons();
+
+            this.showImage(this.current);
+
+            this.animateLine();
+        };
+
+        this.hide = function() {
+            this.view.addClass('hidden');
+        };
+
+        this.removeListeners = function() {
+            var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
+            this.btnNext.off('click', this.nextHandler);
+            this.btnPrev.off('click', this.prevHandler);
+            menuItens.map(function(elmt, index) {
+                elmt.onclick = null;
+            });
+        };
+
+        this.removeAnimation = function() {
+            this.$$('.next').removeClass('draw-in');
+            this.$$('.prev').removeClass('draw-in');
+            this.$$(this.el + ' .image-list ').removeClass('animate-in-upper-line');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeListeners();
+            this.removeAnimation();
+        };
+
+        this.menuActivet = function(el) {
+            this.$$(el).addClass('active');
+        };
+
+        this.showImage = function(index) {
+            this.$$(this.el + ' .images-menu-item').removeClass('active');
+            this.menuActivet(this.el + ' .images-menu-item:nth-child(' + (index + 1) + ')');
+            this.$$(this.el + ' .image-list > .ph > img').addClass('hidden');
+            this.$$(this.el + ' .image-list > .ph > img:nth-child(' + (index + 1) + ')').removeClass('hidden');
+            this.current = index;
+        };
+
+        this.prev = function() {
+            if (this.current > 0) {
+                this.current -= 1;
+            }
+
+            this.showImage(this.current);
+        };
+        this.next = function() {
+            if (this.current < this.total - 1) {
+                this.current += 1;
+            }
+
+            this.showImage(this.current);
+        };
+
+        this.onMenuItemClick = function(index) {
+            this.showImage(index);
+        };
+
+        this.onNextClick = function() {
+            this.next();
+        };
+        this.onPrevClick = function() {
+            this.prev();
+        };
+    };
+    return Gallery;
+});
+
+define('views/tech',['noJquery'], function(NoJQuery) {
+    var Tech = function(options) {
+        this.el = options.el;
+        this.$$ = NoJQuery;
+
+        this.initialize = function() {
+            this.setup();
+        };
+
+        this.execute = function() {
+            this.setup();
+            this.addAnimationsListeners();
+            this.show()
+            this.animateIn();
+        };
+
+        this.addAnimationsListeners = function() {
+            var countleft = 0,
+                countright = 0;
+
+            this.$el = this.$$(this.el);
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
+            options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
+                countleft++;
+                if (countleft === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-left');
+                    this.$$(this.el + ' .front-end ul').addClass('animate-text');
+
+                }
+            }.bind(this));
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
+            options.app.prefixedEventListener(this.backendLine.elmts[0], 'AnimationEnd', function(e) {
+                countright++;
+                if (countright === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-right');
+                    this.$$(this.el + ' .back-end ul').addClass('animate-text');
+                }
+            }.bind(this));
+        };
+
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            this.frontendLine = this.$$(this.el + ' .front-end');
+            this.frontendText = this.$$(this.el + ' .front-end').find('ul');
+            this.backendLine = this.$$(this.el + ' .back-end');
+            this.backendText = this.$$(this.el + ' .back-end').find('ul');
+        };
+
+        this.show = function() {
+            this.$el.removeClass('hidden');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+
+
+        this.animateIn = function() {
+            this.frontendLine.addClass('animate-in-legend-left');
+            this.backendLine.addClass('animate-in-legend-right');
+        };
+
+        this.removeAnimation = function() {
+            this.frontendLine.removeClass('animate-in-legend-left');
+            this.backendLine.removeClass('animate-in-legend-right');
+            this.$$(this.el + 'ul').removeClass('animate-text');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeAnimation();
+        };
+
+        this.initialize();
+    };
+    return Tech;
+});
+
+define('views/info',['noJquery'], function(NoJQuery) {
+    var Info = function(options) {
+        this.el = options.el;
+        this.$$ = NoJQuery;
+        this.initialize = function() {
+            this.setup();
+        };
+
+        this.execute = function() {
+            this.setup();
+            this.show();
+            this.animateIn();
+        };
+
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+        };
+
+        this.show = function() {
+            this.$el.removeClass('hidden');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+
+        this.animateIn = function() {
+
+            this.$$(this.el + ' .picture-one').addClass('picture-one-animatein');
+            this.$$(this.el + ' .picture-two').addClass('picture-two-animatein');
+            this.$$(this.el + ' .picture-tree').addClass('picture-tree-animatein');
+            this.$$(this.el + ' .picture-four').addClass('picture-four-animatein');
+            this.$$(this.el + ' .picture-five').addClass('picture-five-animatein');
+        };
+
+        this.removeAnimation = function() {
+            this.$$(this.el + ' .picture-one').removeClass('picture-one-animatein');
+            this.$$(this.el + ' .picture-two').removeClass('picture-two-animatein');
+            this.$$(this.el + ' .picture-tree').removeClass('picture-tree-animatein');
+            this.$$(this.el + ' .picture-four').removeClass('picture-four-animatein');
+            this.$$(this.el + ' .picture-five').removeClass('picture-five-animatein');
+        };
+
+        this.destroy = function() {
+            this.hide();
+            this.removeAnimation();
+        };
+
+        this.initialize();
+    };
+    return Info;
+});
+
+define('views/project',['views/gallery', 'views/tech', 'views/info'], function(Gallery, Tech, Info) {
+    var Project = function(app, el) {
+        this.el = '.project';
+        this.$$ = app.$$;
+        this.key = '';
+        this.router = app.router;
+        this.routerHandler = null;
+
+        this.initialize = function() {
+            this.setup();
+            this.addAnimationListeners();
+
+            //INIT INFO VIEW
+            this.info = new Info({
+                el: this.el + '> .views > .info'
+            });
+            this.info.execute();
+
+
+            //INIT TECH VIEW
+            this.tech = new Tech({
+                el: this.el + '> .views > .tech',
+                app: app
+            });
+
+            //INIT GALLERY VIEW
+            // this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
+            // this.gallery.initialize();
+
+            this.show();
+            this.animateIn();
+        };
+
+
+        this.setup = function() {
+
+            this.el = el;
+            this.$el = this.$$(this.el);
+            this.key = this.$el.getAttr('id');
+            this.titleLink = this.$$(this.el + ' .infos > .btn');
+            this.techLink = this.$$(this.el + ' .work-infos > .tech');
+            this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
+            this.launchLink = this.$$(this.el + ' .work-infos > .external');
+            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
+        };
+
+        this.addAnimationListeners = function() {
+            var countatech = 0,
+                countgallery = 0,
+                countexternal = 0,
+                counttitle = 0,
+                techLine = this.$$(this.el + ' .work-infos > .tech'),
+                externalLine = this.$$(this.el + ' .work-infos > .external'),
+                galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
+                infoBtn = this.$$(this.el).find('.info').find('.btn');
+
+            app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
+                countatech++;
+                if (countatech == 1) {
+                    this.$$(this.el + ' .work-infos > .tech > .sprite').addClass('animate-sprite');
+                }
+                if (countatech === 2) {
+                    this.$$(e.target).removeClass('animate-in-link-tech');
+                    this.$$(this.el + ' .work-infos > .tech > span').addClass('animate-span');
+                }
+            }.bind(this));
+
+            app.prefixedEventListener(externalLine.elmts[0], 'AnimationEnd', function(e) {
+                countexternal++;
+                if (countexternal == 1) {
+                    this.$$(this.el + ' .work-infos > .external > .sprite').addClass('animate-sprite');
+                }
+                if (countexternal === 2) {
+
+                    this.$$(e.target).removeClass('animate-in-link-gallery');
+                    this.$$(this.el + ' .work-infos > .external > span').addClass('animate-span');
+                }
+            }.bind(this));
+
+            app.prefixedEventListener(galleryLine.elmts[0], 'AnimationEnd', function(e) {
+                countgallery++;
+                if (countgallery == 1) {
+                    this.$$(this.el + ' .work-infos > .gallery > .sprite').addClass('animate-sprite');
+                }
+                if (countgallery === 2) {
+                    this.$$(e.target).removeClass('animate-in-link-gallery');
+                    this.$$(this.el + ' .work-infos > .gallery > span').addClass('animate-span');
+                }
+            }.bind(this));
+            app.prefixedEventListener(infoBtn.elmts[0], 'AnimationEnd', function(e) {
+                counttitle++;
+                if (counttitle === 1) {
+                    this.$$(e.target).removeClass('animate-in-title');
+                    this.$$(this.el + ' .infos > .btn > h2').addClass('animate-title-opacity');
+                }
+            }.bind(this));
+
+        };
+
+        this.show = function() {
+            this.$el.removeClass('hidden');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+        };
+
+
+        this.animateIn = function() {
+            this.titleLink.addClass('animate-in-title');
+            this.techLink.addClass('animate-in-link-tech');
+            this.launchLink.addClass('animate-in-link-external');
+            this.galleryLink.addClass('animate-in-link-gallery');
+        };
+
+        this.destroy = function() {
+            if (this.gallery) {
+                this.gallery.destroy();
+            }
+
+            this.info.destroy();
+            this.info = undefined;
+
+            this.tech.destroy();
+            this.tech = undefined;
+
+            this.techLink.removeClass('animate-in-link-tech');
+            this.galleryLink.removeClass('animate-in-link-gallery');
+            this.launchLink.removeClass('animate-in-link-external');
+
+            //TECH ICON
+            this.$$(this.el + ' .work-infos > .tech > span').removeClass('animate-span');
+            this.$$(this.el + ' .work-infos > .tech > .sprite').removeClass('animate-sprite');
+
+            //EXTERNAL ICON
+            this.$$(this.el + ' .work-infos > .external > span').removeClass('animate-span');
+            this.$$(this.el + ' .work-infos > .external > .sprite').removeClass('animate-sprite');
+
+            //GALLERY ICON
+            this.$$(this.el + ' .work-infos > .gallery > span').removeClass('animate-span');
+            this.$$(this.el + ' .work-infos > .gallery > .sprite').removeClass('animate-sprite');
+
+
+            this.$$(this.el + ' .infos > .btn').removeClass('animate-in-title');
+            this.$$(this.el + ' .infos > .btn > h2').removeClass('animate-title-opacity');
+            this.$$(this.el + ' .infos > p').removeClass('animate-text-opacity');
+        };
+        this.callbackPageProject = function(section) {
+            this.info.destroy()
+            this.tech.destroy();
+
+            if (this.gallery) {
+                this.gallery.destroy();
+            }
+
+            if (section === 'gallery') {
+                this.gallery.start();
+            } else {
+                this[section].execute();
             }
         };
     };
-
-    return Navigator;
+    return Project;
 });
+
+define('views/work',['views/project'], function(Project) {
+    var Work = function(app) {
+        this.el = '.work';
+        this.$$ = app.$$;
+        this.projects = [];
+        this.init = function() {
+            this.setup();
+        };
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+        };
+        this.execute = function() {
+            this.$el.removeClass('hidden');
+            this.projetSelect();
+        };
+
+        this.projetSelect = function() {
+            if (this.projects.length === 0) {
+                this.projects = this.getProjects();
+            }
+
+        };
+        this.getProjects = function() {
+            var ar = [],
+                projectsElmt = [];
+
+            projectsElmt = this.$$('.project').elmts;
+            projectsElmt.map(function(elmt, index) {
+                var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
+                pro.initialize();
+                ar[index] = pro;
+            }.bind(this));
+            projectsElmt = null;
+            return ar;
+        };
+
+        this.showSection = function(project, section) {
+            if (this.projects.length === 0) {
+                this.projects = this.getProjects();
+            }
+
+            this.projects.map(function(elmt, index) {
+                if (elmt.key.toLowerCase() === project.toLowerCase()) {
+                    elmt.callbackPageProject(section);
+                }
+            });
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+            this.projects.map(function(elmt, index) {
+                elmt.destroy();
+            });
+            this.projects = [];
+        };
+    };
+    return Work;
+});
+
+define('views/about',[], function() {
+    var About = function(app) {
+        this.el = '.about';
+        this.$$ = app.$$;
+
+        this.init = function() {
+            this.setup();
+        };
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            this.firstLine = this.$$('fieldset:first-child');
+            this.firstText = this.$$('fieldset:first-child').find('ul');
+            this.secondLine = this.$$('fieldset:nth-child(2)');
+            this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
+            this.thirdLine = this.$$('fieldset:last-child');
+            this.thirdText = this.$$('fieldset:last-child').find('ul');
+            this.addAnimationsListeners();
+        };
+        this.execute = function() {
+            this.$el.removeClass('hidden');
+            this.animateIn();
+        };
+        this.addAnimationsListeners = function() {
+            var countleft = 0,
+                countcenter = 0,
+                countright = 0;
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
+            app.prefixedEventListener(this.firstLine.elmts[0], 'AnimationEnd', function(e) {
+                countleft++;
+                if (countleft === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-left');
+                    this.$$(e.target).find('ul').addClass('animate-text');
+                }
+            }.bind(this));
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
+            app.prefixedEventListener(this.secondLine.elmts[0], 'AnimationEnd', function(e) {
+                countcenter++;
+                if (countcenter === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-center');
+                    this.$$(e.target).find('ul').addClass('animate-text');
+                }
+            }.bind(this));
+
+
+            //LISTENS TO THE LINE ANIMATION COMPLETE (DESIGN)
+            app.prefixedEventListener(this.thirdLine.elmts[0], 'AnimationEnd', function(e) {
+                countright++;
+                if (countright === 2) {
+                    this.$$(e.target).removeClass('animate-in-legend-right');
+                    this.$$(e.target).find('ul').addClass('animate-text');
+                }
+            }.bind(this));
+
+        };
+        this.animateIn = function() {
+            this.$$('p').addClass('animate-text-opacity-about');
+            this.firstLine.addClass('animate-in-legend-left');
+            this.secondLine.addClass('animate-in-legend-center');
+            this.thirdLine.addClass('animate-in-legend-right');
+            this.$$('.about-project').addClass('animate-text-project');
+        };
+        this.removeAnimation = function() {
+            this.$$('.about-project').removeClass('animate-text-project');
+            this.$$('p').removeClass('animate-text-opacity-about');
+            this.$$('ul').removeClass('animate-text');
+        };
+
+        this.hide = function() {
+            this.$el.addClass('hidden');
+            this.removeAnimation();
+        };
+
+    };
+    return About;
+});
+
+define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'views/about'], function(page, Menu, Home, Work, About) {
+
+    var Controller = function Controller(app) {
+        this.setup = function() {
+            console.log('Controller setup', app);
+            this.menu = new Menu(app);
+            this.home = new Home(app);
+            this.work = new Work(app);
+            this.about = new About(app);
+        };
+
+        this.start = function() {
+            console.log('controller start');
+            this.setup();
+            this.home.init();
+            this.work.init();
+            this.menu.init();
+            this.about.init();
+            this.masterPage();
+
+
+            page('/', this.onHome.bind(this));
+            page('/work', this.onWork.bind(this));
+            page('/about', this.onAbout.bind(this));
+            page('/work/:project/:section', this.onProject.bind(this));
+            page('*', this.notFound.bind(this));
+            page.exit('*', this.onExit.bind(this));
+            page();
+
+            //this.menu.activateMenu(ctx.path.replace(/\//, ''));
+
+        };
+        this.masterPage = function(ctx, next) {
+
+            //LET ELEMENTS VISIBLE
+            app.$$('main').removeClass('hidden');
+            app.$$('.footer').removeClass('hidden');
+            app.$$('.content').removeClass('hidden');
+
+        };
+        this.navigate = function(path) {
+            page(path);
+        };
+
+
+        this.onExit = function(ctx, next) {
+            this.current.hide();
+            next();
+        };
+        this.animateInComplete = function() {
+            console.log('controller in complete');
+        };
+        this.onHome = function(ctx, next) {
+            console.log('home');
+            this.home.execute();
+            this.current = this.home;
+        };
+        this.onWork = function(ctx, next) {
+            console.log('work');
+            this.work.execute();            
+            this.menu.execute();
+            this.current = this.work;
+        };
+        this.onProject = function(ctx, next) {
+
+        };
+        this.onAbout = function(ctx, next) {
+            console.log('about');
+            this.about.execute();
+            this.current = this.about;
+        };
+        this.notFound = function(ctx, next) {
+            console.log('notFound');
+        };
+    };
+
+    return Controller;
+});
+
 // File:src/Three.js
 
 /**
@@ -45779,1765 +46442,31 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
 define("vendors/TweenMax", function(){});
 
-define('views/menu',['noJquery'], function(NoJQuery) {
-    var Menu = function(app) {
-        this.el = '.menu';
-        this.$$ = NoJQuery;
-        this.initialize = function() {
-            this.setup();
-            this.execute();
-        };
-
-        this.setup = function() {
-            this.countAbout = 0;
-            this.countWork = 0;
-            this.$el = this.$$(this.el);
-            this.btnWork = this.$$('.btn-work');
-            this.btnAbout = this.$$('.btn-about');
-            this.workLine = this.$$('.btn-work').find('.line-ph').find('i');
-            this.aboutLine = this.$$('.btn-about').find('.line-ph').find('i');
-        };
-
-        this.execute = function() {
-            this.setup()
-            this.addAnimationsListeners();
-            this.animate();
-        };
-        this.animate = function() {
-            this.$$('.btn-work').find('.text-ph').addClass('animate-span');
-            this.$$('.btn-work').find('.line-ph').find('i').addClass('animate-line');
-
-            this.$$('.btn-about').find('.text-ph').addClass('animate-span-about');
-            this.$$('.btn-about').find('.line-ph').find('i').addClass('animate-line-about');
-        };
-
-        this.addAnimationsListeners = function() {
-            app.prefixedEventListener(this.workLine.elmts[0], 'AnimationEnd', function(e) {
-                this.countWork++;
-                if (this.countWork === 2) {
-                    this.$$(e.target).removeClass('animate-line');
-                    this.$$(e.target).addClass('animate-line-fixed');
-                    if (this.currentItem) {
-                        this.deactivetButton();
-                        this.activetButton(this.currentItem);
-                    }
-                }
-            }.bind(this));
-            app.prefixedEventListener(this.aboutLine.elmts[0], 'AnimationEnd', function(e) {
-                this.countAbout++;
-                if (this.countAbout === 2) {
-                    this.$$(e.target).removeClass('animate-line-about');
-                    this.$$(e.target).addClass('animate-line-fixed');
-                    if (this.currentItem) {
-                        this.deactivetButton();
-                        this.activetButton(this.currentItem);
-                    }
-                }
-            }.bind(this));
-        };
-
-        this.hide = function() {
-            this.countAbout = 0;
-            this.countWork = 0;
-            this.$$('.btn-work').find('.text-ph').removeClass('animate-span');
-            this.$$('.btn-work').find('.line-ph').find('i').removeClass('animate-line');
-
-            this.$$('.btn-about').find('.text-ph').removeClass('animate-span-about');
-            this.$$('.btn-about').find('.line-ph').find('i').removeClass('animate-line-about');
-
-            this.btnWork.removeClass('active-button');
-            this.btnAbout.removeClass('active-button');
-
-            this.$$('.btn-work').find('.line-ph').find('i').removeClass('animate-line-fixed');
-            this.$$('.btn-about').find('.line-ph').find('i').removeClass('animate-line-fixed');
-        };
-
-        this.activatetMenu = function(view) {
-            this.currentItem = view;
-            if (this.countAbout > 1 && this.countWork > 1) {
-                this.deactivetButton();
-                this.activetButton(view);
-            }
-        };
-
-        this.deactivetButton = function() {
-            this.btnWork.removeClass('active-button');
-            this.btnAbout.removeClass('active-button');
-        };
-
-        this.activetButton = function(view) {
-            try {
-                this.$$('.btn-' + view).addClass('active-button');
-            } catch (e) {};
-        };
-
-        this.initialize();
-    };
-    return Menu;
-});
-
-define('lib/NoJQuery',[], function () {
-    'use strict';    
-    var NoJQuery = {
-        ajax: {
-            getJson: function ajaxGet(url, onSuccess, onError) {
-                var request = new XMLHttpRequest(),
-                    dataSuccess,
-                    dataError;
-
-                request.open('GET', url, true);
-
-                request.onload = function onload(evt) {
-                    var options = {};
-                    options.evt = evt;
-                    options.request = request;
-                    options.onSuccess = onSuccess;
-                    options.onError = onError;
-                    options.dataSuccess = dataSuccess;
-                    options.dataError = dataError;
-
-                    NoJQuery.ajax.jsonRequestOnLoad(options);
-                };
-                request.onerror = function onerror() {
-                    onError();
-                };
-                request.send();
-            },
-            postJson: function ajaxPost(url, data, onSuccess, onError) {
-                var request = new XMLHttpRequest(),
-                    dataSuccess,
-                    dataError;
-
-                request.open('POST', url, true);
-                request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-                request.onload = function onload(evt) {
-                    var options = {};
-                    options.evt = evt;
-                    options.request = request;
-                    options.onSuccess = onSuccess;
-                    options.onError = onError;
-                    options.dataSuccess = dataSuccess;
-                    options.dataError = dataError;
-
-                    NoJQuery.ajax.jsonRequestOnLoad(options);
-                };
-                request.onerror = function onerror() {
-                    onError();
-                };
-                request.send(data);
-            },
-            get: function ajaxGet(url, onSuccess, onError) {
-                var request = new XMLHttpRequest(),
-                    dataSuccess,
-                    dataError;
-
-                request.open('GET', url, true);
-
-                request.onload = function onload(evt) {
-                    var options = {};
-                    options.evt = evt;
-                    options.request = request;
-                    options.onSuccess = onSuccess;
-                    options.onError = onError;
-                    options.dataSuccess = dataSuccess;
-                    options.dataError = dataError;
-
-                    NoJQuery.ajax.requestOnLoad(options);
-                };
-                request.onerror = function onerror() {
-                    onError();
-                };
-                request.send();
-            },
-            onLoad: function (options, returnData) {
-                if (options.request.status >= 200 && options.request.status < 400) {
-                    options.dataSuccess = returnData;
-                    options.onSuccess(options.dataSuccess);
-                } else {
-                    options.dataError = { message: options.evt.currentTarget.responseURL + ' - ' + options.evt.currentTarget.statusText, statusText: options.evt.currentTarget.statusText, responseURL: options.evt.currentTarget.responseURL, status: options.evt.currentTarget.status };
-                    options.onError();
-                }
-            },
-            jsonRequestOnLoad: function (options) {
-                NoJQuery.ajax.onLoad(options, JSON.parse(options.request.responseText));
-            },
-            requestOnLoad: function (options) {
-                NoJQuery.ajax.onLoad(options, options.request.responseText);
-            }
-        },
-        select: function (selector) {
-            var elmts = document.querySelectorAll(selector);
-
-            if (elmts.length === 0) {
-                throw "No element(s) found for '" + selector + "'";
-            }
-            return elmts;
-        },
-        find: function (selector) {
-            var elmts = document.querySelectorAll(selector),
-                count = 0;
-
-            count = elmts.length;
-
-            return count;
-        },
-        closestParent: function (child, className) {
-            if (!child || child === document) {
-                return null;
-            }
-            if (child.classList.contains(className)) {
-                return child;
-            } else {
-                return NoJQuery.closestParent(child.parentNode, className);
-            }
-        },
-        on: function (el, eventName, eventHandler) {
-            el.addEventListener(eventName, eventHandler);
-        },
-        off: function (el, eventName, eventHandler) {
-            el.removeEventListener(eventName, eventHandler);
-        },
-        addClass: function (elmts, className, dontRedraw) {
-            for (var i = 0; i < elmts.length; i++) {
-                if (!dontRedraw) {
-                    this.redraw(elmts[i]);
-                }                
-                if (elmts[i].classList) {
-                    elmts[i].classList.add(className);                    
-                } else {
-                    elmts[i].className += ' ' + className;
-                }
-            }
-        },
-        hasClass: function (elmt, className) {
-            var result = false;
-            if (elmt.classList) {
-                result = elmt.classList.contains(className);
-            } else {
-                result = new RegExp('(^| )' + className + '( |$)', 'gi').test(elmt.className);
-            }
-
-            return result;
-        },
-        removeClass: function (elmts, className) {
-            for (var i = 0; i < elmts.length; i++) {
-                if (elmts[i].classList) {
-                    elmts[i].classList.remove(className);
-                } else {
-                    elmts[i].className = elmts[i].className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-                }
-            }
-        },
-        redraw: function(elmt) {
-            elmt.offsetHeight;
-        },
-        containsSelector: function (elmt, selector) {
-            var result = elmt.querySelector(selector) !== null;
-            return result;
-        },
-        each: function (selector, eachFunc) {
-            var elmts = document.querySelectorAll(selector);
-            Array.prototype.forEach.call(elmts, function (el, i) {
-                eachFunc(el, i);
-            });
-        },
-        empty: function (elmt) {
-            elmt.innerHTML = '';
-        },
-        getAttr: function (elmt, attr) {
-            var result = elmt.getAttribute(attr);
-            return result;
-        },
-        setAttr: function (elmt, attr, val) {
-            elmt.setAttribute(attr, val);
-        },
-        remove: function (elmt) {
-            elmt.parentNode.removeChild(NoJQuery.elmt);
-        },
-        prev: function (elmt) {
-            var prevElmt = elmt.previousElementSibling;
-            return prevElmt;
-        },
-        next: function (elmt) {
-            var nextElmt = elmt.nextElementSibling;
-            return nextElmt;
-        },
-        proxy: function (fn, context) {
-            fn.bind(context);
-        },
-        html: function (elmt, string) {
-            elmt.innerHTML = string;
-        },
-        text: function (elmt, string) {
-            elmt.textContent = string;
-        },
-        append: function (elmt, el) {
-            elmt.appendChild(el);
-        },
-        prepend: function (elmt, el) {
-            var parent = elmt;
-            parent.insertBefore(el, parent.firstChild);
-        },
-        parseHtml: function (str) {
-            var tmp = document.implementation.createHTMLDocument();
-            tmp.body.innerHTML = str;
-            return tmp.body.children;
-        }
-    };
-
-    return NoJQuery;
-});
-/* global TweenLite */
-define('views/AnimateColors',['lib/NoJQuery'], function (NoJQuery) {
-    var AnimateColors = function (Grid3D) {
-        this.el = 'grid3d';
-        this.njq = NoJQuery;
-        this.grid = Grid3D;
-        this.totalColors = this.grid.colors.length;
-        this.duration = 2;
-        this.delay = 1000 * this.duration;
-
-        function hexToRgbTreeJs(hex) {
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16) / 255,
-                g: parseInt(result[2], 16) / 255,
-                b: parseInt(result[3], 16) / 255
-            } : null;
-        }
-
-        function TweenProp(prop, rgb, material, duration) {
-            TweenLite.to(prop, duration, {
-                r: rgb.r, g: rgb.g, b: rgb.b, onUpdate: function (material) {
-                    material.verticesNeedUpdate = true;                    
-                }, onUpdateParams: [material]
-            });
-        }
-
-        this.getRandomIndex = function () {
-            return Math.floor(Math.random() * (this.totalColors - 1));
-        };
-
-        this.initialize = function () {
-            setInterval(function () {
-                var index = this.getRandomIndex();
-                this.changeColors(index);
-
-            }.bind(this), this.delay);            
-        };
-
-        this.changeColors = function (index) {            
-            var rgbColor = hexToRgbTreeJs(this.grid.colors[index].materialColor),
-                rgbSpecular = hexToRgbTreeJs(this.grid.colors[index].specularColor);
-
-            //MATERIAL COLOR
-            TweenProp(this.grid.materials[0].color, rgbColor, this.grid.materials[0], this.duration);
-
-            //SPECULAR
-            TweenProp(this.grid.materials[0].specular, rgbSpecular, this.grid.materials[0], this.duration);
-
-            //MATERIAL AUX COLOR
-            TweenProp(this.grid.materialsAux[0].color, rgbColor, this.grid.materialsAux[0], this.duration);
-
-            //SPECULAR AUX
-            TweenProp(this.grid.materialsAux[0].specular, rgbSpecular, this.grid.materialsAux[0], this.duration);
-
-            
-        };
-
-        this.execute = function () {
-        };
-
-        this.initialize();
-    };
-    return AnimateColors;
-});
-/* global THREE */
-/* global Detector */
-define('views/grid3d',['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColors) {
-    var Grid3D = function () {
-        this.el = 'grid3d';
-        this.njq = NoJQuery;
-        this.completed = false;
-
-        this.initialize = function () {            
-
-            this.camera;
-            this.scene;
-            this.renderer;
-            this.mouseX = 0;
-            this.mouseY = 0;
-
-            this.ambient;
-            this.materials;
-            this.materialsAux;
-            this.light;
-
-            this.colors = [];
-            this.colors[0] = { materialColor: '#094AAE', specularColor: '#1BE4DC' };
-            this.colors[1] = { materialColor: '#ff0000', specularColor: '#ff6a00' };
-            this.colors[2] = { materialColor: '#094AAE', specularColor: '#ff0000' };
-            this.colors[3] = { materialColor: '#01052e', specularColor: '#094AAE' };
-            this.colors[4] = { materialColor: '#240058', specularColor: '#ff7c0d' };
-            this.colors[5] = { materialColor: '#240058', specularColor: '#4cff00' };
-            this.colors[6] = { materialColor: '#000000', specularColor: '#4e4e4e' };
-            this.colors[7] = { materialColor: '#01273d', specularColor: '#8500fa' };
-
-            this.colorIndex = 0;
-            this.baseColor = '#000';
-            this.ambientColor = '#000';
-            this.directionalColor = '#fff';
-            this.materialColor = this.colors[this.colorIndex].materialColor;
-            this.specularColor = this.colors[this.colorIndex].specularColor;
-
-            this.objPlain;
-            this.objUp;
-            this.objDown;
-            this.gridGroup;
-
-            this.executed = false;
-            this.windowHalfX = window.innerWidth / 2;
-            this.windowHalfY = window.innerHeight / 2;
-
-        };
-
-        this.onMouseMove = function (event) {
-            this.mouseX = (event.clientX - this.windowHalfX) * 10;
-            this.mouseY = (event.clientY - this.windowHalfY) * 10;
-        };
-
-        this.onWindowResize = function () {
-            this.windowHalfX = window.innerWidth / 2;
-            this.windowHalfY = window.innerHeight / 2;
-
-            this.camera.aspect = window.innerWidth / window.innerHeight;
-            this.camera.updateProjectionMatrix();
-
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-
-        this.initGrid = function () {
-            
-            
-            window.addEventListener('mousemove', this.onMouseMove.bind(this));
-
-            window.addEventListener('resize', this.onWindowResize.bind(this), false);
-
-            this.container = document.getElementsByClassName(this.el)[0];
-
-            this.gridGroup = new THREE.Object3D();
-            
-            this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            this.renderer.setClearColor(this.baseColor, 1);
-            this.renderer.setPixelRatio(window.devicePixelRatio);
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.container.appendChild(this.renderer.domElement);
-
-            this.scene = new THREE.Scene();            
-            this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-            this.camera.position.set(0, 0, 500);
-
-            this.camera.target = new THREE.Vector3();
-
-            this.ambient = new THREE.AmbientLight(this.ambientColor);
-            this.scene.add(this.ambient);
-
-            this.light = new THREE.DirectionalLight(this.directionalColor, 0.3);
-            this.light.position.set(0, 200, 500);
-            this.scene.add(this.light);
-
-            this.materials = [];
-
-            this.materialsAux = [];
-
-            this.materials.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
-
-            this.objPlain = this.addPlainObj(this.scene, this.materials);
-
-            this.objUp = this.addExtrudeUpObj(this.scene, this.materials);
-
-            this.objDown = this.addExtrudeDownObj(this.scene, this.materials);
-        };
-
-        this.addExtrudeUpObj = function (scene, materials) {
-            var triangleMaterial = materials[0],
-                triangleGeometry,
-                triangleGeometry1,
-                triangleGeometry2,
-                triangleGeometry3,
-                triangleGeometry4,
-                triangleGeometry5,
-                triangleMesh0,
-                triangleMesh1,
-                triangleMesh2,
-                triangleMesh3,
-                triangleMesh4,
-                triangleMesh5,
-                obj;
-
-            triangleGeometry = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -52.5, 0)]);
-            triangleGeometry1 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -52.5, 0), new THREE.Vector3(0, 50, 0)]);
-            triangleGeometry2 = this.positionVertices([new THREE.Vector3(0, -48, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(53.9, 0, 0)]);
-            triangleGeometry3 = this.positionVertices([new THREE.Vector3(-53.9, 0, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(0, -48, 0)]);
-            triangleGeometry4 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 52.5, 0)]);
-            triangleGeometry5 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 52.5, 0), new THREE.Vector3(0, -50, 0)]);
-
-            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial);
-            triangleMesh0.name = 'triangleMesh0';
-
-            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
-            triangleMesh1.name = 'triangleMesh1';
-
-            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
-            triangleMesh2.name = 'triangleMesh2';
-            triangleMesh2.position.y = -50;
-            triangleMesh2.position.x = -50;
-
-            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
-            triangleMesh3.name = 'triangleMesh3';
-            triangleMesh3.position.y = -50;
-            triangleMesh3.position.x = 50;
-
-            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
-            triangleMesh4.name = 'triangleMesh4';
-            triangleMesh4.position.y = -100;
-            triangleMesh4.position.x = 0;
-
-            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
-            triangleMesh5.name = 'triangleMesh5';
-            triangleMesh5.position.y = -100;
-            triangleMesh5.position.x = 0;
-
-            obj = new THREE.Object3D();
-            obj.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
-            scene.add(obj);
-
-            obj.position.x = -1000;
-
-            return obj;
-        };
-
-        this.addExtrudeDownObj = function (scene, materials) {
-            var triangleMaterial = materials[0],
-                triangleGeometry,
-                triangleGeometry1,
-                triangleGeometry2,
-                triangleGeometry3,
-                triangleGeometry4,
-                triangleGeometry5,
-                obj,
-                triangleMesh0,
-                triangleMesh1,
-                triangleMesh2,
-                triangleMesh3,
-                triangleMesh4,
-                triangleMesh5;
-
-            triangleGeometry = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -52.5, 0)]);
-            triangleGeometry1 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -52.5, 0), new THREE.Vector3(0, 50, 0)]);
-            triangleGeometry2 = this.positionVertices([new THREE.Vector3(0, -48, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(53.9, 0, 0)]);
-            triangleGeometry3 = this.positionVertices([new THREE.Vector3(-53.9, 0, 0), new THREE.Vector3(0, 48, 0), new THREE.Vector3(0, -48, 0)]);
-            triangleGeometry4 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 52.5, 0)]);
-            triangleGeometry5 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 52.5, 0), new THREE.Vector3(0, -50, 0)]);
-
-            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial);
-            triangleMesh0.name = 'triangleMesh0';
-
-            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
-            triangleMesh1.name = 'triangleMesh1';
-
-            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
-            triangleMesh2.name = 'triangleMesh2';
-            triangleMesh2.position.y = -50;
-            triangleMesh2.position.x = -50;
-
-            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
-            triangleMesh3.name = 'triangleMesh3';
-            triangleMesh3.position.y = -50;
-            triangleMesh3.position.x = 50;
-
-            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
-            triangleMesh4.name = 'triangleMesh4';
-            triangleMesh4.position.y = -100;
-            triangleMesh4.position.x = 0;
-
-            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
-            triangleMesh5.name = 'triangleMesh5';
-            triangleMesh5.position.y = -100;
-            triangleMesh5.position.x = 0;
-
-            obj = new THREE.Object3D();
-            obj.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
-            scene.add(obj);
-
-            obj.position.x = -1000;
-
-            return obj;
-        };
-
-        this.addPlainObj = function (scene, materials) {
-            var triangleMaterial = materials[0],
-                triangleGeometry,
-                triangleGeometry1,
-                triangleGeometry2,
-                triangleGeometry3,
-                triangleGeometry4,
-                triangleGeometry5,
-                triangleMesh0,
-                triangleMesh1,
-                triangleMesh2,
-                triangleMesh3,
-                triangleMesh4,
-                triangleMesh5,
-                group,
-                obj;
-
-            triangleGeometry = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
-            triangleGeometry1 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
-            triangleGeometry2 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
-            triangleGeometry3 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
-            triangleGeometry4 = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -50, 0), new THREE.Vector3(0, 50, 0)]);
-            triangleGeometry5 = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 50, 0), new THREE.Vector3(0, -50, 0)]);
-
-            triangleMesh0 = new THREE.Mesh(triangleGeometry, triangleMaterial);
-            triangleMesh0.name = 'triangleMesh0';
-
-            triangleMesh1 = new THREE.Mesh(triangleGeometry1, triangleMaterial);
-            triangleMesh1.name = 'triangleMesh1';
-
-            triangleMesh2 = new THREE.Mesh(triangleGeometry2, triangleMaterial);
-            triangleMesh2.name = 'triangleMesh2';
-            triangleMesh2.position.y = -50;
-            triangleMesh2.position.x = -50;
-
-            triangleMesh3 = new THREE.Mesh(triangleGeometry3, triangleMaterial);
-            triangleMesh3.name = 'triangleMesh3';
-            triangleMesh3.position.y = -50;
-            triangleMesh3.position.x = 50;
-
-            triangleMesh4 = new THREE.Mesh(triangleGeometry4, triangleMaterial);
-            triangleMesh4.name = 'triangleMesh4';
-            triangleMesh4.position.y = -100;
-            triangleMesh4.position.x = 0;
-
-            triangleMesh5 = new THREE.Mesh(triangleGeometry5, triangleMaterial);
-            triangleMesh5.name = 'triangleMesh5';
-            triangleMesh5.position.y = -100;
-            triangleMesh5.position.x = 0;
-
-            group = new THREE.Object3D();
-            group.name = 'group';
-            group.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
-
-            obj = new THREE.Object3D();
-            obj.add(group);
-            scene.add(obj);
-            obj.position.x = -1000;
-
-            return obj;
-        };
-
-        this.positionVertices = function (vector3dList) {
-            var triangle = new THREE.Geometry();
-
-            triangle.vertices.push(vector3dList[0]);
-            triangle.vertices.push(vector3dList[1]);
-            triangle.vertices.push(vector3dList[2]);
-
-            triangle.faces.push(new THREE.Face3(0, 1, 2));
-
-            return triangle;
-        };
-
-        this.animate = function () {
-            requestAnimationFrame(this.animate.bind(this));
-            this.render();
-        };
-
-        this.render = function () {
-            this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
-            this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
-
-            this.camera.lookAt(this.scene.position);
-
-            this.renderer.render(this.scene, this.camera);
-        };
-
-        this.showValXUp = function (obj, index, value) {
-            obj.children[index].rotation.x = value;
-        };
-        this.showValYUp = function (obj, index, value) {
-            obj.children[index].rotation.y = value;
-        };
-        this.showValPXUp = function (obj, index, value) {
-            obj.children[index].position.x = value;
-        };
-        this.showValPYUp = function (obj, index, value) {
-            obj.children[index].position.z = value;
-        };
-        this.showValPZUp = function (obj, index, value) {
-            obj.children[index].position.y = value;
-        };
-
-        this.animateFaceDown = function (target) {
-            var i = 0,
-                total = target.children.length,
-                targetChild,
-                rotation,
-                position,
-                childDown;
-
-            target.position.z = -30;
-            target.position.y = 5;
-
-            for (i; i < total; i++) {
-                targetChild = target.children[i];
-
-                rotation = targetChild.rotation;
-                position = targetChild.position;
-                childDown = this.objDown.children[i];
-
-                rotation.x = childDown.rotation.x;
-                rotation.y = childDown.rotation.y;
-                rotation.z = childDown.rotation.z;
-
-                position.x = childDown.position.x;
-                position.y = childDown.position.y;
-                position.z = childDown.position.z;
-            }
-        };
-
-        this.animateFaceUp = function (target) {
-            var i = 0,
-                rotation,
-                position,
-                childUp,
-                total = target.children.length,
-                targetChild;
-
-            for (i; i < total; i++) {
-                targetChild = target.children[i];
-                childUp = this.objUp.children[i];
-
-                rotation = targetChild.rotation,
-                position = targetChild.position;
-
-                rotation.x = childUp.rotation.x;
-                rotation.y = childUp.rotation.y;
-                rotation.z = childUp.rotation.z;
-
-                position.x = childUp.position.x;
-                position.y = childUp.position.y;
-                position.z = childUp.position.z;
-
-                targetChild.geometry.vertices[0].x = childUp.geometry.vertices[0].x;
-                targetChild.geometry.vertices[0].y = childUp.geometry.vertices[0].y;
-                targetChild.geometry.vertices[0].z = childUp.geometry.vertices[0].z;
-
-                targetChild.geometry.vertices[1].x = childUp.geometry.vertices[1].x;
-                targetChild.geometry.vertices[1].y = childUp.geometry.vertices[1].y;
-                targetChild.geometry.vertices[1].z = childUp.geometry.vertices[1].z;
-
-                targetChild.geometry.vertices[2].x = childUp.geometry.vertices[2].x;
-                targetChild.geometry.vertices[2].y = childUp.geometry.vertices[2].y;
-                targetChild.geometry.vertices[2].z = childUp.geometry.vertices[2].z;
-
-                targetChild.geometry.verticesNeedUpdate = true;
-            }
-        };
-
-        this.prepareGrid = function () {
-            var groudSource = new THREE.Object3D();
-
-            groudSource.add(this.objDown)
-            .add(this.objUp)
-            .add(this.objPlain);
-
-            this.scene.add(groudSource);
-
-            groudSource.position.x = -1000;
-        };
-
-        this.buildGrid = function () {
-            var posAnterior = 0,
-                anchorY = 1000,
-                i = 0, 
-                cols = 13,
-                lines = 25,
-                objY;
-
-            for (i; i < cols; i++) {
-                posAnterior = -((195) * i) + anchorY;
-
-                if (i > 0) {
-                    if ((i % 2 === 0)) {
-                        posAnterior = -((196) * i) + anchorY;
-                    }
-                }
-
-                for (var j = 0; j < lines; j++) {
-                    objY = this.objPlain.clone();
-                    objY.position.x = -(1150) + 99 * j;
-
-                    if (i % 2) {
-                        objY.animated = 'up';
-                        this.animateFaceUp(objY.children[0]);
-                    } else {
-                        objY.animated = 'down';
-                        this.animateFaceDown(objY.children[0]);
-                    }
-
-                    this.addAuxiliaryFaces(objY);
-
-                    objY.position.y = posAnterior; 
-
-                    this.gridGroup.add(objY);
-                }
-            }
- 
-            this.scene.add(this.gridGroup);
-
-            this.gridGroup.rotateZ(-0.4);
-            
-            this.njq.removeClass(this.njq.select('.grid3d'), 'visible-false');
-        };
-
-        this.addAuxiliaryFaces = function (pai) {
-            var triangleGeometry,
-                auxmesh,
-                aux,
-                triangleGeometryDown,
-                auxmeshDown,
-                auxDown;
-
-            this.materialsAux.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
-
-            triangleGeometry = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 51, 0)]);
-            auxmesh = new THREE.Mesh(triangleGeometry, this.materialsAux[0]);
-            auxmesh.name = 'auxmesh';
-            aux = new THREE.Object3D();
-            aux.add(auxmesh);
-
-            triangleGeometryDown = this.positionVertices([new THREE.Vector3(-50, 0, 0), new THREE.Vector3(50, 0, 0), new THREE.Vector3(0, -51, 0)]);
-            auxmeshDown = new THREE.Mesh(triangleGeometryDown, this.materialsAux[0]);
-            auxmeshDown.name = 'auxmeshDown';
-            auxDown = new THREE.Object3D();
-            auxDown.add(auxmeshDown);
-
-            if (pai.animated === 'down') {
-                aux.position.y = -143;
-                aux.position.x = -49.5;
-                aux.position.z = -15;
-                aux.rotation.x = -0.18;
-
-                auxDown.position.y = 53;
-                auxDown.position.x = -49.5;
-                auxDown.rotation.x = 0.18;
-                auxDown.position.z = aux.position.z;
-            } else if (pai.animated === 'up') {
-                aux.position.y = -148;
-                aux.position.x = -49.5;
-                aux.position.z = -15;
-                aux.rotation.x = 0.18;
-
-                auxDown.position.y = 48;
-                auxDown.position.x = -49.5;
-                auxDown.rotation.x = -0.18;
-                auxDown.position.z = aux.position.z;
-            } else {
-                aux.position.y = -150;
-                aux.position.x = -50;
-
-                auxDown.position.y = 50;
-                auxDown.position.x = -50;
-            }
-
-            pai.add(aux);
-            pai.add(auxDown);
-        };
-
-        this.execute = function () {
-            this.initGrid();
-
-            this.animate();
-
-            this.showValXUp(this.objUp, 0, -0.3);
-            this.showValYUp(this.objUp, 0, -0.13);
-
-            this.showValXUp(this.objUp, 1, -0.3);
-            this.showValYUp(this.objUp, 1, 0.13);
-
-            this.showValYUp(this.objUp, 2, -0.41);
-            this.showValPXUp(this.objUp, 2, -49.61);
-            this.showValPYUp(this.objUp, 2, -6);
-
-            this.showValXUp(this.objUp, 4, 0.3);
-            this.showValYUp(this.objUp, 4, 0.13);
-
-            this.showValYUp(this.objUp, 3, 0.41);
-            this.showValPXUp(this.objUp, 3, 49.61);
-            this.showValPYUp(this.objUp, 3, -6);
-
-            this.showValXUp(this.objUp, 5, 0.3);
-            this.showValYUp(this.objUp, 5, -0.13);
-
-            /*--------------------------------*/
-
-            this.showValXUp(this.objDown, 0, 0.3);
-            this.showValYUp(this.objDown, 0, 0.13);
-
-            this.showValXUp(this.objDown, 1, 0.3);
-            this.showValYUp(this.objDown, 1, -0.13);
-
-            this.showValYUp(this.objDown, 2, 0.41);
-            this.showValPXUp(this.objDown, 2, -49.61);
-            this.showValPYUp(this.objDown, 2, 6);
-
-            this.showValXUp(this.objDown, 4, -0.3);
-            this.showValYUp(this.objDown, 4, -0.13);
-
-            this.showValYUp(this.objDown, 3, -0.41);
-            this.showValPXUp(this.objDown, 3, 49.61);
-            this.showValPYUp(this.objDown, 3, 6);
-
-            this.showValXUp(this.objDown, 5, -0.3);
-            this.showValYUp(this.objDown, 5, 0.13);
-
-            this.prepareGrid();
-
-            this.buildGrid();
-
-            this.animateColors = new AnimateColors(this);
-            this.animateColors.execute();
-
-            this.executed = true;
-        };
-
-        this.initialize();
-    };
-    return Grid3D;
-});
-/* global Detector */
-define('views/home',['noJquery', 'views/grid3d'], function(NoJQuery, Grid3D) {
-    var Home = function(app) {
-        this.el = '.home';
-        this.$$ = NoJQuery;
-        this.completed = false;
-        this.menu = app.menu;
-
-        this.initialize = function() {
-
-            this.$$('body').removeClass('body-gradient');
-            this.$$(this.el).addClass('body-gradient');
-            this.$el = this.$$(this.el);
-
-            //INIT WEBGL GRID ONLY IDF SUPPORTED
-            if (Detector.webgl) {
-                this.grid3D = new Grid3D();
-            }
-
-            //HIDE LOADER
-            this.$$('.loading-arrow').addClass('hidden');
-        };
-        this.execute = function() {
-            if (Detector.webgl) {
-                if (this.grid3D.executed == false) {
-                    this.grid3D.execute();
-                }
-            }
-
-            //app.showConsoleGretings();                          
-
-            //SHOW VIEW
-            this.$el.removeClass('hidden');
-
-            //OPEN FULL MODE
-            this.full();
-
-            app.event.publish('completed');
-        };
-
-        this.full = function() {
-
-            this.$el.removeClass('show-min');
-
-            //ANIMATE FULL VIEW
-            this.$el.addClass('show-full');
-
-            this.$$('.scroll-down-button').removeClass('hidden');
-            this.$$('body').removeClass('show-scroll');
-            this.$$('.scroll-down-button').addClass('draw-in');
-            this.completed = true;
-
-            this.menu.hide();
-        };
-        this.minimize = function() {
-            this.$el.removeClass('show-full');
-
-            //ANIMATE MINIMIZED VIEW
-            this.$el.addClass('show-min');
-
-            this.$$('.scroll-down-button').addClass('hidden');
-            this.$$('body').addClass('show-scroll');
-            this.$$('.scroll-down-button').removeClass('draw-in');
-            this.completed = true;
-
-            this.menu.animate();
-        };
-
-        this.initialize();
-    };
-    return Home;
-});
-
-define('views/gallery',['noJquery'], function(NoJQuery) {
-    var Gallery = function(router, el) {
-        this.el = '.gallery';
-        this.$$ = NoJQuery;
-        this.initialize = function() {
-            this.setup();
-        };
-        this.setup = function() {
-            this.total = 4;
-            this.current = 0;
-            this.el = el;
-            this.view = this.$$(this.el);
-            this.btnNext = this.$$(this.el + ' .next');
-            this.btnPrev = this.$$(this.el + ' .prev');
-        };
-        this.addListeners = function() {
-            var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
-
-            this.nextHandler = this.onNextClick.bind(this);
-            this.prevHandler = this.onPrevClick.bind(this);
-
-            this.btnNext.on('click', this.nextHandler);
-            this.btnPrev.on('click', this.prevHandler);
-
-            menuItens.map(function(elmt, index) {
-                elmt.onclick = this.onMenuItemClick.bind(this, index);
-            }.bind(this));
-
-        };
-        this.show = function() {
-            this.view.removeClass('hidden');
-        };
-
-        this.drawSVGButtons = function() {
-            this.$$('.next').addClass('draw-in');
-            this.$$('.prev').addClass('draw-in');
-        };
-
-        this.animateLine = function() {
-            this.$$(this.el + ' .image-list ').addClass('animate-in-upper-line');
-        };
-
-        this.start = function() {
-            this.current = 0;
-
-            this.addListeners();
-
-            this.show();
-
-            this.drawSVGButtons();
-
-            this.showImage(this.current);
-
-            this.animateLine();
-        };
-
-        this.hide = function() {
-            this.view.addClass('hidden');
-        };
-
-        this.removeListeners = function() {
-            var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
-            this.btnNext.off('click', this.nextHandler);
-            this.btnPrev.off('click', this.prevHandler);
-            menuItens.map(function(elmt, index) {
-                elmt.onclick = null;
-            });
-        };
-
-        this.removeAnimation = function() {
-            this.$$('.next').removeClass('draw-in');
-            this.$$('.prev').removeClass('draw-in');
-            this.$$(this.el + ' .image-list ').removeClass('animate-in-upper-line');
-        };
-
-        this.destroy = function() {
-            this.hide();
-            this.removeListeners();
-            this.removeAnimation();
-        };
-
-        this.menuActivet = function(el) {
-            this.$$(el).addClass('active');
-        };
-
-        this.showImage = function(index) {
-            this.$$(this.el + ' .images-menu-item').removeClass('active');
-            this.menuActivet(this.el + ' .images-menu-item:nth-child(' + (index + 1) + ')');
-            this.$$(this.el + ' .image-list > .ph > img').addClass('hidden');
-            this.$$(this.el + ' .image-list > .ph > img:nth-child(' + (index + 1) + ')').removeClass('hidden');
-            this.current = index;
-        };
-
-        this.prev = function() {
-            if (this.current > 0) {
-                this.current -= 1;
-            }
-
-            this.showImage(this.current);
-        };
-        this.next = function() {
-            if (this.current < this.total - 1) {
-                this.current += 1;
-            }
-
-            this.showImage(this.current);
-        };
-
-        this.onMenuItemClick = function(index) {
-            this.showImage(index);
-        };
-
-        this.onNextClick = function() {
-            this.next();
-        };
-        this.onPrevClick = function() {
-            this.prev();
-        };
-    };
-    return Gallery;
-});
-
-define('views/tech',['noJquery'], function(NoJQuery) {
-    var Tech = function(options) {
-        this.el = options.el;
-        this.$$ = NoJQuery;
-
-        this.initialize = function() {
-            this.setup();
-        };
-
-        this.execute = function() {
-            this.setup();
-            this.addAnimationsListeners();
-            this.show()
-            this.animateIn();
-        };
-
-        this.addAnimationsListeners = function() {
-            var countleft = 0,
-                countright = 0;
-
-            this.$el = this.$$(this.el);
-
-            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
-            options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
-                countleft++;
-                if (countleft === 2) {
-                    this.$$(e.target).removeClass('animate-in-legend-left');
-                    this.$$(this.el + ' .front-end ul').addClass('animate-text');
-
-                }
-            }.bind(this));
-
-            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
-            options.app.prefixedEventListener(this.backendLine.elmts[0], 'AnimationEnd', function(e) {
-                countright++;
-                if (countright === 2) {
-                    this.$$(e.target).removeClass('animate-in-legend-right');
-                    this.$$(this.el + ' .back-end ul').addClass('animate-text');
-                }
-            }.bind(this));
-        };
-
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-            this.frontendLine = this.$$(this.el + ' .front-end');
-            this.frontendText = this.$$(this.el + ' .front-end').find('ul');
-            this.backendLine = this.$$(this.el + ' .back-end');
-            this.backendText = this.$$(this.el + ' .back-end').find('ul');
-        };
-
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
-
-
-        this.animateIn = function() {
-            this.frontendLine.addClass('animate-in-legend-left');
-            this.backendLine.addClass('animate-in-legend-right');
-        };
-
-        this.removeAnimation = function() {
-            this.frontendLine.removeClass('animate-in-legend-left');
-            this.backendLine.removeClass('animate-in-legend-right');
-            this.$$(this.el + 'ul').removeClass('animate-text');
-        };
-
-        this.destroy = function() {
-            this.hide();
-            this.removeAnimation();
-        };
-
-        this.initialize();
-    };
-    return Tech;
-});
-
-define('views/info',['noJquery'], function(NoJQuery) {
-    var Info = function(options) {
-        this.el = options.el;
-        this.$$ = NoJQuery;
-        this.initialize = function() {
-            this.setup();
-        };
-
-        this.execute = function() {
-            this.setup();
-            this.show();
-            this.animateIn();
-        };
-
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-        };
-
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
-
-        this.animateIn = function() {
-
-            this.$$(this.el + ' .picture-one').addClass('picture-one-animatein');
-            this.$$(this.el + ' .picture-two').addClass('picture-two-animatein');
-            this.$$(this.el + ' .picture-tree').addClass('picture-tree-animatein');
-            this.$$(this.el + ' .picture-four').addClass('picture-four-animatein');
-            this.$$(this.el + ' .picture-five').addClass('picture-five-animatein');
-        };
-
-        this.removeAnimation = function() {
-            this.$$(this.el + ' .picture-one').removeClass('picture-one-animatein');
-            this.$$(this.el + ' .picture-two').removeClass('picture-two-animatein');
-            this.$$(this.el + ' .picture-tree').removeClass('picture-tree-animatein');
-            this.$$(this.el + ' .picture-four').removeClass('picture-four-animatein');
-            this.$$(this.el + ' .picture-five').removeClass('picture-five-animatein');
-        };
-
-        this.destroy = function() {
-            this.hide();
-            this.removeAnimation();
-        };
-
-        this.initialize();
-    };
-    return Info;
-});
-
-define('views/project',['noJquery', 'views/gallery', 'views/tech', 'views/info'], function(NoJQuery, Gallery, Tech, Info) {
-    var Project = function(app, el) {
-        this.el = '.project';
-        this.$$ = NoJQuery;
-        this.key = '';
-        this.router = app.router;
-        this.routerHandler = null;
-
-        this.initialize = function() {
-            this.setup();
-            this.addAnimationListeners();
-
-            //INIT INFO VIEW
-            this.info = new Info({
-                el: this.el + '> .views > .info'
-            });
-            this.info.execute();
-
-
-            //INIT TECH VIEW
-            this.tech = new Tech({
-                el: this.el + '> .views > .tech',
-                app: app
-            });
-
-            //INIT GALLERY VIEW
-            this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
-            this.gallery.initialize();
-
-            this.show();
-            this.animateIn();
-        };
-
-
-        this.setup = function() {
-
-            this.el = el;
-            this.$el = this.$$(this.el);
-            this.key = this.$el.getAttr('id');
-            this.titleLink = this.$$(this.el + ' .infos > .btn');
-            this.techLink = this.$$(this.el + ' .work-infos > .tech');
-            this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
-            this.launchLink = this.$$(this.el + ' .work-infos > .external');
-            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
-        };
-
-        this.addAnimationListeners = function() {
-            var countatech = 0,
-                countgallery = 0,
-                countexternal = 0,
-                counttitle = 0,
-                techLine = this.$$(this.el + ' .work-infos > .tech'),
-                externalLine = this.$$(this.el + ' .work-infos > .external'),
-                galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
-                infoBtn = this.$$(this.el).find('.info').find('.btn');
-
-            app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
-                countatech++;
-                if (countatech == 1) {
-                    this.$$(this.el + ' .work-infos > .tech > .sprite').addClass('animate-sprite');
-                }
-                if (countatech === 2) {
-                    this.$$(e.target).removeClass('animate-in-link-tech');
-                    this.$$(this.el + ' .work-infos > .tech > span').addClass('animate-span');
-                }
-            }.bind(this));
-
-            app.prefixedEventListener(externalLine.elmts[0], 'AnimationEnd', function(e) {
-                countexternal++;
-                if (countexternal == 1) {
-                    this.$$(this.el + ' .work-infos > .external > .sprite').addClass('animate-sprite');
-                }
-                if (countexternal === 2) {
-
-                    this.$$(e.target).removeClass('animate-in-link-gallery');
-                    this.$$(this.el + ' .work-infos > .external > span').addClass('animate-span');
-                }
-            }.bind(this));
-
-            app.prefixedEventListener(galleryLine.elmts[0], 'AnimationEnd', function(e) {
-                countgallery++;
-                if (countgallery == 1) {
-                    this.$$(this.el + ' .work-infos > .gallery > .sprite').addClass('animate-sprite');
-                }
-                if (countgallery === 2) {
-                    this.$$(e.target).removeClass('animate-in-link-gallery');
-                    this.$$(this.el + ' .work-infos > .gallery > span').addClass('animate-span');
-                }
-            }.bind(this));
-            app.prefixedEventListener(infoBtn.elmts[0], 'AnimationEnd', function(e) {
-                counttitle++;
-                if (counttitle === 1) {
-                    this.$$(e.target).removeClass('animate-in-title');
-                    this.$$(this.el + ' .infos > .btn > h2').addClass('animate-title-opacity');
-                }
-            }.bind(this));
-
-        };
-
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
-
-
-        this.animateIn = function() {
-            this.titleLink.addClass('animate-in-title');
-            this.techLink.addClass('animate-in-link-tech');
-            this.launchLink.addClass('animate-in-link-external');
-            this.galleryLink.addClass('animate-in-link-gallery');
-        };
-
-        this.destroy = function() {
-            if (this.gallery) {
-                this.gallery.destroy();
-            }
-
-            this.info.destroy();
-            this.info = undefined;
-
-            this.tech.destroy();
-            this.tech = undefined;
-
-            this.techLink.removeClass('animate-in-link-tech');
-            this.galleryLink.removeClass('animate-in-link-gallery');
-            this.launchLink.removeClass('animate-in-link-external');
-
-            //TECH ICON
-            this.$$(this.el + ' .work-infos > .tech > span').removeClass('animate-span');
-            this.$$(this.el + ' .work-infos > .tech > .sprite').removeClass('animate-sprite');
-
-            //EXTERNAL ICON
-            this.$$(this.el + ' .work-infos > .external > span').removeClass('animate-span');
-            this.$$(this.el + ' .work-infos > .external > .sprite').removeClass('animate-sprite');
-
-            //GALLERY ICON
-            this.$$(this.el + ' .work-infos > .gallery > span').removeClass('animate-span');
-            this.$$(this.el + ' .work-infos > .gallery > .sprite').removeClass('animate-sprite');
-
-
-            this.$$(this.el + ' .infos > .btn').removeClass('animate-in-title');
-            this.$$(this.el + ' .infos > .btn > h2').removeClass('animate-title-opacity');
-            this.$$(this.el + ' .infos > p').removeClass('animate-text-opacity');
-        };
-        this.callbackPageProject = function(section) {
-            this.info.destroy()
-            this.tech.destroy();
-
-            if (this.gallery) {
-                this.gallery.destroy();
-            }
-
-            if (section === 'gallery') {
-                this.gallery.start();
-            } else {
-                this[section].execute();
-            }
-        };
-    };
-    return Project;
-});
-
-define('views/work',['noJquery', 'views/project'], function(NoJQuery, Project) {
-    var Work = function(app) {
-        this.el = '.work';
-        this.$$ = NoJQuery;
-        this.router = app.router;
-        this.completed = false;
-        this.projects = [];
-        this.initialize = function() {
-            this.setup();
-        };
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-        };
-        this.execute = function() {
-            this.setup();
-            this.show();
-            this.projetSelect();
-            this.completed = true;
-            app.event.publish('completed');
-        };
-
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
-
-        this.projetSelect = function() {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
-
-        };
-        this.getProjects = function() {
-            var ar = [],
-                projectsElmt = [];
-
-            projectsElmt = this.$$('.project').elmts;
-            projectsElmt.map(function(elmt, index) {
-                var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
-                pro.initialize();
-                ar[index] = pro;
-            }.bind(this));
-            projectsElmt = null;
-            return ar;
-        };
-
-        this.showSection = function(project, section) {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
-
-            this.projects.map(function(elmt, index) {
-                if (elmt.key.toLowerCase() === project.toLowerCase()) {
-                    elmt.callbackPageProject(section);
-                }
-            });
-        };
-
-        this.destroy = function() {
-            this.hide();
-            this.projects.map(function(elmt, index) {
-                elmt.destroy();
-            });
-            this.projects = [];
-        };
-
-        this.initialize();
-    };
-    return Work;
-});
-
-define('views/about',['noJquery'], function(NoJQuery) {
-    var About = function(app) {
-        this.el = '.about';
-        this.$$ = NoJQuery;
-        this.completed = false;
-        this.initialize = function() {
-            this.setup();
-        };
-        this.execute = function() {
-            this.setup();
-            this.addAnimationsListeners();
-            this.show();
-            this.animateIn();
-            this.completed = true;
-            app.event.publish('completed');
-        };
-        this.addAnimationsListeners = function() {
-            var countleft = 0,
-                countcenter = 0,
-                countright = 0;
-
-            //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
-            app.prefixedEventListener(this.firstLine.elmts[0], 'AnimationEnd', function(e) {
-                countleft++;
-                if (countleft === 2) {
-                    this.$$(e.target).removeClass('animate-in-legend-left');
-                    this.$$(e.target).find('ul').addClass('animate-text');
-                }
-            }.bind(this));
-
-            //LISTENS TO THE LINE ANIMATION COMPLETE (BACK END)
-            app.prefixedEventListener(this.secondLine.elmts[0], 'AnimationEnd', function(e) {
-                countcenter++;
-                if (countcenter === 2) {
-                    this.$$(e.target).removeClass('animate-in-legend-center');
-                    this.$$(e.target).find('ul').addClass('animate-text');
-                }
-            }.bind(this));
-
-
-            //LISTENS TO THE LINE ANIMATION COMPLETE (DESIGN)
-            app.prefixedEventListener(this.thirdLine.elmts[0], 'AnimationEnd', function(e) {
-                countright++;
-                if (countright === 2) {
-                    this.$$(e.target).removeClass('animate-in-legend-right');
-                    this.$$(e.target).find('ul').addClass('animate-text');
-                }
-            }.bind(this));
-
-        };
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-            this.firstLine = this.$$('fieldset:first-child');
-            this.firstText = this.$$('fieldset:first-child').find('ul');
-            this.secondLine = this.$$('fieldset:nth-child(2)');
-            this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
-            this.thirdLine = this.$$('fieldset:last-child');
-            this.thirdText = this.$$('fieldset:last-child').find('ul');
-        };
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
-        this.animateIn = function() {
-            this.$$('p').addClass('animate-text-opacity-about');
-            this.firstLine.addClass('animate-in-legend-left');
-            this.secondLine.addClass('animate-in-legend-center');
-            this.thirdLine.addClass('animate-in-legend-right');
-            this.$$('.about-project').addClass('animate-text-project');
-        };
-        this.removeAnimation = function() {
-            this.$$('.about-project').removeClass('animate-text-project');
-            this.$$('p').removeClass('animate-text-opacity-about');
-            this.$$('ul').removeClass('animate-text');
-        };
-
-        this.destroy = function() {
-            this.hide();
-            this.removeAnimation();
-        };
-
-        this.initialize();
-    };
-    return About;
-});
-
-require.config({
-    urlArgs: "bust=" + (new Date()).getTime(),
-    waitSeconds: 0
-});
-
 require([
-    'vendors/pubsub',
-    'vendors/fastclick',
-    'routers/router',
-    'lib/navigator',
     'noJquery',
+    'core/controller',
     'vendors/three',
     'vendors/OrbitControls',
     'vendors/Detector',
-    'vendors/TweenMax',
-    'views/menu',
-    'views/home',
-    'views/work',
-    'views/about'
+    'vendors/TweenMax'
 
-], function (PubSub,FastClick, Router, Navigator, NoJQuery, TREE, OrbitControls, Detector, TweenMax,  Menu, Home, Work, About) {
-    var Master = function () {
-        this.$$ = NoJQuery;
-        this.prefixedEventListener = function (element, type, callback) {
+], function(NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax) {
+    var App = function() {
+        this.prefixedEventListener = function(element, type, callback) {
             var pfx = ["webkit", "moz", "MS", "o", ""];
             for (var p = 0; p < pfx.length; p++) {
                 if (!pfx[p]) type = type.toLowerCase();
                 element.addEventListener(pfx[p] + type, callback, false);
             }
         };
-         
-        this.currentView;
-        this.previousView;
-        this.event = PubSub;
 
-        this.router = new Router();
-        this.menu = new Menu(this);
-        this.home = new Home(this);
-        this.work = new Work(this);
-        this.about = new About(this);
-        this.navigator = new Navigator();
-
-        this.initialize = function () {
-            PubSub.subscribe('completed', this.complete.bind(this));
-            
-            
-            //ADD FAST CLICK IF MOBILE BROWSING
-            if (this.$$('html').hasClass('mobile')) {            
-                FastClick.attach(document.body, {});
-            }
-
-            this.navigator = new Navigator();
-            this.navigator.addCommand('home', this.home, undefined);
-
-
-            //ROUTER
-            this.router.initialize(this.event);
-            this.router.on('change', this.routerChange.bind(this));
-            this.router.on('details', this.onRouterDetails.bind(this));
-
-            this.router.start();
-
-            //LET ELEMENTS VISIBLE
-            this.$$('main').removeClass('hidden');
-            this.$$('.footer').removeClass('hidden');
-            this.$$('.content').removeClass('hidden');
-        };
-
-        this.routerChange = function(evt, data) {
-            if (data.length > 0 && data[0] !== 'home' && this.home.loaded === false) {
-                this.navigator.addCommand('home', this.home);
-                this.navigator.executeCommand();
-            }
-
-            data.map(function(elmt, index) {
-                this.navigator.addCommand(data[index], this[data[index]]);
-            }.bind(this));
-
-            console.log('rout change', data);
-
-            if (data.length === 0) {
-                console.log('rout add home', data);
-                this.navigator.addCommand('home', this.home);
-            }
-
-            console.log('route commands', this.navigator.commands);
-
-            if (this.navigator.currentView) {
-                this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
-            }
-
-            if (this.navigator.commands.length > 1) {
-                console.log('route remove command', data);
-                this.navigator.removeCommand();
-            }
-
-
-
-            this.navigator.executeCommand();
-        };
-        this.complete = function () {
-            this.navigator.nextCommand();
-
-            if (this.navigator.currentCommand === undefined) {
-                this.router.off('change');
-                PubSub.unsubscribe('completed');
-                this.router.on('change', this.onRouterChangeNoAnimation.bind(this));
-                this.router.off('details');
-                this.router.on('details', this.onRouterChangeNoAnimationDetailsZ.bind(this));
-
-                if (this.navigator.subCommands.length) {
-                    this.work.showSection(this.navigator.subCommands[0].project, this.navigator.subCommands[0].section);
-                }
-            }
-        };
-        this.onRouterChangeNoAnimation = function (evt, data) {
-            var obj = { key: '', item: {} };
-            if (data.length === 0) {
-                obj.key = 'home';
-                obj.item = this.home;
-            } else {
-                obj.key = data[0];
-                obj.item = this[data[0]];
-            }
-
-            this.navigator.currentView = obj.item;
-            this.menu.activatetMenu(this.navigator.currentView.el.replace(/\./, ''));
-            this.navigator.addCommand(obj.key, obj.item);
-            this.navigator.simpleCommand();
-        };
-        this.onRouterChangeNoAnimationDetails = function (evt, data) {
-            this.onRouterChange(null, [data[0]]);
-            this.navigator.subCommands.push({ project: data[1], section: data[2] });
-        };
-        this.onRouterChangeNoAnimationDetailsZ = function (evt, data) {
-            this.onRouterChange(null, [data[0]]);
-            this.work.showSection(data[1], data[2]);
-        };
-        this.showConsoleGreetings = function () {
-            console.clear();
-            console.log("  _    _      _ _       _  ");
-            console.log(" | |  | |    | | |     | | ");
-            console.log(" | |__| | ___| | | ___ | | ");
-            console.log(" |  __  |/ _ \ | |/ _ \| | ");
-            console.log(" | |  | |  __/ | | (_) |_| ");
-            console.log(" |_|  |_|\___|_|_|\___/(_) ");
-            console.log("Thanks for stopping by! =]");
-        };
+        this.$$ = NoJQuery;
+        this.controller = new Controller(this);
+        this.controller.start();
     };
 
-    window.app = new Master();
-    window.app.initialize();
+    window.app = new App();
 });
+
 define("source/scripts/app/main", function(){});
 

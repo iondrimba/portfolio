@@ -1,18 +1,24 @@
-﻿define(['noJquery'], function(NoJQuery) {
+﻿define([], function() {
     var About = function(app) {
         this.el = '.about';
-        this.$$ = NoJQuery;
-        this.completed = false;
-        this.initialize = function() {
+        this.$$ = app.$$;
+
+        this.init = function() {
             this.setup();
         };
-        this.execute = function() {
-            this.setup();
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            this.firstLine = this.$$('fieldset:first-child');
+            this.firstText = this.$$('fieldset:first-child').find('ul');
+            this.secondLine = this.$$('fieldset:nth-child(2)');
+            this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
+            this.thirdLine = this.$$('fieldset:last-child');
+            this.thirdText = this.$$('fieldset:last-child').find('ul');
             this.addAnimationsListeners();
-            this.show();
+        };
+        this.execute = function() {
+            this.$el.removeClass('hidden');
             this.animateIn();
-            this.completed = true;
-            app.event.publish('completed');
         };
         this.addAnimationsListeners = function() {
             var countleft = 0,
@@ -48,21 +54,6 @@
             }.bind(this));
 
         };
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-            this.firstLine = this.$$('fieldset:first-child');
-            this.firstText = this.$$('fieldset:first-child').find('ul');
-            this.secondLine = this.$$('fieldset:nth-child(2)');
-            this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
-            this.thirdLine = this.$$('fieldset:last-child');
-            this.thirdText = this.$$('fieldset:last-child').find('ul');
-        };
-        this.show = function() {
-            this.$el.removeClass('hidden');
-        };
-        this.hide = function() {
-            this.$el.addClass('hidden');
-        };
         this.animateIn = function() {
             this.$$('p').addClass('animate-text-opacity-about');
             this.firstLine.addClass('animate-in-legend-left');
@@ -76,12 +67,11 @@
             this.$$('ul').removeClass('animate-text');
         };
 
-        this.destroy = function() {
-            this.hide();
+        this.hide = function() {
+            this.$el.addClass('hidden');
             this.removeAnimation();
         };
 
-        this.initialize();
     };
     return About;
 });

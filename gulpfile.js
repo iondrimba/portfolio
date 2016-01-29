@@ -14,11 +14,11 @@ var autoprefixer = require('gulp-autoprefixer');
 var requirePaths = {
     lib: 'source/scripts/app/lib',
     views: 'source/scripts/app/views',
-    router5: 'node_modules/router5/dist/browser/router5',
+    page: 'node_modules/page/page',
     vendors: 'source/scripts/vendors',
     noJquery: 'node_modules/nojquery/nojquery',
     TweenLite: 'source/scripts/vendors/TweenLite',
-    routers: 'source/scripts/app/routers'
+    core: 'source/scripts/app/core'
 };
 
 gulp.task('sass', function() {
