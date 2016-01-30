@@ -3423,16 +3423,26 @@ define('views/work',['views/project'], function(Project) {
     return Work;
 });
 
-define('views/about',[], function() {
+
+define('text!source/templates/about.html',[],function () { return '<p>\r\n    Hi, my name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.\r\n    <br /> I\'m focused on front-end development with javascript and back-end development with C#(.NET).\r\n    <br />\r\n    <br>Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.\r\n    <br />\r\n    <br /> Thanks for stopping by =]\r\n</p>\r\n<div class="skills-set">\r\n    <fieldset>\r\n        <legend>Front-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>Javascript/jQuery</li>\r\n            <li>Sass/Less</li>\r\n            <li>Handlebars</li>\r\n            <li>Backbone</li>\r\n            <li>Grunt/Gulp/npm</li>\r\n            <li>CSS3</li>\r\n            <li>HTML5</li>\r\n            <li>Bootstrap</li>\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset>\r\n        <legend>Back-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>C#</li>\r\n            <li>MVC </li>\r\n            <li>Web API</li>\r\n            <li>Web Forms</li>\r\n            <li>WPF</li>\r\n            <li>SQL Server</li>\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset>\r\n        <legend>Design:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>Photoshop</li>\r\n            <li>Flash</li>\r\n        </ul>\r\n    </fieldset>\r\n</div>\r\n<br />\r\n<br />\r\n<div class="about-project">\r\n    <strong>About this project:</strong>\r\n    <p>\r\n        No jQuery\r\n        <br /> CSS3 animations\r\n        <br /> Html5 Pushstate\r\n        <br /> Responsive\r\n        <br /> 3D Grid: ThreeJs + TweenMax\r\n        <br /> Routing system: Page.Js\r\n    </p>\r\n</div>\r\n';});
+
+define('views/about',['text!source/templates/about.html'], function(template) {
     var About = function(app) {
         this.el = '.about';
         this.$$ = app.$$;
+        this.view = function() {
+            var view = app.handlebars.compile(template),
+                html = view()
 
+            return html;
+
+        };
         this.init = function() {
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
+            this.$el.html(this.view());
             this.firstLine = this.$$('fieldset:first-child');
             this.firstText = this.$$('fieldset:first-child').find('ul');
             this.secondLine = this.$$('fieldset:nth-child(2)');

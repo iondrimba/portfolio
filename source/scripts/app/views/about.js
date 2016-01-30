@@ -1,13 +1,20 @@
-﻿define([], function() {
+﻿define(['text!source/templates/about.html'], function(template) {
     var About = function(app) {
         this.el = '.about';
         this.$$ = app.$$;
+        this.view = function() {
+            var view = app.handlebars.compile(template),
+                html = view()
 
+            return html;
+
+        };
         this.init = function() {
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
+            this.$el.html(this.view());
             this.firstLine = this.$$('fieldset:first-child');
             this.firstText = this.$$('fieldset:first-child').find('ul');
             this.secondLine = this.$$('fieldset:nth-child(2)');
