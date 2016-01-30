@@ -21,7 +21,6 @@
         };
 
         this.execute = function() {
-            console.log('menu execute');
             this.hide();
             setTimeout(function() {
                 this.animate();
@@ -29,7 +28,6 @@
             }.bind(this), 10);
         };
         this.animate = function() {
-            console.log('menu animate');
             this.$$('.btn-work > .text-ph').addClass('animate-span');
             this.$$('.btn-work > .line-ph > i').addClass('animate-line');
 

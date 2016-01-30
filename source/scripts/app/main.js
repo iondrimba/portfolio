@@ -4,9 +4,10 @@
     'vendors/three',
     'vendors/OrbitControls',
     'vendors/Detector',
-    'vendors/TweenMax'
+    'vendors/TweenMax',
+    'handlebars'
 
-], function(NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax) {
+], function(NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax, handlebars) {
     var App = function() {
         this.prefixedEventListener = function(element, type, callback) {
             var pfx = ["webkit", "moz", "MS", "o", ""];
@@ -15,7 +16,7 @@
                 element.addEventListener(pfx[p] + type, callback, false);
             }
         };
-
+        this.handlebars = handlebars;
         this.$$ = NoJQuery;
         this.controller = new Controller(this);
         this.controller.start();

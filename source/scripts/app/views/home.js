@@ -1,5 +1,5 @@
 ﻿/* global Detector */
-define(['views/grid3d'], function(Grid3D) {
+define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, template) {
     var Home = function(app) {
         this.el = '.home';
         this.$$ = app.$$;        
@@ -14,6 +14,11 @@ define(['views/grid3d'], function(Grid3D) {
             if (Detector.webgl) {
                 this.grid3D = new Grid3D();
             }
+
+            var view = app.template.compile(template);           
+
+            console.log(this.view);
+
 
             //HIDE LOADER
             this.$$('.loading-arrow').addClass('hidden');
