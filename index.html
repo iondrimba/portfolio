@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
@@ -19,7 +20,6 @@
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <meta name="application-name" content="Portfolio of Ion Drimba Filho">
-
     <meta name="description" content="Web Developer (JS/CSHARP)">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name='keywords' content='Developer, Javascript Developer, Front-End Developer, Portfolio, C# Developer, Web Developer'>
@@ -41,11 +41,8 @@
     <meta name='rating' content='General'>
     <meta name='subtitle' content='Web Developer'>
     <meta name='target' content='all'>
-        
-
     <!-- IE cleartype -->
     <meta http-equiv="cleartype" content="on">
-
     <!-- Social: Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="Portfolio of Ion Drimba Filho">
@@ -53,7 +50,6 @@
     <meta name="twitter:title" content="Portfolio of Ion Drimba Filho">
     <meta name="twitter:description" content="Web Developer (JS/CSHARP)">
     <meta name="twitter:image:src" content="https://dl.dropboxusercontent.com/u/4633623/portfoliotwitter.jpg">
-
     <!-- Social: Facebook  -->
     <meta property="og:url" content="http://iondrimbafilho.me/">
     <meta property="og:type" content="website">
@@ -63,53 +59,80 @@
     <meta property="og:site_name" content="Portfolio of Ion Drimba Filho">
     <meta property="article:author" content="http://iondrimbafilho.me/">
     <meta property="article:publisher" content="http://iondrimbafilho.me/">
-
     <!-- Social: Google+ / Schema.org  -->
     <meta itemprop="name" content="Portfolio of Ion Drimba Filho">
     <meta itemprop="description" content="Web Developer (JS/CSHARP)">
     <meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/portfoliogoogleplus.jpg">
     <title>Portfolio of Ion Drimba Filho</title>
     <style>
-        .body-gradient {
-            background: -webkit-linear-gradient(140deg, #5824c1, #435085, #d73f26);
-            background: -o-linear-gradient(140deg, #5824c1, #435085, #d73f26);
-            background: linear-gradient(230deg, #5824c1, #435085, #d73f26);
-            background-size:600% 600%;            
-             height: 100vh;
-            -webkit-animation: AnimationName 21s ease infinite;
-            -moz-animation: AnimationName 21s ease infinite;
-            -o-animation: AnimationName 21s ease infinite;
-            animation: AnimationName 21s ease infinite;
-        }
-        @-webkit-keyframes AnimationName {
-            0%{background-position:17% 0%}
-            50%{background-position:84% 100%}
-            100%{background-position:17% 0%}
-        }
-        @-moz-keyframes AnimationName {
-            0%{background-position:17% 0%}
-            50%{background-position:84% 100%}
-            100%{background-position:17% 0%}
-        }
-        @-o-keyframes AnimationName {
-            0%{background-position:17% 0%}
-            50%{background-position:84% 100%}
-            100%{background-position:17% 0%}
-        }
-        @keyframes AnimationName { 
-            0%{background-position:17% 0%}
-            50%{background-position:84% 100%}
-            100%{background-position:17% 0%}
-        }
-        </style>
-    <link href="/build/css/main.css" rel="stylesheet" />
+    .body-gradient {
+        background: -webkit-linear-gradient(140deg, #5824c1, #435085, #d73f26);
+        background: -o-linear-gradient(140deg, #5824c1, #435085, #d73f26);
+        background: linear-gradient(230deg, #5824c1, #435085, #d73f26);
+        background-size: 600% 600%;
+        height: 100vh;
+        -webkit-animation: AnimationName 21s ease infinite;
+        -moz-animation: AnimationName 21s ease infinite;
+        -o-animation: AnimationName 21s ease infinite;
+        animation: AnimationName 21s ease infinite;
+    }
     
+    @-webkit-keyframes AnimationName {
+        0% {
+            background-position: 17% 0%
+        }
+        50% {
+            background-position: 84% 100%
+        }
+        100% {
+            background-position: 17% 0%
+        }
+    }
+    
+    @-moz-keyframes AnimationName {
+        0% {
+            background-position: 17% 0%
+        }
+        50% {
+            background-position: 84% 100%
+        }
+        100% {
+            background-position: 17% 0%
+        }
+    }
+    
+    @-o-keyframes AnimationName {
+        0% {
+            background-position: 17% 0%
+        }
+        50% {
+            background-position: 84% 100%
+        }
+        100% {
+            background-position: 17% 0%
+        }
+    }
+    
+    @keyframes AnimationName {
+        0% {
+            background-position: 17% 0%
+        }
+        50% {
+            background-position: 84% 100%
+        }
+        100% {
+            background-position: 17% 0%
+        }
+    }
+    </style>
+    <link href="/build/css/main.css" rel="stylesheet" />
 </head>
 
 <body class="body-gradient">
     <div class="arrow-full loading-arrow" id="loading-arrow"></div>
     <main class="hidden">
-        {{{home}}}
+        <div class="home clearfix">
+        </div>
         <div class="content clearfix">
             <nav class="clearfix">
                 <div class="arrows">
@@ -205,9 +228,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tech view hidden">                            
-                            <a class="close" href="/work/musicbattl/info"><label>✕</label></a>
-                            <fieldset class="front-end">                                
+                        <div class="tech view hidden">
+                            <a class="close" href="/work/musicbattl/info">
+                                <label>✕</label>
+                            </a>
+                            <fieldset class="front-end">
                                 <legend>
                                     Front-End:
                                 </legend>
@@ -236,7 +261,7 @@
                                     <li>SQL Server</li>
                                     <li>SignalR</li>
                                     <li>Azure</li>
-                                </ul> 
+                                </ul>
                             </fieldset>
                         </div>
                         <div class="gallery view hidden">
@@ -334,9 +359,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tech view hidden">                            
-                            <a class="close" href="/work/sbp/info"><label>✕</label></a>
-                            <fieldset class="front-end">                                
+                        <div class="tech view hidden">
+                            <a class="close" href="/work/sbp/info">
+                                <label>✕</label>
+                            </a>
+                            <fieldset class="front-end">
                                 <legend>
                                     Front-End:
                                 </legend>
@@ -345,7 +372,7 @@
                                 </div>
                                 <ul>
                                     <li>Javascript/jQuery</li>
-                                    <li>Sass</li>                                    
+                                    <li>Sass</li>
                                     <li>Backbone</li>
                                     <li>Grunt</li>
                                     <li>Foundation</li>
@@ -359,7 +386,7 @@
                                 <ul>
                                     <li>C#</li>
                                     <li>MVC (.NET)</li>
-                                    <li>SQL Server</li>                                    
+                                    <li>SQL Server</li>
                                     <li>Azure (hosting)</li>
                                 </ul>
                             </fieldset>
@@ -375,7 +402,6 @@
                                     </div>
                                     <i class="arrow" title="arrow icon"></i>
                                 </a>
-
                                 <div class="image-list">
                                     <div class="line-ph">
                                         <i class=""></i>
@@ -461,9 +487,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tech view hidden">                            
-                            <a class="close" href="/work/comunidade/info"><label>✕</label></a>
-                            <fieldset class="front-end">                                
+                        <div class="tech view hidden">
+                            <a class="close" href="/work/comunidade/info">
+                                <label>✕</label>
+                            </a>
+                            <fieldset class="front-end">
                                 <legend>
                                     Front-End:
                                 </legend>
@@ -482,7 +510,7 @@
                                 </div>
                                 <ul>
                                     <li>FluorineFx</li>
-                                    <li>SQL Server</li>     
+                                    <li>SQL Server</li>
                                 </ul>
                             </fieldset>
                         </div>
@@ -497,7 +525,6 @@
                                     </div>
                                     <i class="arrow" title="arrow icon"></i>
                                 </a>
-
                                 <div class="image-list">
                                     <div class="line-ph">
                                         <i class=""></i>
@@ -533,11 +560,12 @@
             </div>
             <div class="about hidden">
                 <p>
-                    Hi, my name is Ion Drimba Filho, I'm a Web Developer based in Brazil.<br />
-                    I'm focused on front-end development with javascript and back-end development with C#(.NET).<br />
-                    <br>Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.<br />                    
-                   <br />
-                    Thanks for stopping by =]
+                    Hi, my name is Ion Drimba Filho, I'm a Web Developer based in Brazil.
+                    <br /> I'm focused on front-end development with javascript and back-end development with C#(.NET).
+                    <br />
+                    <br>Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.
+                    <br />
+                    <br /> Thanks for stopping by =]
                 </p>
                 <div class="skills-set">
                     <fieldset>
@@ -580,85 +608,87 @@
                             <li>Flash</li>
                         </ul>
                     </fieldset>
-                </div><br /><br />
+                </div>
+                <br />
+                <br />
                 <div class="about-project">
                     <strong>About this project:</strong>
                     <p>
-                        No jQuery<br />
-                        CSS3 animations<br />
-                        Html5 Pushstate<br />
-                        Responsive<br />
-                        3D Grid: ThreeJs + TweenMax<br />
-                        Routing system: Page.Js
+                        No jQuery
+                        <br /> CSS3 animations
+                        <br /> Html5 Pushstate
+                        <br /> Responsive
+                        <br /> 3D Grid: ThreeJs + TweenMax
+                        <br /> Routing system: Page.Js
                     </p>
                 </div>
             </div>
         </div>
     </main>
-    <footer class="hidden">                    
-            <div class="social-icons">
-                <a target="_blank" href="https://github.com/iondrimba" class="sprite github"></a>
-                <a target="_blank" href="https://coderwall.com/iondrimba" class="sprite coderwall"></a>
-                <a target="_blank" href="https://www.linkedin.com/in/iondrimbafilho" class="sprite linkedin"></a>
-            </div>
+    <footer class="hidden">
+        <div class="social-icons">
+            <a target="_blank" href="https://github.com/iondrimba" class="sprite github"></a>
+            <a target="_blank" href="https://coderwall.com/iondrimba" class="sprite coderwall"></a>
+            <a target="_blank" href="https://www.linkedin.com/in/iondrimbafilho" class="sprite linkedin"></a>
+        </div>
     </footer>
     <script>
-            var isMobile = {
-                Android: function() {
-                    return navigator.userAgent.match(/Android/i);
-                },
-                BlackBerry: function() {
-                    return navigator.userAgent.match(/BlackBerry/i);
-                },
-                iOS: function() {
-                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-                },
-                Opera: function() {
-                    return navigator.userAgent.match(/Opera Mini/i);
-                },
-                Windows: function() {
-                    return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
-                },
-                any: function() {
-                    return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-                }
-            };            
-                        
-            
-                        
-            var loading = document.getElementById('loading-arrow'),
-                 hanldetimeout,
-                 fixHover;
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
 
-            hanldetimeout = setInterval(function () {
-                loading.className = loading.className.replace(/animate-in/, '');
-                loading.style.display = 'none';
-                loading.offsetHeight;
-                loading.style.display = 'block';
-                loading.className += 'animate-in';
 
-                if (window.app && window.app.controller.home.loaded) {
-                    clearTimeout(hanldetimeout);
-                }
 
-            }, 2200);
-            loading.className += ' animate-in';
-            
-            if( isMobile.any() ) {
-                fixHover = 'mobile';
-            }else{
-                fixHover = 'notmobile';
-            }
-            
-            //SVG SMILL SUPPORT
-            var svgsmill = function() {
-                var valid =  !!document.createElementNS && /SVGAnimate/.test(document.createElementNS('http://www.w3.org/2000/svg', 'animate').toString());
-                return valid;
-            };            
-            
-            document.getElementsByTagName('html')[0].className += fixHover;
-            
-            document.getElementsByTagName('html')[0].className += svgsmill()===false?' no-svgsmill':'';
+    var loading = document.getElementById('loading-arrow'),
+        hanldetimeout,
+        fixHover;
+
+    hanldetimeout = setInterval(function() {
+        loading.className = loading.className.replace(/animate-in/, '');
+        loading.style.display = 'none';
+        loading.offsetHeight;
+        loading.style.display = 'block';
+        loading.className += 'animate-in';
+
+        if (window.app && window.app.controller.home.loaded) {
+            clearTimeout(hanldetimeout);
+        }
+
+    }, 2200);
+    loading.className += ' animate-in';
+
+    if (isMobile.any()) {
+        fixHover = 'mobile';
+    } else {
+        fixHover = 'notmobile';
+    }
+
+    //SVG SMILL SUPPORT
+    var svgsmill = function() {
+        var valid = !!document.createElementNS && /SVGAnimate/.test(document.createElementNS('http://www.w3.org/2000/svg', 'animate').toString());
+        return valid;
+    };
+
+    document.getElementsByTagName('html')[0].className += fixHover;
+
+    document.getElementsByTagName('html')[0].className += svgsmill() === false ? ' no-svgsmill' : '';
     </script>
     <script data-main="/build/scripts/main.js" src="/build/scripts/require.js" async></script>
 </body>

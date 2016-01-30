@@ -2,23 +2,27 @@
 define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, template) {
     var Home = function(app) {
         this.el = '.home';
-        this.$$ = app.$$;        
+        this.$$ = app.$$;
         this.loaded = false;
+        this.view = function() {
+            var view = app.handlebars.compile(template),
+                html = view()
+
+            return html;
+
+        };
         this.init = function() {
 
             this.$$('body').removeClass('body-gradient');
             this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
+            this.$el.html(this.view());
+
 
             //INIT WEBGL GRID ONLY IDF SUPPORTED
             if (Detector.webgl) {
                 this.grid3D = new Grid3D();
             }
-
-            var view = app.template.compile(template);           
-
-            console.log(this.view);
-
 
             //HIDE LOADER
             this.$$('.loading-arrow').addClass('hidden');

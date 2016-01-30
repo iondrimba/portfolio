@@ -18,7 +18,7 @@ var requirePaths = {
     vendors: 'source/scripts/vendors',
     noJquery: 'node_modules/nojquery/nojquery',
     TweenLite: 'source/scripts/vendors/TweenLite',
-    handlebars: 'node_modules/handlebars/dist/handlebars.amd',
+    handlebars: 'node_modules/handlebars/dist/handlebars',
     core: 'source/scripts/app/core'
 };
 
