@@ -1,7 +1,14 @@
-﻿define([], function() {
+﻿define(['text!source/templates/menu.html'], function(template) {
     var Menu = function(app) {
         this.el = '.menu';
         this.$$ = app.$$;
+         this.view = function() {
+            var view = app.handlebars.compile(template),
+                html = view()
+
+            return html;
+
+        };
         this.init = function() {
             this.setup();
         };
@@ -11,6 +18,7 @@
             this.countWork = 0;
             this.currentItem = 'work';
             this.$el = this.$$(this.el);
+            this.$el.html(this.view());
             this.btnWork = this.$$('.btn-work');
             this.btnAbout = this.$$('.btn-about');
             this.workLine = this.$$('.btn-work > .line-ph > i');
