@@ -1,13 +1,21 @@
-﻿define(['views/project'], function(Project) {
+﻿define(['text!source/templates/work.html', 'views/project'], function(template, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = app.$$;
         this.projects = [];
+        this.view = function() {
+            var view = app.handlebars.compile(template),
+                html = view()
+
+            return html;
+
+        };
         this.init = function() {
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
+            this.$el.html(this.view());
         };
         this.execute = function() {
             this.$el.removeClass('hidden');

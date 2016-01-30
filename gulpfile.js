@@ -59,7 +59,6 @@ gulp.task('requirejs:dev', function() {
                 out: 'build/scripts/main.js',
                 baseUrl: '',
                 enforceDefine: true,
-                waitSeconds: 10000,
                 optimizeAllPluginResources: false,
                 noGlobal: true,
                 optimize: 'none',
