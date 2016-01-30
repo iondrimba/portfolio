@@ -9,11 +9,13 @@
         this.setup = function() {
             this.countAbout = 0;
             this.countWork = 0;
+            this.currentItem = 'work';
             this.$el = this.$$(this.el);
             this.btnWork = this.$$('.btn-work');
             this.btnAbout = this.$$('.btn-about');
             this.workLine = this.$$('.btn-work > .line-ph > i');
             this.aboutLine = this.$$('.btn-about > .line-ph > i');
+            this.animated = false;
 
             this.addAnimationsListeners();
         };
@@ -21,10 +23,10 @@
         this.execute = function() {
             console.log('menu execute');
             this.hide();
-            setTimeout(function(){
+            setTimeout(function() {
                 this.animate();
                 clearTimeout();
-            }.bind(this),10);
+            }.bind(this), 10);
         };
         this.animate = function() {
             console.log('menu animate');
@@ -37,7 +39,6 @@
 
         this.addAnimationsListeners = function() {
             app.prefixedEventListener(this.workLine.elmts[0], 'AnimationEnd', function(e) {
-                console.log('aaaa', this.countWork);
                 this.countWork++;
                 if (this.countWork === 2) {
                     this.$$(e.target).removeClass('animate-line');
@@ -53,6 +54,9 @@
                 if (this.countAbout === 2) {
                     this.$$(e.target).removeClass('animate-line-about');
                     this.$$(e.target).addClass('animate-line-fixed');
+
+                    this.animated = true;
+
                     if (this.currentItem) {
                         this.deactivateButton();
                         this.activateButton(this.currentItem);
@@ -69,13 +73,12 @@
 
             this.$$('.btn-about > .text-ph').removeClass('animate-span-about');
             this.$$('.btn-about > .line-ph > i').removeClass('animate-line-about');
-
-            this.btnWork.removeClass('active-button');
-            this.btnAbout.removeClass('active-button');
-
             this.$$('.btn-work > .line-ph > i').removeClass('animate-line-fixed');
             this.$$('.btn-about').find('.line-ph').find('i').removeClass('animate-line-fixed');
 
+            this.deactivateButton();
+
+            this.animated = false;
             console.log('menu hide');
         };
 

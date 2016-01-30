@@ -1528,11 +1528,13 @@ define('views/menu',[], function() {
         this.setup = function() {
             this.countAbout = 0;
             this.countWork = 0;
+            this.currentItem = 'work';
             this.$el = this.$$(this.el);
             this.btnWork = this.$$('.btn-work');
             this.btnAbout = this.$$('.btn-about');
             this.workLine = this.$$('.btn-work > .line-ph > i');
             this.aboutLine = this.$$('.btn-about > .line-ph > i');
+            this.animated = false;
 
             this.addAnimationsListeners();
         };
@@ -1540,10 +1542,10 @@ define('views/menu',[], function() {
         this.execute = function() {
             console.log('menu execute');
             this.hide();
-            setTimeout(function(){
+            setTimeout(function() {
                 this.animate();
                 clearTimeout();
-            }.bind(this),10);
+            }.bind(this), 10);
         };
         this.animate = function() {
             console.log('menu animate');
@@ -1556,7 +1558,6 @@ define('views/menu',[], function() {
 
         this.addAnimationsListeners = function() {
             app.prefixedEventListener(this.workLine.elmts[0], 'AnimationEnd', function(e) {
-                console.log('aaaa', this.countWork);
                 this.countWork++;
                 if (this.countWork === 2) {
                     this.$$(e.target).removeClass('animate-line');
@@ -1572,6 +1573,9 @@ define('views/menu',[], function() {
                 if (this.countAbout === 2) {
                     this.$$(e.target).removeClass('animate-line-about');
                     this.$$(e.target).addClass('animate-line-fixed');
+
+                    this.animated = true;
+
                     if (this.currentItem) {
                         this.deactivateButton();
                         this.activateButton(this.currentItem);
@@ -1588,13 +1592,12 @@ define('views/menu',[], function() {
 
             this.$$('.btn-about > .text-ph').removeClass('animate-span-about');
             this.$$('.btn-about > .line-ph > i').removeClass('animate-line-about');
-
-            this.btnWork.removeClass('active-button');
-            this.btnAbout.removeClass('active-button');
-
             this.$$('.btn-work > .line-ph > i').removeClass('animate-line-fixed');
             this.$$('.btn-about').find('.line-ph').find('i').removeClass('animate-line-fixed');
 
+            this.deactivateButton();
+
+            this.animated = false;
             console.log('menu hide');
         };
 
@@ -3119,14 +3122,14 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
 
             page('/', this.onHome.bind(this));
-            page('/work', this.onWork.bind(this));
-            page('/about', this.onAbout.bind(this));
-            page('/work/:project/:section', this.onProject.bind(this));
+            page('/work', this.onPrerender.bind(this), this.onWork.bind(this));
+            page('/about', this.onPrerender.bind(this), this.onAbout.bind(this));
+            page('/work/:project/:section', this.onPrerender.bind(this), this.onProject.bind(this));
             page('*', this.notFound.bind(this));
             page.exit('*', this.onExit.bind(this));
             page();
 
-            //this.menu.activateMenu(ctx.path.replace(/\//, ''));
+
 
         };
         this.masterPage = function(ctx, next) {
@@ -3143,7 +3146,24 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
 
         this.onExit = function(ctx, next) {
+            var livingView = ctx.path.replace(/\//, '');
+            console.log('exit', livingView);
+            //GOING BACK TO HOME
+            if (livingView.length === 0) {    
+                this.menu.hide();
+            }
+
             this.current.hide();
+            next();
+        };
+        this.onPrerender = function(ctx, next) {
+            if (this.menu.animated) {
+                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+            } else {
+
+                this.menu.execute();
+            }
+
             next();
         };
         this.animateInComplete = function() {
@@ -3156,8 +3176,7 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
         };
         this.onWork = function(ctx, next) {
             console.log('work');
-            this.work.execute();            
-            this.menu.execute();
+            this.work.execute();
             this.current = this.work;
         };
         this.onProject = function(ctx, next) {

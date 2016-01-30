@@ -20,14 +20,14 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
 
 
             page('/', this.onHome.bind(this));
-            page('/work', this.onWork.bind(this));
-            page('/about', this.onAbout.bind(this));
-            page('/work/:project/:section', this.onProject.bind(this));
+            page('/work', this.onPrerender.bind(this), this.onWork.bind(this));
+            page('/about', this.onPrerender.bind(this), this.onAbout.bind(this));
+            page('/work/:project/:section', this.onPrerender.bind(this), this.onProject.bind(this));
             page('*', this.notFound.bind(this));
             page.exit('*', this.onExit.bind(this));
             page();
 
-            //this.menu.activateMenu(ctx.path.replace(/\//, ''));
+
 
         };
         this.masterPage = function(ctx, next) {
@@ -44,7 +44,24 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
 
 
         this.onExit = function(ctx, next) {
+            var livingView = ctx.path.replace(/\//, '');
+            console.log('exit', livingView);
+            //GOING BACK TO HOME
+            if (livingView.length === 0) {    
+                this.menu.hide();
+            }
+
             this.current.hide();
+            next();
+        };
+        this.onPrerender = function(ctx, next) {
+            if (this.menu.animated) {
+                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+            } else {
+
+                this.menu.execute();
+            }
+
             next();
         };
         this.animateInComplete = function() {
@@ -57,8 +74,7 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
         };
         this.onWork = function(ctx, next) {
             console.log('work');
-            this.work.execute();            
-            this.menu.execute();
+            this.work.execute();
             this.current = this.work;
         };
         this.onProject = function(ctx, next) {
