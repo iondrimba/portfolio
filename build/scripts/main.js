@@ -3519,11 +3519,11 @@ define('views/about',['text!source/templates/about.html'], function(template) {
             this.secondLine = this.$$('fieldset:nth-child(2)');
             this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
             this.thirdLine = this.$$('fieldset:last-child');
-            this.thirdText = this.$$('fieldset:last-child').find('ul');
-            this.addAnimationsListeners();
+            this.thirdText = this.$$('fieldset:last-child').find('ul');            
         };
         this.execute = function() {
             this.$el.removeClass('hidden');
+            this.addAnimationsListeners();
             this.animateIn();
         };
         this.addAnimationsListeners = function() {
