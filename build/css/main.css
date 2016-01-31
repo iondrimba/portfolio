@@ -863,13 +863,13 @@ nav {
   transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 .show-min {
-  -webkit-transform: translateY(-50vh);
-  transform: translateY(-50vh);
+  -webkit-transform: translateY(-70vh);
+  transform: translateY(-70vh);
   transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 h1.title-show-in {
-  -webkit-transform: translateX(-50%) translateY(-170%);
-  transform: translateX(-50%) translateY(-170%); }
+  -webkit-transform: translateX(-50%) translateY(-410px);
+  transform: translateX(-50%) translateY(-410px); }
 
 h1.title-show-out {
   -webkit-transform: translateX(-50%) translateY(-50%);
@@ -1396,7 +1396,7 @@ body {
 .content-wrapper {
   width: 100%;
   background-color: #fff;
-  min-height: 500px; }
+  min-height: 680px; }
 
 .content {
   max-width: 960px;
@@ -1404,8 +1404,6 @@ body {
   font-size: 1rem;
   letter-spacing: 0.5pt;
   background-color: #fff;
-  padding-right: 5%;
-  padding-left: 5%;
   position: absolute;
   left: 50%;
   -webkit-transform: translateX(-50%);

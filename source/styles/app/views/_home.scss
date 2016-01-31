@@ -40,12 +40,12 @@ $easingtime:.7s;
 }
 
 .show-min {
-    transform: translateY(-50vh);
+    transform: translateY(-70vh);
     transition: all $easingtime $easing;
 }
 
 h1.title-show-in {
-    transform: translateX(-50%) translateY(-170%);
+    transform: translateX(-50%) translateY(-410px);
 }
 
 h1.title-show-out {

@@ -2922,7 +2922,8 @@ define('views/home',['views/grid3d', 'text!source/templates/home.html'], functio
             }
 
             //HIDE LOADER
-            this.$$('.loading-arrow').addClass('hidden');
+            this.$$('.loading-arrow').remove();
+            this.$el.removeClass('body-gradient');
         };
         this.execute = function() {
             if (Detector.webgl) {

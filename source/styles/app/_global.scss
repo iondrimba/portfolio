@@ -22,7 +22,7 @@ body {
 .content-wrapper {
     width: 100%;
     background-color: #fff;
-    min-height: 500px;
+    min-height: 680px;
 }
 
 .content {
@@ -31,8 +31,6 @@ body {
     font-size: 1rem;
     letter-spacing: 0.5pt;
     background-color: $base-color;
-    padding-right: 5%;
-    padding-left: 5%;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);

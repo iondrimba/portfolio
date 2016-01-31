@@ -25,7 +25,8 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
             }
 
             //HIDE LOADER
-            this.$$('.loading-arrow').addClass('hidden');
+            this.$$('.loading-arrow').remove();
+            this.$el.removeClass('body-gradient');
         };
         this.execute = function() {
             if (Detector.webgl) {
