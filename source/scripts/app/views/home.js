@@ -44,11 +44,14 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
         };
 
         this.show = function() {
-
-            this.$el.removeClass('show-min');
+            console.log('show');
+            this.$$('.content-wrapper').removeClass('show-min');
 
             //ANIMATE FULL VIEW
-            this.$el.addClass('show-full');
+            this.$$('.content-wrapper').addClass('show-full');
+
+            this.$el.find('h1').removeClass('title-show-int');
+            this.$el.find('h1').addClass('title-show-out');
 
             this.$$('.scroll-down-button').removeClass('hidden');
             this.$$('body').removeClass('show-scroll');
@@ -56,10 +59,14 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
 
         };
         this.hide = function() {
-            this.$el.removeClass('show-full');
+            console.log('hide');
+            this.$$('.content-wrapper').removeClass('show-full');
+
+            this.$el.find('h1').removeClass('title-show-out');
+            this.$el.find('h1').addClass('title-show-in');
 
             //ANIMATE MINIMIZED VIEW
-            this.$el.addClass('show-min');
+            this.$$('.content-wrapper').addClass('show-min');
 
             this.$$('.scroll-down-button').addClass('hidden');
             this.$$('body').addClass('show-scroll');

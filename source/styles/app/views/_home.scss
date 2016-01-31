@@ -1,4 +1,5 @@
 ﻿@import "../_variables.scss";
+$easingtime:.7s;
 .home {
     overflow: hidden;
     position: relative;
@@ -22,6 +23,7 @@
         line-height: 45pt;
         display: block;
         margin: 0;
+        transition: all $easingtime $easing;
         span {
             font-weight: 100;
             font-size: 31pt;
@@ -31,13 +33,21 @@
     }
 }
 
-$easingtime:.7s;
+
 .show-full {
-    height: 100vh;
-    transition: height $easingtime $easing;
+    transform: translateY(0);
+    transition: all $easingtime $easing;
 }
 
 .show-min {
-    height: 250px;
-    transition: height $easingtime $easing;
+    transform: translateY(-50vh);
+    transition: all $easingtime $easing;
+}
+
+h1.title-show-in {
+    transform: translateX(-50%) translateY(-170%);
+}
+
+h1.title-show-out {
+    transform: translateX(-50%) translateY(-50%);
 }

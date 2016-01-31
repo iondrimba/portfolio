@@ -849,7 +849,8 @@ nav {
     font-weight: 800;
     line-height: 45pt;
     display: block;
-    margin: 0; }
+    margin: 0;
+    transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
     .home h1 span {
       font-weight: 100;
       font-size: 31pt;
@@ -857,12 +858,22 @@ nav {
       display: block; }
 
 .show-full {
-  height: 100vh;
-  transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+  transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 .show-min {
-  height: 250px;
-  transition: height 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
+  -webkit-transform: translateY(-50vh);
+  transform: translateY(-50vh);
+  transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
+
+h1.title-show-in {
+  -webkit-transform: translateX(-50%) translateY(-170%);
+  transform: translateX(-50%) translateY(-170%); }
+
+h1.title-show-out {
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%); }
 
 html.notmobile .picture-mask:hover {
   -webkit-transform: translateY(-5%) rotate(45deg);
@@ -1382,15 +1393,23 @@ body {
   transform: translateX(-50%) translateY(-50%) rotate(45deg);
   position: absolute; }
 
+.content-wrapper {
+  width: 100%;
+  background-color: #fff;
+  min-height: 500px; }
+
 .content {
   max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   font-size: 1rem;
   letter-spacing: 0.5pt;
   background-color: #fff;
   padding-right: 5%;
-  padding-left: 5%; }
+  padding-left: 5%;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%); }
 
 a {
   color: #333;

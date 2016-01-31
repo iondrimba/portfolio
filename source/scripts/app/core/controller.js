@@ -40,7 +40,7 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
 
         this.onExit = function(ctx, next) {
             var livingView = ctx.path.replace(/\//, '');
-          
+            console.log(livingView);
             if (livingView !== 'work') {
                 this.current.hide();
             } else {

@@ -19,15 +19,23 @@ body {
     position: absolute;
 }
 
+.content-wrapper {
+    width: 100%;
+    background-color: #fff;
+    min-height: 500px;
+}
+
 .content {
     max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
     font-size: 1rem;
     letter-spacing: 0.5pt;
     background-color: $base-color;
     padding-right: 5%;
     padding-left: 5%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 a {
