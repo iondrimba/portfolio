@@ -297,7 +297,7 @@
             }
         } catch (err) {
             throw new Error('prev:: ' + err.message);
-        } 
+        }
         return this;
     };
     NoJQuery.prototype.next = function() {
@@ -321,26 +321,41 @@
             textNode;
 
         try {
-            total = this.previousElmt.length;
+            total = this.elmts.length;
             textNode = isString(el);
 
             if (textNode === false) {
                 node = el.elmts[0];
             }
 
+            if (total === 0) {
+                node = parseHTML(el);
+                this.elmts[0].appendChild(node);
+            }
+
             for (i; i < total; i++) {
                 if (textNode) {
-                    this.html(el);
-                } else {
-                    this.previousElmt[i].appendChild(node);
-                    node = el.elmts[0].cloneNode(true);
+                    node = parseHTML(el);
                 }
+
+                this.elmts[i].appendChild(node);
             }
         } catch (err) {
             throw new Error('append:: ' + err.message);
         }
         return this;
     };
+    NoJQuery.prototype.parent = function() {
+        var parent;
+
+        try {
+            parent = this.elmts[0].parentNode || this.elmts[0].parent;
+        } catch (err) {
+            throw new Error('parent:: ' + err.message);
+        }
+        return parent;
+    };
+
     NoJQuery.prototype.prepend = function(el) {
         var total = 0,
             i = 0,
@@ -407,6 +422,7 @@
     };
     return new NoJQuery();
 }));
+
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define('page',[],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.page=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (process){
   /* globals require, module */
@@ -1917,7 +1933,7 @@ define('views/menu',['text!source/templates/menu.html'], function(template) {
         this.$$ = app.$$;
          this.view = function() {
             var view = app.handlebars.compile(template),
-                html = view()
+                html = view();
 
             return html;
 
@@ -2026,7 +2042,7 @@ define('views/menu',['text!source/templates/menu.html'], function(template) {
 
 define('lib/NoJQuery',[], function () {
     'use strict';    
-    var NoJQuery = {
+    var NoJQueryYY = {
         ajax: {
             getJson: function ajaxGet(url, onSuccess, onError) {
                 var request = new XMLHttpRequest(),
@@ -2044,7 +2060,7 @@ define('lib/NoJQuery',[], function () {
                     options.dataSuccess = dataSuccess;
                     options.dataError = dataError;
 
-                    NoJQuery.ajax.jsonRequestOnLoad(options);
+                    NoJQueryY.ajax.jsonRequestOnLoad(options);
                 };
                 request.onerror = function onerror() {
                     onError();
@@ -2067,7 +2083,7 @@ define('lib/NoJQuery',[], function () {
                     options.dataSuccess = dataSuccess;
                     options.dataError = dataError;
 
-                    NoJQuery.ajax.jsonRequestOnLoad(options);
+                    NoJQueryY.ajax.jsonRequestOnLoad(options);
                 };
                 request.onerror = function onerror() {
                     onError();
@@ -2090,7 +2106,7 @@ define('lib/NoJQuery',[], function () {
                     options.dataSuccess = dataSuccess;
                     options.dataError = dataError;
 
-                    NoJQuery.ajax.requestOnLoad(options);
+                    NoJQueryY.ajax.requestOnLoad(options);
                 };
                 request.onerror = function onerror() {
                     onError();
@@ -2107,10 +2123,10 @@ define('lib/NoJQuery',[], function () {
                 }
             },
             jsonRequestOnLoad: function (options) {
-                NoJQuery.ajax.onLoad(options, JSON.parse(options.request.responseText));
+                NoJQueryY.ajax.onLoad(options, JSON.parse(options.request.responseText));
             },
             requestOnLoad: function (options) {
-                NoJQuery.ajax.onLoad(options, options.request.responseText);
+                NoJQueryY.ajax.onLoad(options, options.request.responseText);
             }
         },
         select: function (selector) {
@@ -2136,7 +2152,7 @@ define('lib/NoJQuery',[], function () {
             if (child.classList.contains(className)) {
                 return child;
             } else {
-                return NoJQuery.closestParent(child.parentNode, className);
+                return NoJQueryY.closestParent(child.parentNode, className);
             }
         },
         on: function (el, eventName, eventHandler) {
@@ -2200,7 +2216,7 @@ define('lib/NoJQuery',[], function () {
             elmt.setAttribute(attr, val);
         },
         remove: function (elmt) {
-            elmt.parentNode.removeChild(NoJQuery.elmt);
+            elmt.parentNode.removeChild(NoJQueryY.elmt);
         },
         prev: function (elmt) {
             var prevElmt = elmt.previousElementSibling;
@@ -2233,7 +2249,7 @@ define('lib/NoJQuery',[], function () {
         }
     };
 
-    return NoJQuery;
+    return NoJQueryYY;
 });
 /* global TweenLite */
 define('views/AnimateColors',['lib/NoJQuery'], function (NoJQuery) {
@@ -2956,7 +2972,49 @@ define('views/home',['views/grid3d', 'text!source/templates/home.html'], functio
 });
 
 
-define('text!source/templates/work.html',[],function () { return '<div class="project musicbattl clearfix" id="musicbattl">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/musicbattl/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>music battl</h2>\r\n        </a>\r\n        <p class="opacity">Personal project I developed for research. It uses SignalR for the realtime voting system, WebApi for the service layer and SoundCloud API. Future plans for this project is to develop the mobile version.</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/musicbattl/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/musicbattl/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="http://musicbattl.azurewebsites.net/" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="/images/gallery1.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="/images/gallery1.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="/images/gallery1.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="/images/gallery1.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="/images/gallery1.jpg" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/musicbattl/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>Javascript/jQuery</li>\r\n                    <li>Sass</li>\r\n                    <li>Handlebars</li>\r\n                    <li>Backbone</li>\r\n                    <li>Grunt</li>\r\n                    <li>SoundCloud API</li>\r\n                    <li>Design</li>\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>C#</li>\r\n                    <li>WEBAPI</li>\r\n                    <li>DI (Ninject)</li>\r\n                    <li>SQL Server</li>\r\n                    <li>SignalR</li>\r\n                    <li>Azure</li>\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/musicbattl/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                        <img src="/images/gallery1.jpg" />\r\n                        <img src="/images/musicbattl2.jpg" />\r\n                        <img src="/images/musicbattl3.jpg" />\r\n                        <img src="/images/musicbattl4.jpg" />\r\n                    </div>\r\n                    <div class="clearfix"></div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n<div class="project sbp clearfix" id="sbp">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/sbp/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>30° CONGRESSO BRASILEIRO DE PATOLOGIA</h2>\r\n        </a>\r\n        <p class="opacity">Responsible of all Javascript and Asp.Net MVC development of the website and voting/application submission system.</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/sbp/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/sbp/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="http://congressodepatologia.org.br/" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="/images/sbp.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="/images/sbp.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="/images/sbp.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="/images/sbp.jpg" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="/images/sbp.jpg" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/sbp/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>Javascript/jQuery</li>\r\n                    <li>Sass</li>\r\n                    <li>Backbone</li>\r\n                    <li>Grunt</li>\r\n                    <li>Foundation</li>\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>C#</li>\r\n                    <li>MVC (.NET)</li>\r\n                    <li>SQL Server</li>\r\n                    <li>Azure (hosting)</li>\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/sbp/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                        <img src="/images/sbp.jpg" />\r\n                        <img src="/images/congresso2.jpg" />\r\n                        <img src="/images/congresso3.jpg" />\r\n                        <img src="/images/congresso4.jpg" />\r\n                    </div>\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n<div class="project comunidade clearfix" id="comunidade">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/comunidade/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2 class="">Comunidade Mais Divertido</h2>\r\n        </a>\r\n        <p class="opacity">Isometric social game development (old flash days), unfortunately not online anymore. Developed while I worked at Tribo Interactive.</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/comunidade/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span class="">TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/comunidade/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span class="">IMAGES</span>\r\n                <i class="sprite  sprite-images"></i>\r\n            </a>\r\n            <a class="external">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span class="">LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one picture-one-animatein">\r\n                    <img src="/images/cidade_1.jpg">\r\n                </div>\r\n                <div class="picture-mask picture-two picture-two-animatein">\r\n                    <img src="/images/cidade_1.jpg">\r\n                </div>\r\n                <div class="picture-mask picture-tree picture-tree-animatein">\r\n                    <img src="/images/cidade_1.jpg">\r\n                </div>\r\n                <div class="picture-mask picture-four picture-four-animatein">\r\n                    <img src="/images/cidade_1.jpg">\r\n                </div>\r\n                <div class="picture-mask picture-five picture-five-animatein">\r\n                    <img src="/images/cidade_1.jpg">\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/comunidade/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>Actionscript 3</li>\r\n                    <li>Plain Isometric engine</li>\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>FluorineFx</li>\r\n                    <li>SQL Server</li>\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/comunidade/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                        <img src="/images/cidade_1.jpg">\r\n                        <img src="/images/cidade_3.jpg">\r\n                        <img src="/images/quintal_3.jpg">\r\n                        <img src="/images/quintal_5.jpg">\r\n                    </div>\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
+define('text!source/templates/work.html',[],function () { return '\r\n';});
+
+define('models/project',[], function() {
+    var ProjectModel = [{
+        id: "musicbattl",
+        name: "Music Battl",
+        description: "Personal project I developed for research. It uses SignalR for the realtime voting system, WebApi for the service layer and SoundCloud API. Future plans for this project is to develop the mobile version.",
+        url: "http://musicbattl.azurewebsites.net/",
+        tech: {
+            frontend: ["Javascript/jQuery", "Sass", "Handlebars", "Backbone", "Grunt", "SoundCloud API", "Design"],
+            backend: ["C#", "WEBAPI", "DI (Ninject)", "SQL Server", "SignalR", "Azure (hosting)"]
+        },
+        preview: "/images/gallery1.jpg",
+        gallery: ["/images/gallery1.jpg", "/images/musicbattl2.jpg", "/images/musicbattl3.jpg", "/images/musicbattl4.jpg"]
+    }, {
+        id:"sbp",
+        name: "30° CONGRESSO BRASILEIRO DE PATOLOGIA",
+        description: "Responsible of all Javascript and Asp.Net MVC development of the website and voting/application submission system.",
+        url: "http://congressodepatologia.org.br/",
+        tech: {
+            frontend: ["Javascript/jQuery", "Sass", "Backbone", "Grunt", "Foundation"],
+            backend: ["C#", "MVC (.NET)", "SQL Server", "Azure (hosting)"]
+        },
+        preview: "/images/sbp.jpg",
+        gallery: ["/images/sbp.jpg", "/images/congresso2.jpg", "/images/congresso3.jpg", "/images/congresso4.jpg"]
+    }, {
+        id: "comunidade",
+        name: "Comunidade Mais Divertido",
+        description: "Isometric social game development (old flash days), unfortunately not online anymore. Developed while I worked at Tribo Interactive.",
+        url: "",
+        tech: {
+            frontend: ["Actionscript 3", "Plain Isometric engine"],
+            backend: ["FluorineFx", "SQL Server"]
+        },
+        preview: "/images/cidade_1.jpg",
+        gallery: ["/images/cidade_1.jpg", "/images/cidade_3.jpg", "/images/quintal_3.jpg", "/images/quintal_5.jpg"]
+    }];
+
+    return ProjectModel;
+});
+
+
+define('text!source/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/{{id}}/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>Javascript/jQuery</li>\r\n                    <li>Sass</li>\r\n                    <li>Handlebars</li>\r\n                    <li>Backbone</li>\r\n                    <li>Grunt</li>\r\n                    <li>SoundCloud API</li>\r\n                    <li>Design</li>\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>C#</li>\r\n                    <li>WEBAPI</li>\r\n                    <li>DI (Ninject)</li>\r\n                    <li>SQL Server</li>\r\n                    <li>SignalR</li>\r\n                    <li>Azure</li>\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/{{id}}/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                        <img src="/images/gallery1.jpg" />\r\n                        <img src="/images/musicbattl2.jpg" />\r\n                        <img src="/images/musicbattl3.jpg" />\r\n                        <img src="/images/musicbattl4.jpg" />\r\n                    </div>\r\n                    <div class="clearfix"></div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
 
 define('views/gallery',['noJquery'], function(NoJQuery) {
     var Gallery = function(router, el) {
@@ -3213,14 +3271,31 @@ define('views/info',['noJquery'], function(NoJQuery) {
     return Info;
 });
 
-define('views/project',['views/gallery', 'views/tech', 'views/info'], function(Gallery, Tech, Info) {
-    var Project = function(app, el) {
-        this.el = '.project';
+define('views/project',['text!source/templates/project.html', 'views/gallery', 'views/tech', 'views/info'], function(template, Gallery, Tech, Info) {
+    var Project = function(app, model) {
+        this.el = '.project' + '.' + model.id;
         this.$$ = app.$$;
-        this.key = '';
+        this.model = model;
+        this.key = model.id;
         this.router = app.router;
         this.routerHandler = null;
 
+        this.view = function() {
+            var view = app.handlebars.compile(template),
+                html = view(this.model);
+            return html;
+
+        };
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            
+
+            this.titleLink = this.$$(this.el + ' .infos > .btn');
+            this.techLink = this.$$(this.el + ' .work-infos > .tech');
+            this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
+            this.launchLink = this.$$(this.el + ' .work-infos > .external');
+            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
+        };
         this.initialize = function() {
             this.setup();
             this.addAnimationListeners();
@@ -3230,7 +3305,6 @@ define('views/project',['views/gallery', 'views/tech', 'views/info'], function(G
                 el: this.el + '> .views > .info'
             });
             this.info.execute();
-
 
             //INIT TECH VIEW
             this.tech = new Tech({
@@ -3245,20 +3319,6 @@ define('views/project',['views/gallery', 'views/tech', 'views/info'], function(G
             this.show();
             this.animateIn();
         };
-
-
-        this.setup = function() {
-
-            this.el = el;
-            this.$el = this.$$(this.el);
-            this.key = this.$el.getAttr('id');
-            this.titleLink = this.$$(this.el + ' .infos > .btn');
-            this.techLink = this.$$(this.el + ' .work-infos > .tech');
-            this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
-            this.launchLink = this.$$(this.el + ' .work-infos > .external');
-            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
-        };
-
         this.addAnimationListeners = function() {
             var countatech = 0,
                 countgallery = 0,
@@ -3334,10 +3394,10 @@ define('views/project',['views/gallery', 'views/tech', 'views/info'], function(G
             }
 
             this.info.destroy();
-            this.info = undefined;
+            this.info = null;
 
             this.tech.destroy();
-            this.tech = undefined;
+            this.tech = null;
 
             this.techLink.removeClass('animate-in-link-tech');
             this.galleryLink.removeClass('animate-in-link-gallery');
@@ -3378,14 +3438,15 @@ define('views/project',['views/gallery', 'views/tech', 'views/info'], function(G
     return Project;
 });
 
-define('views/work',['text!source/templates/work.html', 'views/project'], function(template, Project) {
+define('views/work',['text!source/templates/work.html', 'models/project', 'views/project'], function(template, ProjectModel, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = app.$$;
         this.projects = [];
+        this.model = ProjectModel;
         this.view = function() {
             var view = app.handlebars.compile(template),
-                html = view()
+                html = view();
 
             return html;
 
@@ -3399,33 +3460,20 @@ define('views/work',['text!source/templates/work.html', 'views/project'], functi
         };
         this.execute = function() {
             this.$el.removeClass('hidden');
-            this.projetSelect();
-        };
-
-        this.projetSelect = function() {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
+            this.projectsRender();
 
         };
-        this.getProjects = function() {
-            var ar = [],
-                projectsElmt = [];
 
-            projectsElmt = this.$$('.project').elmts;
-            projectsElmt.map(function(elmt, index) {
-                var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
-                pro.initialize();
-                ar[index] = pro;
+        this.projectsRender = function() {
+            this.model.map(function(data, index) {
+                var project = new Project(app, data);
+                this.projects[index] = project;
+                this.$$(this.el).append(project.view());
+                project.initialize();
             }.bind(this));
-            projectsElmt = null;
-            return ar;
         };
 
         this.showSection = function(project, section) {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
 
             this.projects.map(function(elmt, index) {
                 if (elmt.key.toLowerCase() === project.toLowerCase()) {
@@ -3436,8 +3484,9 @@ define('views/work',['text!source/templates/work.html', 'views/project'], functi
 
         this.hide = function() {
             this.$el.addClass('hidden');
-            this.projects.map(function(elmt, index) {
-                elmt.destroy();
+            this.$el.empty();
+            this.projects.map(function(project, index) {
+                project.destroy();
             });
             this.projects = [];
         };
@@ -3553,7 +3602,6 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             this.about.init();
             this.masterPage();
 
-
             page('/', this.onHome.bind(this));
             page('/work', this.onPrerender.bind(this), this.onWork.bind(this));
             page('/about', this.onPrerender.bind(this), this.onAbout.bind(this));
@@ -3561,9 +3609,6 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             page('*', this.notFound.bind(this));
             page.exit('*', this.onExit.bind(this));
             page();
-
-
-
         };
         this.masterPage = function(ctx, next) {
 
@@ -3582,11 +3627,15 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             var livingView = ctx.path.replace(/\//, '');
             console.log('exit', livingView);
             //GOING BACK TO HOME
-            if (livingView.length === 0) {    
+            if (livingView.length === 0) {
                 this.menu.hide();
             }
 
-            this.current.hide();
+            if (livingView !== 'work') {
+                this.current.hide();
+            }else{
+                this.work.hide();
+            }
             next();
         };
         this.onPrerender = function(ctx, next) {
@@ -51520,11 +51569,12 @@ require([
                 element.addEventListener(pfx[p] + type, callback, false);
             }
         };
+
         this.handlebars = handlebars;
         this.$$ = NoJQuery;
         this.controller = new Controller(this);
         this.controller.start();
-    };
+    }
 
     window.app = new App();
 });

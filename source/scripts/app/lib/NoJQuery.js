@@ -1,6 +1,6 @@
 ﻿define([], function () {
     'use strict';    
-    var NoJQuery = {
+    var NoJQueryYY = {
         ajax: {
             getJson: function ajaxGet(url, onSuccess, onError) {
                 var request = new XMLHttpRequest(),
@@ -18,7 +18,7 @@
                     options.dataSuccess = dataSuccess;
                     options.dataError = dataError;
 
-                    NoJQuery.ajax.jsonRequestOnLoad(options);
+                    NoJQueryY.ajax.jsonRequestOnLoad(options);
                 };
                 request.onerror = function onerror() {
                     onError();
@@ -41,7 +41,7 @@
                     options.dataSuccess = dataSuccess;
                     options.dataError = dataError;
 
-                    NoJQuery.ajax.jsonRequestOnLoad(options);
+                    NoJQueryY.ajax.jsonRequestOnLoad(options);
                 };
                 request.onerror = function onerror() {
                     onError();
@@ -64,7 +64,7 @@
                     options.dataSuccess = dataSuccess;
                     options.dataError = dataError;
 
-                    NoJQuery.ajax.requestOnLoad(options);
+                    NoJQueryY.ajax.requestOnLoad(options);
                 };
                 request.onerror = function onerror() {
                     onError();
@@ -81,10 +81,10 @@
                 }
             },
             jsonRequestOnLoad: function (options) {
-                NoJQuery.ajax.onLoad(options, JSON.parse(options.request.responseText));
+                NoJQueryY.ajax.onLoad(options, JSON.parse(options.request.responseText));
             },
             requestOnLoad: function (options) {
-                NoJQuery.ajax.onLoad(options, options.request.responseText);
+                NoJQueryY.ajax.onLoad(options, options.request.responseText);
             }
         },
         select: function (selector) {
@@ -110,7 +110,7 @@
             if (child.classList.contains(className)) {
                 return child;
             } else {
-                return NoJQuery.closestParent(child.parentNode, className);
+                return NoJQueryY.closestParent(child.parentNode, className);
             }
         },
         on: function (el, eventName, eventHandler) {
@@ -174,7 +174,7 @@
             elmt.setAttribute(attr, val);
         },
         remove: function (elmt) {
-            elmt.parentNode.removeChild(NoJQuery.elmt);
+            elmt.parentNode.removeChild(NoJQueryY.elmt);
         },
         prev: function (elmt) {
             var prevElmt = elmt.previousElementSibling;
@@ -207,5 +207,5 @@
         }
     };
 
-    return NoJQuery;
+    return NoJQueryYY;
 });

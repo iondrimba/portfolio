@@ -18,7 +18,6 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             this.about.init();
             this.masterPage();
 
-
             page('/', this.onHome.bind(this));
             page('/work', this.onPrerender.bind(this), this.onWork.bind(this));
             page('/about', this.onPrerender.bind(this), this.onAbout.bind(this));
@@ -26,9 +25,6 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             page('*', this.notFound.bind(this));
             page.exit('*', this.onExit.bind(this));
             page();
-
-
-
         };
         this.masterPage = function(ctx, next) {
 
@@ -47,11 +43,15 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             var livingView = ctx.path.replace(/\//, '');
             console.log('exit', livingView);
             //GOING BACK TO HOME
-            if (livingView.length === 0) {    
+            if (livingView.length === 0) {
                 this.menu.hide();
             }
 
-            this.current.hide();
+            if (livingView !== 'work') {
+                this.current.hide();
+            }else{
+                this.work.hide();
+            }
             next();
         };
         this.onPrerender = function(ctx, next) {

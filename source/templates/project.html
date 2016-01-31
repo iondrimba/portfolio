@@ -1,28 +1,28 @@
-<div class="project {class} clearfix" id="{class}">
+<div class="project {{id}} clearfix" id="{{id}}">
     <div class="column infos">
-        <a class="btn" href="/work/{class}/info">
+        <a class="btn" href="/work/{{id}}/info">
             <div class="line-ph">
                 <i class=""></i>
             </div>
-            <h2>{name}</h2>
+            <h2>{{name}}</h2>
         </a>
-        <p class="opacity">{description}</p>
+        <p class="opacity">{{description}}</p>
         <div class="work-infos">
-            <a class="tech" href="/work/musicbattl/tech">
+            <a class="tech" href="/work/{{id}}/tech">
                 <div class="line-ph">
                     <i class=""></i>
                 </div>
                 <span>TECH</span>
                 <i class="sprite sprite-tech"></i>
             </a>
-            <a class="gallery" href="/work/musicbattl/gallery">
+            <a class="gallery" href="/work/{{id}}/gallery">
                 <div class="line-ph">
                     <i class=""></i>
                 </div>
                 <span>IMAGES</span>
                 <i class="sprite sprite-images"></i>
             </a>
-            <a class="external" href="http://musicbattl.azurewebsites.net/" target="_blank">
+            <a class="external" href="{{url}}" target="_blank">
                 <div class="line-ph">
                     <i class=""></i>
                 </div>
@@ -35,24 +35,24 @@
         <div class="info view hidden">
             <div class="preview">
                 <div class="picture-mask picture-one">
-                    <img src="/images/gallery1.jpg" />
+                    <img src="{{preview}}" />
                 </div>
                 <div class="picture-mask picture-two">
-                    <img src="/images/gallery1.jpg" />
+                    <img src="{{preview}}" />
                 </div>
                 <div class="picture-mask picture-tree">
-                    <img src="/images/gallery1.jpg" />
+                    <img src="{{preview}}" />
                 </div>
                 <div class="picture-mask picture-four">
-                    <img src="/images/gallery1.jpg" />
+                    <img src="{{preview}}" />
                 </div>
                 <div class="picture-mask picture-five">
-                    <img src="/images/gallery1.jpg" />
+                    <img src="{{preview}}" />
                 </div>
             </div>
         </div>
         <div class="tech view hidden">
-            <a class="close" href="/work/musicbattl/info">
+            <a class="close" href="/work/{{id}}/info">
                 <label>✕</label>
             </a>
             <fieldset class="front-end">
@@ -88,7 +88,7 @@
             </fieldset>
         </div>
         <div class="gallery view hidden">
-            <a class="close" href="/work/musicbattl/info">✕</a>
+            <a class="close" href="/work/{{id}}/info">✕</a>
             <div class="images-ph">
                 <a class="rounded-button prev">
                     <div class="svg-ph">

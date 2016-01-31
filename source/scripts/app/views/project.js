@@ -1,11 +1,28 @@
-﻿define(['views/gallery', 'views/tech', 'views/info'], function(Gallery, Tech, Info) {
-    var Project = function(app, el) {
-        this.el = '.project';
+﻿define(['text!source/templates/project.html', 'views/gallery', 'views/tech', 'views/info'], function(template, Gallery, Tech, Info) {
+    var Project = function(app, model) {
+        this.el = '.project' + '.' + model.id;
         this.$$ = app.$$;
-        this.key = '';
+        this.model = model;
+        this.key = model.id;
         this.router = app.router;
         this.routerHandler = null;
 
+        this.view = function() {
+            var view = app.handlebars.compile(template),
+                html = view(this.model);
+            return html;
+
+        };
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            
+
+            this.titleLink = this.$$(this.el + ' .infos > .btn');
+            this.techLink = this.$$(this.el + ' .work-infos > .tech');
+            this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
+            this.launchLink = this.$$(this.el + ' .work-infos > .external');
+            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
+        };
         this.initialize = function() {
             this.setup();
             this.addAnimationListeners();
@@ -15,7 +32,6 @@
                 el: this.el + '> .views > .info'
             });
             this.info.execute();
-
 
             //INIT TECH VIEW
             this.tech = new Tech({
@@ -30,20 +46,6 @@
             this.show();
             this.animateIn();
         };
-
-
-        this.setup = function() {
-
-            this.el = el;
-            this.$el = this.$$(this.el);
-            this.key = this.$el.getAttr('id');
-            this.titleLink = this.$$(this.el + ' .infos > .btn');
-            this.techLink = this.$$(this.el + ' .work-infos > .tech');
-            this.galleryLink = this.$$(this.el + ' .work-infos > .gallery');
-            this.launchLink = this.$$(this.el + ' .work-infos > .external');
-            this.$$(this.el + ' .infos > p').addClass('animate-text-opacity');
-        };
-
         this.addAnimationListeners = function() {
             var countatech = 0,
                 countgallery = 0,
@@ -119,10 +121,10 @@
             }
 
             this.info.destroy();
-            this.info = undefined;
+            this.info = null;
 
             this.tech.destroy();
-            this.tech = undefined;
+            this.tech = null;
 
             this.techLink.removeClass('animate-in-link-tech');
             this.galleryLink.removeClass('animate-in-link-gallery');

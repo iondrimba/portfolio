@@ -4,7 +4,7 @@
         this.$$ = app.$$;
          this.view = function() {
             var view = app.handlebars.compile(template),
-                html = view()
+                html = view();
 
             return html;
 

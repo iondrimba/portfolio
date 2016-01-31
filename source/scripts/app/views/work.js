@@ -1,11 +1,12 @@
-﻿define(['text!source/templates/work.html', 'views/project'], function(template, Project) {
+﻿define(['text!source/templates/work.html', 'models/project', 'views/project'], function(template, ProjectModel, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = app.$$;
         this.projects = [];
+        this.model = ProjectModel;
         this.view = function() {
             var view = app.handlebars.compile(template),
-                html = view()
+                html = view();
 
             return html;
 
@@ -19,33 +20,20 @@
         };
         this.execute = function() {
             this.$el.removeClass('hidden');
-            this.projetSelect();
-        };
-
-        this.projetSelect = function() {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
+            this.projectsRender();
 
         };
-        this.getProjects = function() {
-            var ar = [],
-                projectsElmt = [];
 
-            projectsElmt = this.$$('.project').elmts;
-            projectsElmt.map(function(elmt, index) {
-                var pro = new Project(app, '.' + elmt.attributes.class.value.replace(/\W/g, '.'));
-                pro.initialize();
-                ar[index] = pro;
+        this.projectsRender = function() {
+            this.model.map(function(data, index) {
+                var project = new Project(app, data);
+                this.projects[index] = project;
+                this.$$(this.el).append(project.view());
+                project.initialize();
             }.bind(this));
-            projectsElmt = null;
-            return ar;
         };
 
         this.showSection = function(project, section) {
-            if (this.projects.length === 0) {
-                this.projects = this.getProjects();
-            }
 
             this.projects.map(function(elmt, index) {
                 if (elmt.key.toLowerCase() === project.toLowerCase()) {
@@ -56,8 +44,9 @@
 
         this.hide = function() {
             this.$el.addClass('hidden');
-            this.projects.map(function(elmt, index) {
-                elmt.destroy();
+            this.$el.empty();
+            this.projects.map(function(project, index) {
+                project.destroy();
             });
             this.projects = [];
         };

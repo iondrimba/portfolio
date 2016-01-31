@@ -13,6 +13,7 @@ var autoprefixer = require('gulp-autoprefixer');
 
 var requirePaths = {
     lib: 'source/scripts/app/lib',
+    models: 'source/scripts/app/models',
     views: 'source/scripts/app/views',
     page: 'node_modules/page/page',
     vendors: 'source/scripts/vendors',
