@@ -1,7 +1,7 @@
 ﻿@import "../_variables.scss";
 html.notmobile {
     .picture-mask:hover {
-        transform: translateY(-5%) rotate(45deg);
+        transform: translateY(round(-5%)) rotate(45deg);
     }
 }
 
@@ -32,61 +32,61 @@ html.notmobile {
         margin-top: 60px;
         margin-left: 120px;
         img {
-            top: -100%;
-            left: -180%;
+            top: round(-100%);
+            left: round(-180%);
         }
     }
     .sbp .picture-one {
         img {
-            top: -210%;
+            top: round(-210%);
         }
     }
     .picture-two {
         margin-top: 272px;
         margin-left: 230px;
         img {
-            top: -91%;
-            left: -296%;
+            top: round(-91%);
+            left: round(-296%);
         }
     }
     .picture-tree {
         margin-top: 232px;
         margin-left: 290px;
         img {
-            top: -173%;
-            left: -117%;
+            top: round(-173%);
+            left: round(-117%);
         }
     }
     .sbp .picture-tree {
         img {
-            top: -383%;
-            left: -147%;
+            top: round(-383%);
+            left: round(-147%);
         }
     }
     .picture-four {
         margin-top: 132px;
         margin-left: 260px;
         img {
-            top: -173%;
-            left: -117%;
+            top: round(-173%);
+            left: round(-117%);
         }
     }
     .sbp .picture-four {
         img {
-            top: -245%;
+            top: round(-245%);
         }
     }
     .picture-five {
         margin-top: 285px;
         margin-left: 330px;
         img {
-            top: -89%;
-            left: -101%;
+            top: round(-89%);
+            left: round(-101%);
         }
     }
     .sbp .picture-five {
         img {
-            top: -300%;
+            top: round(-300%);
         }
     }
 }

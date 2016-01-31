@@ -14,7 +14,7 @@ html.notmobile {
         height: 100%;
         width: 100%;
         svg {
-            transform: rotate(180deg) translateX(79%) translateY(41%);
+            transform: rotate(180deg) translateX(round(79%)) translateY(round(41%));
         }
     }
     will-change: transform;
@@ -54,7 +54,7 @@ html.notmobile {
         height: 60px;
         border-color: $link-color;
         .arrow {
-            transform: translateX(-50%) translateY(-150%) rotate(-135deg);
+            transform: translateX(round(-50%)) translateY(round(-150%)) rotate(-135deg);
         }
     }
     .next {
@@ -65,7 +65,7 @@ html.notmobile {
         width: 60px;
         height: 60px;
         .arrow {
-            transform: translateX(-50%) translateY(-150%) rotate(45deg);
+            transform: translateX(round(-50%)) translateY(round(-150%)) rotate(45deg);
         }
     }
     .images-menu {

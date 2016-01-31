@@ -3,21 +3,21 @@ $easingtime:.7s;
 .home {
     overflow: hidden;
     position: relative;
-    height: 100vh;
+    height: round(100vh);
     h1 {
         position: absolute;
         z-index: 1;
         color: #FFF;
         font-size: 46pt;
-        top: 50%;
+        top: round(50%);
         font-family: 'Open Sans', sans-serif;
-        transform: translateX(-50%) translateY(-50%);
-        left: 50%;
+        transform: translateX(round(-50%)) translateY(round(-50%));
+        left: round(50%);
         width: 600px;
         height: auto;
         letter-spacing: 5pt;
         text-transform: uppercase;
-        padding: 2%;
+        //padding: round(2%);
         text-shadow: 1px 1px 0 #1d1c1c;
         font-weight: 800;
         line-height: 45pt;
@@ -39,20 +39,20 @@ $easingtime:.7s;
 }
 
 .show-min {
-    transform: translateY(-70vh);
+    transform: translateY(round(-70vh));
     transition: all $easingtime $easing;
 }
 
 h1.title-show-in {
     opacity: 0;
-    transform: translateX(-50%) translateY(-50%);
-    top: 15%;
+    transform: translateX(round(-50%)) translateY(round(-50%));
+    top: round(15%);
     animation: opacity .5s .5s  1 forwards;
 }
 
 h1.title-show-out {
-    transform: translateX(-50%) translateY(-50%);
-    top: 50%;
+    transform: translateX(round(-50%)) translateY(round(-50%));
+    top: round(50%);
 }
 
 @keyframes opacity { 

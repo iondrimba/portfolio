@@ -674,9 +674,7 @@ nav {
   color: #fff;
   width: 100%;
   background-color: #fff;
-  height: 90px;
   font-size: 1rem;
-  padding-bottom: 30px;
   position: relative; }
   nav .menu {
     position: absolute;
@@ -844,7 +842,6 @@ nav {
     height: auto;
     letter-spacing: 5pt;
     text-transform: uppercase;
-    padding: 2%;
     text-shadow: 1px 1px 0 #1d1c1c;
     font-weight: 800;
     line-height: 45pt;
@@ -1429,6 +1426,7 @@ body {
   max-width: 900px;
   width: 90%;
   margin: 0 auto;
+  top: 1px;
   font-size: 1rem;
   letter-spacing: 0.5pt;
   background-color: #fff;

@@ -1,16 +1,14 @@
 ﻿@import "../_variables.scss";
 nav {
     color: $base-color;
-    width: 100%;
+    width: round(100%);
     background-color: $base-color;
-    height: 90px;
     font-size: 1rem;
-    padding-bottom: 30px;
     position: relative;
     .menu {
         position: absolute;
         right: 0;
-        width: 100%;
+        width: round(100%);
         top: 20px;
         text-align: left;
         a {
@@ -47,7 +45,7 @@ nav {
     }
     .main-arrow {
         background-color: $base-color;
-        margin-left: 50%;
+        margin-left: round(50%);
         left: -25px;
         position: relative;
         top: -20px;
@@ -78,7 +76,7 @@ nav {
     }
     .arrow-full {
         position: absolute;
-        margin-left: 50%;
+        margin-left: round(50%);
     }
     .arrow-full.second {
         left: -140px;
@@ -135,7 +133,7 @@ nav {
 
 .animate-line-fixed {
     transform: scale(1, 1) !important;
-    top: 100% !important;
+    top: round(100%) !important;
     opacity: 0;
 }
 

@@ -17,7 +17,7 @@ body {
 .loading-arrow {
     left: 50%;
     top: 50%;
-    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    transform: translateX(round(-50%)) translateY(round(-50%)) rotate(45deg);
     position: absolute;
 }
 
@@ -29,14 +29,15 @@ body {
 
 .content {
     max-width: 900px;
-    width: 90%;
+    width: round(90%);
     margin: 0 auto;
+    top: 1px;
     font-size: 1rem;
     letter-spacing: 0.5pt;
     background-color: $base-color;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    left: round(50%);
+    transform: translateX(round(-50%));
 }
 
 a {
