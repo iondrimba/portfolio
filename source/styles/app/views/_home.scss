@@ -44,11 +44,24 @@ $easingtime:.7s;
 }
 
 h1.title-show-in {
+    opacity: 0;
     transform: translateX(-50%) translateY(-50%);
     top: 15%;
+    animation: opacity .5s .5s  1 forwards;
 }
 
 h1.title-show-out {
     transform: translateX(-50%) translateY(-50%);
     top: 50%;
+}
+
+@keyframes opacity { 
+    50%{
+        opacity:0;
+        transform: opacity;
+    }
+    100% { 
+        opacity:1;
+        transform: opacity;
+    } 
 }

@@ -868,14 +868,37 @@ nav {
   transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 h1.title-show-in {
+  opacity: 0;
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
-  top: 15%; }
+  top: 15%;
+  -webkit-animation: opacity .5s .5s  1 forwards;
+  animation: opacity .5s .5s  1 forwards; }
 
 h1.title-show-out {
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
   top: 50%; }
+
+@-webkit-keyframes opacity {
+  50% {
+    opacity: 0;
+    -webkit-transform: opacity;
+    transform: opacity; }
+  100% {
+    opacity: 1;
+    -webkit-transform: opacity;
+    transform: opacity; } }
+
+@keyframes opacity {
+  50% {
+    opacity: 0;
+    -webkit-transform: opacity;
+    transform: opacity; }
+  100% {
+    opacity: 1;
+    -webkit-transform: opacity;
+    transform: opacity; } }
 
 html.notmobile .picture-mask:hover {
   -webkit-transform: translateY(-5%) rotate(45deg);

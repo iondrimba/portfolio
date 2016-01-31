@@ -51,7 +51,7 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
             //ANIMATE FULL VIEW
             this.$$('.content-wrapper').addClass('show-full');
 
-            this.$el.find('h1').removeClass('title-show-int');
+            this.$el.find('h1').removeClass('title-show-in');
             this.$el.find('h1').addClass('title-show-out');
 
             this.$$('.scroll-down-button').removeClass('hidden');
