@@ -1285,8 +1285,8 @@ html.notmobile .infos a:hover {
   animation: fadeIn .2s 0s 1 forwards; }
 
 .animate-title-opacity {
-  -webkit-animation: fadeIn .2s 0s 1 forwards;
-  animation: fadeIn .2s 0s 1 forwards; }
+  -webkit-animation: fadeIn .2s .3s 1 forwards;
+  animation: fadeIn .2s .3s 1 forwards; }
 
 .animate-sprite {
   -webkit-animation: fadeIn .5s .2s 1 forwards;

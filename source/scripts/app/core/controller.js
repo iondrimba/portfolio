@@ -10,7 +10,6 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
         };
 
         this.start = function() {
-            console.log('controller start');
             this.setup();
             this.home.init();
             this.work.init();
@@ -41,15 +40,10 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
 
         this.onExit = function(ctx, next) {
             var livingView = ctx.path.replace(/\//, '');
-            console.log('exit', livingView);
-            //GOING BACK TO HOME
-            if (livingView.length === 0) {
-                this.menu.hide();
-            }
-
+          
             if (livingView !== 'work') {
                 this.current.hide();
-            }else{
+            } else {
                 this.work.hide();
             }
             next();
@@ -62,18 +56,21 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
                 this.menu.execute();
             }
 
+            if (this.home.loaded === false) {
+                this.home.execute();
+                this.current = this.home;
+                this.home.hide();
+                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+            }
+
             next();
         };
-        this.animateInComplete = function() {
-            console.log('controller in complete');
-        };
         this.onHome = function(ctx, next) {
-            console.log('home');
+            this.menu.hide();
             this.home.execute();
             this.current = this.home;
         };
         this.onWork = function(ctx, next) {
-            console.log('work');
             this.work.execute();
             this.current = this.work;
         };
@@ -81,7 +78,6 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
 
         };
         this.onAbout = function(ctx, next) {
-            console.log('about');
             this.about.execute();
             this.current = this.about;
         };

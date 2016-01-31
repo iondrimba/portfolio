@@ -1931,7 +1931,7 @@ define('views/menu',['text!source/templates/menu.html'], function(template) {
     var Menu = function(app) {
         this.el = '.menu';
         this.$$ = app.$$;
-         this.view = function() {
+        this.view = function() {
             var view = app.handlebars.compile(template),
                 html = view();
 
@@ -1959,10 +1959,7 @@ define('views/menu',['text!source/templates/menu.html'], function(template) {
 
         this.execute = function() {
             this.hide();
-            setTimeout(function() {
-                this.animate();
-                clearTimeout();
-            }.bind(this), 10);
+            this.animate();
         };
         this.animate = function() {
             this.$$('.btn-work > .text-ph').addClass('animate-span');
@@ -2001,6 +1998,7 @@ define('views/menu',['text!source/templates/menu.html'], function(template) {
         };
 
         this.hide = function() {
+            this.currentItem = 'work';
             this.countAbout = 0;
             this.countWork = 0;
             this.$$('.btn-work > .text-ph').removeClass('animate-span');
@@ -2014,12 +2012,10 @@ define('views/menu',['text!source/templates/menu.html'], function(template) {
             this.deactivateButton();
 
             this.animated = false;
-            console.log('menu hide');
         };
 
         this.activateMenu = function(view) {
             this.currentItem = view;
-            console.log('activateMenu', view, this);
             if (this.countAbout > 1 && this.countWork > 1) {
                 this.deactivateButton();
                 this.activateButton(view);
@@ -3594,7 +3590,6 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
         };
 
         this.start = function() {
-            console.log('controller start');
             this.setup();
             this.home.init();
             this.work.init();
@@ -3625,15 +3620,10 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
         this.onExit = function(ctx, next) {
             var livingView = ctx.path.replace(/\//, '');
-            console.log('exit', livingView);
-            //GOING BACK TO HOME
-            if (livingView.length === 0) {
-                this.menu.hide();
-            }
-
+          
             if (livingView !== 'work') {
                 this.current.hide();
-            }else{
+            } else {
                 this.work.hide();
             }
             next();
@@ -3646,18 +3636,21 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
                 this.menu.execute();
             }
 
+            if (this.home.loaded === false) {
+                this.home.execute();
+                this.current = this.home;
+                this.home.hide();
+                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+            }
+
             next();
         };
-        this.animateInComplete = function() {
-            console.log('controller in complete');
-        };
         this.onHome = function(ctx, next) {
-            console.log('home');
+            this.menu.hide();
             this.home.execute();
             this.current = this.home;
         };
         this.onWork = function(ctx, next) {
-            console.log('work');
             this.work.execute();
             this.current = this.work;
         };
@@ -3665,7 +3658,6 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
         };
         this.onAbout = function(ctx, next) {
-            console.log('about');
             this.about.execute();
             this.current = this.about;
         };

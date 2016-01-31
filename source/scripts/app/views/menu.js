@@ -2,7 +2,7 @@
     var Menu = function(app) {
         this.el = '.menu';
         this.$$ = app.$$;
-         this.view = function() {
+        this.view = function() {
             var view = app.handlebars.compile(template),
                 html = view();
 
@@ -30,10 +30,7 @@
 
         this.execute = function() {
             this.hide();
-            setTimeout(function() {
-                this.animate();
-                clearTimeout();
-            }.bind(this), 10);
+            this.animate();
         };
         this.animate = function() {
             this.$$('.btn-work > .text-ph').addClass('animate-span');
@@ -72,6 +69,7 @@
         };
 
         this.hide = function() {
+            this.currentItem = 'work';
             this.countAbout = 0;
             this.countWork = 0;
             this.$$('.btn-work > .text-ph').removeClass('animate-span');
@@ -85,12 +83,10 @@
             this.deactivateButton();
 
             this.animated = false;
-            console.log('menu hide');
         };
 
         this.activateMenu = function(view) {
             this.currentItem = view;
-            console.log('activateMenu', view, this);
             if (this.countAbout > 1 && this.countWork > 1) {
                 this.deactivateButton();
                 this.activateButton(view);
