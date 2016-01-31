@@ -2,6 +2,8 @@
 body {
     font-family: $font-family;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .grid3d {
@@ -26,7 +28,8 @@ body {
 }
 
 .content {
-    max-width: 960px;
+    max-width: 900px;
+    width: 90%;
     margin: 0 auto;
     font-size: 1rem;
     letter-spacing: 0.5pt;

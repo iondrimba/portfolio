@@ -868,12 +868,14 @@ nav {
   transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
 
 h1.title-show-in {
-  -webkit-transform: translateX(-50%) translateY(-410px);
-  transform: translateX(-50%) translateY(-410px); }
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  top: 15%; }
 
 h1.title-show-out {
   -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%); }
+  transform: translateX(-50%) translateY(-50%);
+  top: 50%; }
 
 html.notmobile .picture-mask:hover {
   -webkit-transform: translateY(-5%) rotate(45deg);
@@ -1376,7 +1378,9 @@ footer {
 
 body {
   font-family: "Trebuchet MS";
-  overflow: hidden; }
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: subpixel-antialiased; }
 
 .grid3d {
   overflow-y: hidden;
@@ -1399,7 +1403,8 @@ body {
   min-height: 680px; }
 
 .content {
-  max-width: 960px;
+  max-width: 900px;
+  width: 90%;
   margin: 0 auto;
   font-size: 1rem;
   letter-spacing: 0.5pt;

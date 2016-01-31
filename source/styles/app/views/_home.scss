@@ -33,7 +33,6 @@ $easingtime:.7s;
     }
 }
 
-
 .show-full {
     transform: translateY(0);
     transition: all $easingtime $easing;
@@ -45,9 +44,11 @@ $easingtime:.7s;
 }
 
 h1.title-show-in {
-    transform: translateX(-50%) translateY(-410px);
+    transform: translateX(-50%) translateY(-50%);
+    top: 15%;
 }
 
 h1.title-show-out {
     transform: translateX(-50%) translateY(-50%);
+    top: 50%;
 }
