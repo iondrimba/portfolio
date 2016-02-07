@@ -6,6 +6,7 @@
         this.key = model.id;
         this.router = app.router;
         this.routerHandler = null;
+        console.log('project', model);
 
         this.view = function() {
             var view = app.handlebars.compile(template),
@@ -40,11 +41,10 @@
             });
 
             //INIT GALLERY VIEW
-            // this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
-            // this.gallery.initialize();
+             this.gallery = new Gallery(this.router, this.el + ' > .views >.gallery');
+             this.gallery.initialize();
 
             this.show();
-            this.animateIn();
         };
         this.addAnimationListeners = function() {
             var countatech = 0,
@@ -101,6 +101,8 @@
 
         this.show = function() {
             this.$el.removeClass('hidden');
+
+            this.animateIn();
         };
 
         this.hide = function() {
@@ -117,6 +119,9 @@
 
 
         this.reset = function() {
+            if (this.gallery) {
+                this.gallery.destroy();
+            }
             this.tech.hide();
             this.info.show();
         };

@@ -103,10 +103,9 @@
                         <i class=""></i>
                     </div>
                     <div class="ph">
-                        <img src="/images/gallery1.jpg" />
-                        <img src="/images/musicbattl2.jpg" />
-                        <img src="/images/musicbattl3.jpg" />
-                        <img src="/images/musicbattl4.jpg" />
+                       {{#each gallery}}
+                        <img src="{{this}}" />
+                       {{/each}}
                     </div>
                     <div class="clearfix"></div>
                 </div>

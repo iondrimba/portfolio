@@ -3018,7 +3018,7 @@ define('models/project',[], function() {
 });
 
 
-define('text!source/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/{{id}}/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>Javascript/jQuery</li>\r\n                    <li>Sass</li>\r\n                    <li>Handlebars</li>\r\n                    <li>Backbone</li>\r\n                    <li>Grunt</li>\r\n                    <li>SoundCloud API</li>\r\n                    <li>Design</li>\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>C#</li>\r\n                    <li>WEBAPI</li>\r\n                    <li>DI (Ninject)</li>\r\n                    <li>SQL Server</li>\r\n                    <li>SignalR</li>\r\n                    <li>Azure</li>\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/{{id}}/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                        <img src="/images/gallery1.jpg" />\r\n                        <img src="/images/musicbattl2.jpg" />\r\n                        <img src="/images/musicbattl3.jpg" />\r\n                        <img src="/images/musicbattl4.jpg" />\r\n                    </div>\r\n                    <div class="clearfix"></div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
+define('text!source/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/{{id}}/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>Javascript/jQuery</li>\r\n                    <li>Sass</li>\r\n                    <li>Handlebars</li>\r\n                    <li>Backbone</li>\r\n                    <li>Grunt</li>\r\n                    <li>SoundCloud API</li>\r\n                    <li>Design</li>\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>C#</li>\r\n                    <li>WEBAPI</li>\r\n                    <li>DI (Ninject)</li>\r\n                    <li>SQL Server</li>\r\n                    <li>SignalR</li>\r\n                    <li>Azure</li>\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/{{id}}/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                       {{#each gallery}}\r\n                        <img src="{{this}}" />\r\n                       {{/each}}\r\n                    </div>\r\n                    <div class="clearfix"></div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
 
 define('views/gallery',['noJquery'], function(NoJQuery) {
     var Gallery = function(router, el) {
@@ -3034,6 +3034,8 @@ define('views/gallery',['noJquery'], function(NoJQuery) {
             this.view = this.$$(this.el);
             this.btnNext = this.$$(this.el + ' .next');
             this.btnPrev = this.$$(this.el + ' .prev');
+
+            console.log('gallery init', this.el);
         };
         this.addListeners = function() {
             var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
@@ -3050,7 +3052,16 @@ define('views/gallery',['noJquery'], function(NoJQuery) {
 
         };
         this.show = function() {
+            
+            console.log('gallery show', this.el);
+
             this.view.removeClass('hidden');
+
+            this.drawSVGButtons();
+
+            this.showImage(this.current);
+
+            this.animateLine();
         };
 
         this.drawSVGButtons = function() {
@@ -3069,11 +3080,6 @@ define('views/gallery',['noJquery'], function(NoJQuery) {
 
             this.show();
 
-            this.drawSVGButtons();
-
-            this.showImage(this.current);
-
-            this.animateLine();
         };
 
         this.hide = function() {
@@ -3283,6 +3289,7 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
         this.key = model.id;
         this.router = app.router;
         this.routerHandler = null;
+        console.log('project', model);
 
         this.view = function() {
             var view = app.handlebars.compile(template),
@@ -3317,11 +3324,10 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
             });
 
             //INIT GALLERY VIEW
-            // this.gallery = new Gallery(this.router, this.el + '> .views >.gallery');
-            // this.gallery.initialize();
+             this.gallery = new Gallery(this.router, this.el + ' > .views >.gallery');
+             this.gallery.initialize();
 
             this.show();
-            this.animateIn();
         };
         this.addAnimationListeners = function() {
             var countatech = 0,
@@ -3378,6 +3384,8 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
 
         this.show = function() {
             this.$el.removeClass('hidden');
+
+            this.animateIn();
         };
 
         this.hide = function() {
@@ -3394,6 +3402,9 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
 
 
         this.reset = function() {
+            if (this.gallery) {
+                this.gallery.destroy();
+            }
             this.tech.hide();
             this.info.show();
         };
