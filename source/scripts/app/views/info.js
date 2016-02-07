@@ -9,7 +9,6 @@
         this.execute = function() {
             this.setup();
             this.show();
-            this.animateIn();
         };
 
         this.setup = function() {
@@ -18,6 +17,7 @@
 
         this.show = function() {
             this.$el.removeClass('hidden');
+            this.animateIn();
         };
 
         this.hide = function() {

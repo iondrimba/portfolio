@@ -3155,7 +3155,6 @@ define('views/tech',['noJquery'], function(NoJQuery) {
             this.setup();
             this.addAnimationsListeners();
             this.show()
-            this.animateIn();
         };
 
         this.addAnimationsListeners = function() {
@@ -3194,10 +3193,12 @@ define('views/tech',['noJquery'], function(NoJQuery) {
 
         this.show = function() {
             this.$el.removeClass('hidden');
+            this.animateIn();
         };
 
         this.hide = function() {
             this.$el.addClass('hidden');
+            this.removeAnimation();
         };
 
 
@@ -3209,12 +3210,11 @@ define('views/tech',['noJquery'], function(NoJQuery) {
         this.removeAnimation = function() {
             this.frontendLine.removeClass('animate-in-legend-left');
             this.backendLine.removeClass('animate-in-legend-right');
-            this.$$(this.el + 'ul').removeClass('animate-text');
+            this.$$('.animate-text').removeClass('animate-text');
         };
 
         this.destroy = function() {
             this.hide();
-            this.removeAnimation();
         };
 
         this.initialize();
@@ -3233,7 +3233,6 @@ define('views/info',['noJquery'], function(NoJQuery) {
         this.execute = function() {
             this.setup();
             this.show();
-            this.animateIn();
         };
 
         this.setup = function() {
@@ -3242,6 +3241,7 @@ define('views/info',['noJquery'], function(NoJQuery) {
 
         this.show = function() {
             this.$el.removeClass('hidden');
+            this.animateIn();
         };
 
         this.hide = function() {
@@ -3292,7 +3292,7 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
-            
+
 
             this.titleLink = this.$$(this.el + ' .infos > .btn');
             this.techLink = this.$$(this.el + ' .work-infos > .tech');
@@ -3392,6 +3392,12 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
             this.galleryLink.addClass('animate-in-link-gallery');
         };
 
+
+        this.reset = function() {
+            this.tech.hide();
+            this.info.show();
+        };
+
         this.destroy = function() {
             if (this.gallery) {
                 this.gallery.destroy();
@@ -3478,10 +3484,12 @@ define('views/work',['text!source/templates/work.html', 'models/project', 'views
         };
 
         this.showSection = function(project, section) {
-
-            this.projects.map(function(elmt, index) {
-                if (elmt.key.toLowerCase() === project.toLowerCase()) {
-                    elmt.callbackPageProject(section);
+            console.log('showSection', project, section);
+            this.projects.map(function(item, index) {
+                if (item.key.toLowerCase() === project.toLowerCase()) {
+                    item.callbackPageProject(section);
+                } else {
+                    item.reset();
                 }
             });
         };
@@ -3608,9 +3616,12 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             page('/', this.onHome.bind(this));
             page('/work', this.onPrerender.bind(this), this.onWork.bind(this));
             page('/about', this.onPrerender.bind(this), this.onAbout.bind(this));
-            page('/work/:project/:section', this.onPrerender.bind(this), this.onProject.bind(this));
+            page('/work/:project/:section', this.onPrerenderProject.bind(this), this.onProject.bind(this));            
+            page.exit('/', this.onExit.bind(this));
+            page.exit('/about', this.onExit.bind(this));
+
             page('*', this.notFound.bind(this));
-            page.exit('*', this.onExit.bind(this));
+
             page();
         };
         this.masterPage = function(ctx, next) {
@@ -3627,13 +3638,8 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
 
         this.onExit = function(ctx, next) {
-            var livingView = ctx.path.replace(/\//, '');
-            console.log(livingView);
-            if (livingView !== 'work') {
-                this.current.hide();
-            } else {
-                this.work.hide();
-            }
+            console.log('exit', ctx.path, this.current);
+            this.current.hide();
             next();
         };
         this.onPrerender = function(ctx, next) {
@@ -3653,6 +3659,12 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
             next();
         };
+        this.onPrerenderProject = function(ctx, next) {
+           // this.onHome();
+            //this.work.execute();
+            //this.current = this.work;
+            next();
+        };
         this.onHome = function(ctx, next) {
             this.menu.hide();
             this.home.execute();
@@ -3663,7 +3675,10 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             this.current = this.work;
         };
         this.onProject = function(ctx, next) {
-
+             console.log('onProject', ctx.path);
+             var project = ctx.path.split('/')[2];
+             var section = ctx.path.split('/')[3];
+             this.work.showSection(project, section);
         };
         this.onAbout = function(ctx, next) {
             this.about.execute();

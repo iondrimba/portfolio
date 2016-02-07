@@ -15,7 +15,7 @@
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
-            
+
 
             this.titleLink = this.$$(this.el + ' .infos > .btn');
             this.techLink = this.$$(this.el + ' .work-infos > .tech');
@@ -113,6 +113,12 @@
             this.techLink.addClass('animate-in-link-tech');
             this.launchLink.addClass('animate-in-link-external');
             this.galleryLink.addClass('animate-in-link-gallery');
+        };
+
+
+        this.reset = function() {
+            this.tech.hide();
+            this.info.show();
         };
 
         this.destroy = function() {

@@ -11,7 +11,6 @@
             this.setup();
             this.addAnimationsListeners();
             this.show()
-            this.animateIn();
         };
 
         this.addAnimationsListeners = function() {
@@ -50,10 +49,12 @@
 
         this.show = function() {
             this.$el.removeClass('hidden');
+            this.animateIn();
         };
 
         this.hide = function() {
             this.$el.addClass('hidden');
+            this.removeAnimation();
         };
 
 
@@ -65,12 +66,11 @@
         this.removeAnimation = function() {
             this.frontendLine.removeClass('animate-in-legend-left');
             this.backendLine.removeClass('animate-in-legend-right');
-            this.$$(this.el + 'ul').removeClass('animate-text');
+            this.$$('.animate-text').removeClass('animate-text');
         };
 
         this.destroy = function() {
             this.hide();
-            this.removeAnimation();
         };
 
         this.initialize();

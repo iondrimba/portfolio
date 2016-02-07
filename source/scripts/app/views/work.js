@@ -34,10 +34,12 @@
         };
 
         this.showSection = function(project, section) {
-
-            this.projects.map(function(elmt, index) {
-                if (elmt.key.toLowerCase() === project.toLowerCase()) {
-                    elmt.callbackPageProject(section);
+            console.log('showSection', project, section);
+            this.projects.map(function(item, index) {
+                if (item.key.toLowerCase() === project.toLowerCase()) {
+                    item.callbackPageProject(section);
+                } else {
+                    item.reset();
                 }
             });
         };
