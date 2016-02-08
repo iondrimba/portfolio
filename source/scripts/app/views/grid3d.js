@@ -1,9 +1,9 @@
 ﻿/* global THREE */
 /* global Detector */
-define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColors) {
-    var Grid3D = function () {
+define(['views/AnimateColors'], function (AnimateColors) {
+    var Grid3D = function (app) {
         this.el = 'grid3d';
-        this.njq = NoJQuery;
+        this.$$ = app.$$;
         this.completed = false;
 
         this.initialize = function () {            
@@ -460,7 +460,7 @@ define(['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColor
 
             this.gridGroup.rotateZ(-0.4);
             
-            this.njq.removeClass(this.njq.select('.grid3d'), 'visible-false');
+            this.$$('.grid3d').removeClass('visible-false');
         };
 
         this.addAuxiliaryFaces = function (pai) {

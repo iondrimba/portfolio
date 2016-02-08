@@ -19,6 +19,7 @@
 
             this.$el = this.$$(this.el);
 
+
             //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
             options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
                 countleft++;
@@ -55,6 +56,10 @@
         this.hide = function() {
             this.$el.addClass('hidden');
             this.removeAnimation();
+
+            options.app.removePrefixedEventListener(this.frontendLine.elmts[0]);
+            options.app.removePrefixedEventListener(this.backendLine.elmts[0]);
+
         };
 
 

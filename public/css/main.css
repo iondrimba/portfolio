@@ -897,7 +897,7 @@ h1.title-show-out {
     -webkit-transform: opacity;
     transform: opacity; } }
 
-html.notmobile .picture-mask:hover {
+.work .picture-mask:hover {
   -webkit-transform: translateY(-5%) rotate(45deg);
   transform: translateY(-5%) rotate(45deg); }
 
@@ -917,6 +917,7 @@ html.notmobile .picture-mask:hover {
   height: 190px;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   will-change: transform; }
 
 .work .picture-mask img {
@@ -1210,7 +1211,7 @@ html.notmobile .tech.view .close:hover label {
     -webkit-animation: fadeIn .2s 0s 1 forwards;
     animation: fadeIn .2s 0s 1 forwards; }
 
-html.notmobile .infos a:hover {
+.infos a:hover {
   -webkit-transform: translateY(-5%);
   transform: translateY(-5%);
   transition: all .2s; }
@@ -1420,7 +1421,8 @@ body {
 .content-wrapper {
   width: 100%;
   background-color: #fff;
-  min-height: 680px; }
+  min-height: 680px;
+  position: absolute; }
 
 .content {
   max-width: 900px;

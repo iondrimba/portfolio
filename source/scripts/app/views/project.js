@@ -40,7 +40,7 @@
             });
 
             //INIT GALLERY VIEW
-             this.gallery = new Gallery(this.router, this.el + ' > .views >.gallery');
+             this.gallery = new Gallery(this, this.el + ' > .views > .gallery');
              this.gallery.initialize();
 
             this.show();
@@ -54,6 +54,7 @@
                 externalLine = this.$$(this.el + ' .work-infos > .external'),
                 galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
                 infoBtn = this.$$(this.el).find('.info').find('.btn');
+
 
             app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
                 countatech++;

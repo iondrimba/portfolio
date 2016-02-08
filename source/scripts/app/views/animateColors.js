@@ -1,8 +1,8 @@
 ﻿/* global TweenLite */
-define(['lib/NoJQuery'], function (NoJQuery) {
+define([], function () {
     var AnimateColors = function (Grid3D) {
         this.el = 'grid3d';
-        this.njq = NoJQuery;
+        this.njq = Grid3D.$$;
         this.grid = Grid3D;
         this.totalColors = this.grid.colors.length;
         this.duration = 2;

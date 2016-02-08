@@ -21,7 +21,7 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
 
             //INIT WEBGL GRID ONLY IDF SUPPORTED
             if (Detector.webgl) {
-                this.grid3D = new Grid3D();
+                this.grid3D = new Grid3D(app);
             }
 
             //HIDE LOADER
@@ -45,7 +45,6 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
         };
 
         this.show = function() {
-            console.log('show');
             this.$$('.content-wrapper').removeClass('show-min');
 
             //ANIMATE FULL VIEW

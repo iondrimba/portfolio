@@ -1,14 +1,11 @@
 ﻿@import "../_variables.scss";
-html.notmobile {
-    .infos {
-        a:hover {
-            transform: translateY(-5%);
-            transition: all .2s;
-        }
-    }
-}
 
-.infos {    
+
+.infos {
+    a:hover {
+        transform: translateY(-5%);
+        transition: all .2s;
+    }
     p {
         width: 90%;
         padding-bottom: 5%;

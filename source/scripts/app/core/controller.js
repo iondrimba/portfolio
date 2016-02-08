@@ -2,13 +2,11 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
 
     var Controller = function Controller(app) {
         this.setup = function() {
-            console.log('Controller setup', app);
             this.menu = new Menu(app);
             this.home = new Home(app);
             this.work = new Work(app);
             this.about = new About(app);
             this.previous;
-            this.current;
         };
 
         this.start = function() {
@@ -19,7 +17,6 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             this.about.init();
             this.masterPage();
 
-            this.current = this.home;
 
             page('/', this.onHome.bind(this));
             page('/work', this.onPrerenderWork.bind(this), this.onWork.bind(this));
@@ -39,7 +36,7 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
 
             //LET ELEMENTS VISIBLE
             app.$$('main').removeClass('hidden');
-            app.$$('.footer').removeClass('hidden');
+            app.$$('footer').removeClass('hidden');
             app.$$('.content').removeClass('hidden');
 
         };
@@ -55,7 +52,6 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             next();
         };
         this.onExitWork = function(ctx, next) {
-            this.previous = this.work;
             next();
         };
         this.onExitAbout = function(ctx, next) {
@@ -68,12 +64,25 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
         };
 
         this.onPrerender = function(view) {
+            if (this.home.loaded === false) {
+                this.home.execute();
+                this.home.hide();
+            }
+            if (this.previous) {
+                this.previous.hide();
+            }
+
             if (this.menu.animated) {
                 this.menu.activateMenu(view);
             } else {
-
                 this.menu.execute();
+                var s = setTimeout(function() {
+                    this.menu.activateMenu(view);
+
+                    clearTimeout(s);
+                }.bind(this), 1500);
             }
+
         };
 
         this.onPrerenderWork = function(ctx, next) {
@@ -82,7 +91,7 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
         };
         this.onPrerenderAbout = function(ctx, next) {
             this.onPrerender('about');
-            this.previous.hide();
+            this.work.hide();
             next();
         };
 
@@ -96,7 +105,7 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
                     clearTimeout(s);
 
                 }.bind(this), 1000);
-            }else{
+            } else {
                 next();
             }
 

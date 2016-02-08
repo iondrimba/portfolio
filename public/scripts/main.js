@@ -2036,222 +2036,11 @@ define('views/menu',['text!source/templates/menu.html'], function(template) {
     return Menu;
 });
 
-define('lib/NoJQuery',[], function () {
-    'use strict';    
-    var NoJQueryYY = {
-        ajax: {
-            getJson: function ajaxGet(url, onSuccess, onError) {
-                var request = new XMLHttpRequest(),
-                    dataSuccess,
-                    dataError;
-
-                request.open('GET', url, true);
-
-                request.onload = function onload(evt) {
-                    var options = {};
-                    options.evt = evt;
-                    options.request = request;
-                    options.onSuccess = onSuccess;
-                    options.onError = onError;
-                    options.dataSuccess = dataSuccess;
-                    options.dataError = dataError;
-
-                    NoJQueryY.ajax.jsonRequestOnLoad(options);
-                };
-                request.onerror = function onerror() {
-                    onError();
-                };
-                request.send();
-            },
-            postJson: function ajaxPost(url, data, onSuccess, onError) {
-                var request = new XMLHttpRequest(),
-                    dataSuccess,
-                    dataError;
-
-                request.open('POST', url, true);
-                request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-                request.onload = function onload(evt) {
-                    var options = {};
-                    options.evt = evt;
-                    options.request = request;
-                    options.onSuccess = onSuccess;
-                    options.onError = onError;
-                    options.dataSuccess = dataSuccess;
-                    options.dataError = dataError;
-
-                    NoJQueryY.ajax.jsonRequestOnLoad(options);
-                };
-                request.onerror = function onerror() {
-                    onError();
-                };
-                request.send(data);
-            },
-            get: function ajaxGet(url, onSuccess, onError) {
-                var request = new XMLHttpRequest(),
-                    dataSuccess,
-                    dataError;
-
-                request.open('GET', url, true);
-
-                request.onload = function onload(evt) {
-                    var options = {};
-                    options.evt = evt;
-                    options.request = request;
-                    options.onSuccess = onSuccess;
-                    options.onError = onError;
-                    options.dataSuccess = dataSuccess;
-                    options.dataError = dataError;
-
-                    NoJQueryY.ajax.requestOnLoad(options);
-                };
-                request.onerror = function onerror() {
-                    onError();
-                };
-                request.send();
-            },
-            onLoad: function (options, returnData) {
-                if (options.request.status >= 200 && options.request.status < 400) {
-                    options.dataSuccess = returnData;
-                    options.onSuccess(options.dataSuccess);
-                } else {
-                    options.dataError = { message: options.evt.currentTarget.responseURL + ' - ' + options.evt.currentTarget.statusText, statusText: options.evt.currentTarget.statusText, responseURL: options.evt.currentTarget.responseURL, status: options.evt.currentTarget.status };
-                    options.onError();
-                }
-            },
-            jsonRequestOnLoad: function (options) {
-                NoJQueryY.ajax.onLoad(options, JSON.parse(options.request.responseText));
-            },
-            requestOnLoad: function (options) {
-                NoJQueryY.ajax.onLoad(options, options.request.responseText);
-            }
-        },
-        select: function (selector) {
-            var elmts = document.querySelectorAll(selector);
-
-            if (elmts.length === 0) {
-                throw "No element(s) found for '" + selector + "'";
-            }
-            return elmts;
-        },
-        find: function (selector) {
-            var elmts = document.querySelectorAll(selector),
-                count = 0;
-
-            count = elmts.length;
-
-            return count;
-        },
-        closestParent: function (child, className) {
-            if (!child || child === document) {
-                return null;
-            }
-            if (child.classList.contains(className)) {
-                return child;
-            } else {
-                return NoJQueryY.closestParent(child.parentNode, className);
-            }
-        },
-        on: function (el, eventName, eventHandler) {
-            el.addEventListener(eventName, eventHandler);
-        },
-        off: function (el, eventName, eventHandler) {
-            el.removeEventListener(eventName, eventHandler);
-        },
-        addClass: function (elmts, className, dontRedraw) {
-            for (var i = 0; i < elmts.length; i++) {
-                if (!dontRedraw) {
-                    this.redraw(elmts[i]);
-                }                
-                if (elmts[i].classList) {
-                    elmts[i].classList.add(className);                    
-                } else {
-                    elmts[i].className += ' ' + className;
-                }
-            }
-        },
-        hasClass: function (elmt, className) {
-            var result = false;
-            if (elmt.classList) {
-                result = elmt.classList.contains(className);
-            } else {
-                result = new RegExp('(^| )' + className + '( |$)', 'gi').test(elmt.className);
-            }
-
-            return result;
-        },
-        removeClass: function (elmts, className) {
-            for (var i = 0; i < elmts.length; i++) {
-                if (elmts[i].classList) {
-                    elmts[i].classList.remove(className);
-                } else {
-                    elmts[i].className = elmts[i].className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-                }
-            }
-        },
-        redraw: function(elmt) {
-            elmt.offsetHeight;
-        },
-        containsSelector: function (elmt, selector) {
-            var result = elmt.querySelector(selector) !== null;
-            return result;
-        },
-        each: function (selector, eachFunc) {
-            var elmts = document.querySelectorAll(selector);
-            Array.prototype.forEach.call(elmts, function (el, i) {
-                eachFunc(el, i);
-            });
-        },
-        empty: function (elmt) {
-            elmt.innerHTML = '';
-        },
-        getAttr: function (elmt, attr) {
-            var result = elmt.getAttribute(attr);
-            return result;
-        },
-        setAttr: function (elmt, attr, val) {
-            elmt.setAttribute(attr, val);
-        },
-        remove: function (elmt) {
-            elmt.parentNode.removeChild(NoJQueryY.elmt);
-        },
-        prev: function (elmt) {
-            var prevElmt = elmt.previousElementSibling;
-            return prevElmt;
-        },
-        next: function (elmt) {
-            var nextElmt = elmt.nextElementSibling;
-            return nextElmt;
-        },
-        proxy: function (fn, context) {
-            fn.bind(context);
-        },
-        html: function (elmt, string) {
-            elmt.innerHTML = string;
-        },
-        text: function (elmt, string) {
-            elmt.textContent = string;
-        },
-        append: function (elmt, el) {
-            elmt.appendChild(el);
-        },
-        prepend: function (elmt, el) {
-            var parent = elmt;
-            parent.insertBefore(el, parent.firstChild);
-        },
-        parseHtml: function (str) {
-            var tmp = document.implementation.createHTMLDocument();
-            tmp.body.innerHTML = str;
-            return tmp.body.children;
-        }
-    };
-
-    return NoJQueryYY;
-});
 /* global TweenLite */
-define('views/AnimateColors',['lib/NoJQuery'], function (NoJQuery) {
+define('views/AnimateColors',[], function () {
     var AnimateColors = function (Grid3D) {
         this.el = 'grid3d';
-        this.njq = NoJQuery;
+        this.njq = Grid3D.$$;
         this.grid = Grid3D;
         this.totalColors = this.grid.colors.length;
         this.duration = 2;
@@ -2314,10 +2103,10 @@ define('views/AnimateColors',['lib/NoJQuery'], function (NoJQuery) {
 });
 /* global THREE */
 /* global Detector */
-define('views/grid3d',['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuery, AnimateColors) {
-    var Grid3D = function () {
+define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
+    var Grid3D = function (app) {
         this.el = 'grid3d';
-        this.njq = NoJQuery;
+        this.$$ = app.$$;
         this.completed = false;
 
         this.initialize = function () {            
@@ -2774,7 +2563,7 @@ define('views/grid3d',['lib/NoJQuery', 'views/AnimateColors'], function (NoJQuer
 
             this.gridGroup.rotateZ(-0.4);
             
-            this.njq.removeClass(this.njq.select('.grid3d'), 'visible-false');
+            this.$$('.grid3d').removeClass('visible-false');
         };
 
         this.addAuxiliaryFaces = function (pai) {
@@ -2918,7 +2707,7 @@ define('views/home',['views/grid3d', 'text!source/templates/home.html'], functio
 
             //INIT WEBGL GRID ONLY IDF SUPPORTED
             if (Detector.webgl) {
-                this.grid3D = new Grid3D();
+                this.grid3D = new Grid3D(app);
             }
 
             //HIDE LOADER
@@ -2942,7 +2731,6 @@ define('views/home',['views/grid3d', 'text!source/templates/home.html'], functio
         };
 
         this.show = function() {
-            console.log('show');
             this.$$('.content-wrapper').removeClass('show-min');
 
             //ANIMATE FULL VIEW
@@ -3019,10 +2807,10 @@ define('models/project',[], function() {
 
 define('text!source/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/{{id}}/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    {{#each tech.frontend}}\r\n                    <li>{{this}}</li>\r\n                   {{/each}}\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    {{#each tech.backend}}\r\n                    <li>{{this}}</li>\r\n                   {{/each}}\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/{{id}}/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                       {{#each gallery}}\r\n                        <img src="{{this}}" />\r\n                       {{/each}}\r\n                    </div>\r\n                    <div class="clearfix"></div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
 
-define('views/gallery',['noJquery'], function(NoJQuery) {
-    var Gallery = function(router, el) {
+define('views/gallery',[], function() {
+    var Gallery = function(app, el) {
         this.el = '.gallery';
-        this.$$ = NoJQuery;
+        this.$$ = app.$$;
         this.initialize = function() {
             this.setup();
         };
@@ -3049,20 +2837,22 @@ define('views/gallery',['noJquery'], function(NoJQuery) {
 
         };
         this.show = function() {
-            
-
             this.view.removeClass('hidden');
-
-            this.drawSVGButtons();
 
             this.showImage(this.current);
 
             this.animateLine();
+
+            this.drawSVGButtons();
         };
 
         this.drawSVGButtons = function() {
-            this.$$('.next').addClass('draw-in');
-            this.$$('.prev').addClass('draw-in');
+            
+            var s = setTimeout(function() {
+                this.$$(this.el + ' .next').addClass('draw-in');
+                this.$$(this.el + ' .prev').addClass('draw-in');
+                clearTimeout(s);
+            }.bind(this), 100);
         };
 
         this.animateLine = function() {
@@ -3165,6 +2955,7 @@ define('views/tech',['noJquery'], function(NoJQuery) {
 
             this.$el = this.$$(this.el);
 
+
             //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
             options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
                 countleft++;
@@ -3201,6 +2992,10 @@ define('views/tech',['noJquery'], function(NoJQuery) {
         this.hide = function() {
             this.$el.addClass('hidden');
             this.removeAnimation();
+
+            options.app.removePrefixedEventListener(this.frontendLine.elmts[0]);
+            options.app.removePrefixedEventListener(this.backendLine.elmts[0]);
+
         };
 
 
@@ -3319,7 +3114,7 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
             });
 
             //INIT GALLERY VIEW
-             this.gallery = new Gallery(this.router, this.el + ' > .views >.gallery');
+             this.gallery = new Gallery(this, this.el + ' > .views > .gallery');
              this.gallery.initialize();
 
             this.show();
@@ -3333,6 +3128,7 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
                 externalLine = this.$$(this.el + ' .work-infos > .external'),
                 galleryLine = this.$$(this.el + ' .work-infos > .gallery'),
                 infoBtn = this.$$(this.el).find('.info').find('.btn');
+
 
             app.prefixedEventListener(techLine.elmts[0], 'AnimationEnd', function(e) {
                 countatech++;
@@ -3610,13 +3406,11 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
     var Controller = function Controller(app) {
         this.setup = function() {
-            console.log('Controller setup', app);
             this.menu = new Menu(app);
             this.home = new Home(app);
             this.work = new Work(app);
             this.about = new About(app);
             this.previous;
-            this.current;
         };
 
         this.start = function() {
@@ -3627,7 +3421,6 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             this.about.init();
             this.masterPage();
 
-            this.current = this.home;
 
             page('/', this.onHome.bind(this));
             page('/work', this.onPrerenderWork.bind(this), this.onWork.bind(this));
@@ -3647,7 +3440,7 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
 
             //LET ELEMENTS VISIBLE
             app.$$('main').removeClass('hidden');
-            app.$$('.footer').removeClass('hidden');
+            app.$$('footer').removeClass('hidden');
             app.$$('.content').removeClass('hidden');
 
         };
@@ -3663,7 +3456,6 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             next();
         };
         this.onExitWork = function(ctx, next) {
-            this.previous = this.work;
             next();
         };
         this.onExitAbout = function(ctx, next) {
@@ -3676,12 +3468,25 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
         };
 
         this.onPrerender = function(view) {
+            if (this.home.loaded === false) {
+                this.home.execute();
+                this.home.hide();
+            }
+            if (this.previous) {
+                this.previous.hide();
+            }
+
             if (this.menu.animated) {
                 this.menu.activateMenu(view);
             } else {
-
                 this.menu.execute();
+                var s = setTimeout(function() {
+                    this.menu.activateMenu(view);
+
+                    clearTimeout(s);
+                }.bind(this), 1500);
             }
+
         };
 
         this.onPrerenderWork = function(ctx, next) {
@@ -3690,7 +3495,7 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
         };
         this.onPrerenderAbout = function(ctx, next) {
             this.onPrerender('about');
-            this.previous.hide();
+            this.work.hide();
             next();
         };
 
@@ -3704,7 +3509,7 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
                     clearTimeout(s);
 
                 }.bind(this), 1000);
-            }else{
+            } else {
                 next();
             }
 
@@ -51618,11 +51423,18 @@ require([
 
 ], function(NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax, handlebars) {
     var App = function() {
+        var pfx = ["webkit", "moz", "MS", "o", ""];
         this.prefixedEventListener = function(element, type, callback) {
-            var pfx = ["webkit", "moz", "MS", "o", ""];
+            element['callback'] = callback;
             for (var p = 0; p < pfx.length; p++) {
-                if (!pfx[p]) type = type.toLowerCase();
+                if (!pfx[p]) type = type.toLowerCase();                
+                element[pfx[p]] = pfx[p] + type;
                 element.addEventListener(pfx[p] + type, callback, false);
+            }
+        };
+         this.removePrefixedEventListener = function(element) {
+            for (var p = 0; p < pfx.length; p++) {   
+                element.removeEventListener(element[pfx[p]], element['callback'] );
             }
         };
 

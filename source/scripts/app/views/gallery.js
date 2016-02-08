@@ -1,7 +1,7 @@
-﻿define(['noJquery'], function(NoJQuery) {
-    var Gallery = function(router, el) {
+﻿define([], function() {
+    var Gallery = function(app, el) {
         this.el = '.gallery';
-        this.$$ = NoJQuery;
+        this.$$ = app.$$;
         this.initialize = function() {
             this.setup();
         };
@@ -28,20 +28,22 @@
 
         };
         this.show = function() {
-            
-
             this.view.removeClass('hidden');
-
-            this.drawSVGButtons();
 
             this.showImage(this.current);
 
             this.animateLine();
+
+            this.drawSVGButtons();
         };
 
         this.drawSVGButtons = function() {
-            this.$$('.next').addClass('draw-in');
-            this.$$('.prev').addClass('draw-in');
+            
+            var s = setTimeout(function() {
+                this.$$(this.el + ' .next').addClass('draw-in');
+                this.$$(this.el + ' .prev').addClass('draw-in');
+                clearTimeout(s);
+            }.bind(this), 100);
         };
 
         this.animateLine = function() {
