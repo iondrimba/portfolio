@@ -1,9 +1,12 @@
-﻿define(['noJquery'], function(NoJQuery) {
+﻿define(['text!source/templates/info.html'], function(template) {
     var Info = function(options) {
         this.el = options.el;
-        this.$$ = NoJQuery;
-        this.initialize = function() {
-            this.setup();
+        this.$$ = options.app.$$;
+        this.view = function(model) {
+            var view = options.app.handlebars.compile(template),
+                html = view(model);
+            return html;
+
         };
 
         this.execute = function() {
@@ -45,8 +48,6 @@
             this.hide();
             this.removeAnimation();
         };
-
-        this.initialize();
     };
     return Info;
 });

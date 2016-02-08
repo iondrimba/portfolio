@@ -1,7 +1,14 @@
-﻿define(['noJquery'], function(NoJQuery) {
+﻿define(['text!source/templates/tech.html'], function(template) {
     var Tech = function(options) {
         this.el = options.el;
-        this.$$ = NoJQuery;
+        this.$$ = options.app.$$;
+
+        this.view = function(model) {
+            var view = options.app.handlebars.compile(template),
+                html = view(model);
+            return html;
+
+        };
 
         this.initialize = function() {
             this.setup();

@@ -1,22 +1,15 @@
-﻿define(['text!source/templates/work.html', 'models/project', 'views/project'], function(template, ProjectModel, Project) {
+﻿define(['models/project', 'views/project'], function(ProjectModel, Project) {
     var Work = function(app) {
         this.el = '.work';
         this.$$ = app.$$;
         this.projects = [];
         this.model = ProjectModel;
-        this.view = function() {
-            var view = app.handlebars.compile(template),
-                html = view();
-
-            return html;
-
-        };
+        
         this.init = function() {
             this.setup();
         };
         this.setup = function() {
             this.$el = this.$$(this.el);
-            this.$el.html(this.view());
         };
         this.execute = function() {
             this.$el.removeClass('hidden');

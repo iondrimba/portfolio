@@ -1,7 +1,13 @@
-﻿define([], function() {
+﻿define(['text!source/templates/gallery.html'], function(template) {
     var Gallery = function(app, el) {
         this.el = '.gallery';
         this.$$ = app.$$;
+        this.view = function(model) {
+            var view = app.handlebars.compile(template),
+                html = view(model);
+            return html;
+
+        };
         this.initialize = function() {
             this.setup();
         };
@@ -38,7 +44,7 @@
         };
 
         this.drawSVGButtons = function() {
-            
+
             var s = setTimeout(function() {
                 this.$$(this.el + ' .next').addClass('draw-in');
                 this.$$(this.el + ' .prev').addClass('draw-in');
@@ -56,7 +62,6 @@
             this.addListeners();
 
             this.show();
-
         };
 
         this.hide = function() {

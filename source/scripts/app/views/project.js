@@ -29,8 +29,10 @@
 
             //INIT INFO VIEW
             this.info = new Info({
-                el: this.el + '> .views > .info'
+                el: this.el + '> .views > .info',
+                app: app
             });
+            this.$$(this.el + '> .views' ).append(this.info.view(this.model));            
             this.info.execute();
 
             //INIT TECH VIEW
@@ -38,10 +40,13 @@
                 el: this.el + '> .views > .tech',
                 app: app
             });
+            this.$$(this.el + '> .views' ).append(this.tech.view(this.model));
+            this.tech.setup();
 
             //INIT GALLERY VIEW
-             this.gallery = new Gallery(this, this.el + ' > .views > .gallery');
-             this.gallery.initialize();
+            this.gallery = new Gallery(app, this.el + ' > .views > .gallery');
+            this.$$(this.el + '> .views' ).append(this.gallery.view(this.model));
+            this.gallery.setup();
 
             this.show();
         };
