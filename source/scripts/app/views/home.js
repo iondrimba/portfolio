@@ -60,7 +60,6 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
 
         };
         this.hide = function() {
-            console.log('hide');
             this.$$('.content-wrapper').removeClass('show-full');
 
             this.$el.find('h1').removeClass('title-show-out');

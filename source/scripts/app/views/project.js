@@ -6,7 +6,6 @@
         this.key = model.id;
         this.router = app.router;
         this.routerHandler = null;
-        console.log('project', model);
 
         this.view = function() {
             var view = app.handlebars.compile(template),
@@ -111,7 +110,7 @@
 
 
         this.animateIn = function() {
-            this.titleLink.addClass('animate-in-title');
+            this.$$(this.el + ' .infos > .btn').addClass('animate-in-title');
             this.techLink.addClass('animate-in-link-tech');
             this.launchLink.addClass('animate-in-link-external');
             this.galleryLink.addClass('animate-in-link-gallery');

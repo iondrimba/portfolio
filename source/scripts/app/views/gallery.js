@@ -12,8 +12,6 @@
             this.view = this.$$(this.el);
             this.btnNext = this.$$(this.el + ' .next');
             this.btnPrev = this.$$(this.el + ' .prev');
-
-            console.log('gallery init', this.el);
         };
         this.addListeners = function() {
             var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
@@ -31,7 +29,6 @@
         };
         this.show = function() {
             
-            console.log('gallery show', this.el);
 
             this.view.removeClass('hidden');
 

@@ -2957,7 +2957,6 @@ define('views/home',['views/grid3d', 'text!source/templates/home.html'], functio
 
         };
         this.hide = function() {
-            console.log('hide');
             this.$$('.content-wrapper').removeClass('show-full');
 
             this.$el.find('h1').removeClass('title-show-out');
@@ -3018,7 +3017,7 @@ define('models/project',[], function() {
 });
 
 
-define('text!source/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/{{id}}/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>Javascript/jQuery</li>\r\n                    <li>Sass</li>\r\n                    <li>Handlebars</li>\r\n                    <li>Backbone</li>\r\n                    <li>Grunt</li>\r\n                    <li>SoundCloud API</li>\r\n                    <li>Design</li>\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    <li>C#</li>\r\n                    <li>WEBAPI</li>\r\n                    <li>DI (Ninject)</li>\r\n                    <li>SQL Server</li>\r\n                    <li>SignalR</li>\r\n                    <li>Azure</li>\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/{{id}}/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                       {{#each gallery}}\r\n                        <img src="{{this}}" />\r\n                       {{/each}}\r\n                    </div>\r\n                    <div class="clearfix"></div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
+define('text!source/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">\r\n        <div class="info view hidden">\r\n            <div class="preview">\r\n                <div class="picture-mask picture-one">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-two">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-tree">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-four">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n                <div class="picture-mask picture-five">\r\n                    <img src="{{preview}}" />\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class="tech view hidden">\r\n            <a class="close" href="/work/{{id}}/info">\r\n                <label>✕</label>\r\n            </a>\r\n            <fieldset class="front-end">\r\n                <legend>\r\n                    Front-End:\r\n                </legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    {{#each tech.frontend}}\r\n                    <li>{{this}}</li>\r\n                   {{/each}}\r\n                </ul>\r\n            </fieldset>\r\n            <fieldset class="back-end">\r\n                <legend>Back-End:</legend>\r\n                <div class="line-ph">\r\n                    <i></i>\r\n                </div>\r\n                <ul>\r\n                    {{#each tech.backend}}\r\n                    <li>{{this}}</li>\r\n                   {{/each}}\r\n                </ul>\r\n            </fieldset>\r\n        </div>\r\n        <div class="gallery view hidden">\r\n            <a class="close" href="/work/{{id}}/info">✕</a>\r\n            <div class="images-ph">\r\n                <a class="rounded-button prev">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="image-list">\r\n                    <div class="line-ph">\r\n                        <i class=""></i>\r\n                    </div>\r\n                    <div class="ph">\r\n                       {{#each gallery}}\r\n                        <img src="{{this}}" />\r\n                       {{/each}}\r\n                    </div>\r\n                    <div class="clearfix"></div>\r\n                </div>\r\n                <a class="rounded-button next">\r\n                    <div class="svg-ph">\r\n                        <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                            <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                        </svg>\r\n                    </div>\r\n                    <i class="arrow" title="arrow icon"></i>\r\n                </a>\r\n                <div class="images-menu">\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                    <a class="images-menu-item"></a>\r\n                </div>\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
 
 define('views/gallery',['noJquery'], function(NoJQuery) {
     var Gallery = function(router, el) {
@@ -3034,8 +3033,6 @@ define('views/gallery',['noJquery'], function(NoJQuery) {
             this.view = this.$$(this.el);
             this.btnNext = this.$$(this.el + ' .next');
             this.btnPrev = this.$$(this.el + ' .prev');
-
-            console.log('gallery init', this.el);
         };
         this.addListeners = function() {
             var menuItens = this.$$(this.el + ' .images-menu-item').elmts;
@@ -3053,7 +3050,6 @@ define('views/gallery',['noJquery'], function(NoJQuery) {
         };
         this.show = function() {
             
-            console.log('gallery show', this.el);
 
             this.view.removeClass('hidden');
 
@@ -3289,7 +3285,6 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
         this.key = model.id;
         this.router = app.router;
         this.routerHandler = null;
-        console.log('project', model);
 
         this.view = function() {
             var view = app.handlebars.compile(template),
@@ -3394,7 +3389,7 @@ define('views/project',['text!source/templates/project.html', 'views/gallery', '
 
 
         this.animateIn = function() {
-            this.titleLink.addClass('animate-in-title');
+            this.$$(this.el + ' .infos > .btn').addClass('animate-in-title');
             this.techLink.addClass('animate-in-link-tech');
             this.launchLink.addClass('animate-in-link-external');
             this.galleryLink.addClass('animate-in-link-gallery');
@@ -3486,16 +3481,21 @@ define('views/work',['text!source/templates/work.html', 'models/project', 'views
         };
 
         this.projectsRender = function() {
+            this.$$(this.el).empty();
             this.model.map(function(data, index) {
                 var project = new Project(app, data);
-                this.projects[index] = project;
+                this.projects[index] = project;                
                 this.$$(this.el).append(project.view());
                 project.initialize();
             }.bind(this));
         };
+        this.reset = function() {
+            this.projects.map(function(item, index) {
+                 item.reset();
+            });
+        };
 
         this.showSection = function(project, section) {
-            console.log('showSection', project, section);
             this.projects.map(function(item, index) {
                 if (item.key.toLowerCase() === project.toLowerCase()) {
                     item.callbackPageProject(section);
@@ -3507,10 +3507,11 @@ define('views/work',['text!source/templates/work.html', 'models/project', 'views
 
         this.hide = function() {
             this.$el.addClass('hidden');
-            this.$el.empty();
             this.projects.map(function(project, index) {
                 project.destroy();
             });
+
+            this.$el.empty();
             this.projects = [];
         };
     };
@@ -3614,6 +3615,8 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             this.home = new Home(app);
             this.work = new Work(app);
             this.about = new About(app);
+            this.previous;
+            this.current;
         };
 
         this.start = function() {
@@ -3624,12 +3627,17 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             this.about.init();
             this.masterPage();
 
+            this.current = this.home;
+
             page('/', this.onHome.bind(this));
-            page('/work', this.onPrerender.bind(this), this.onWork.bind(this));
-            page('/about', this.onPrerender.bind(this), this.onAbout.bind(this));
-            page('/work/:project/:section', this.onPrerenderProject.bind(this), this.onProject.bind(this));            
-            page.exit('/', this.onExit.bind(this));
-            page.exit('/about', this.onExit.bind(this));
+            page('/work', this.onPrerenderWork.bind(this), this.onWork.bind(this));
+            page('/about', this.onPrerenderAbout.bind(this), this.onAbout.bind(this));
+            page('/work/:project/:section', this.onPrerenderProject.bind(this), this.onProject.bind(this));
+
+            page.exit('/', this.onExitHome.bind(this));
+            page.exit('/about', this.onExitAbout.bind(this));
+            page.exit('/work', this.onExitWork.bind(this));
+            page.exit('/work/:project/:section', this.onExitProject.bind(this));
 
             page('*', this.notFound.bind(this));
 
@@ -3647,53 +3655,75 @@ define('core/controller',['page', 'views/menu', 'views/home', 'views/work', 'vie
             page(path);
         };
 
-
-        this.onExit = function(ctx, next) {
-            console.log('exit', ctx.path, this.current);
-            this.current.hide();
+        this.onExitHome = function(ctx, next) {
+            if (this.previous) {
+                this.previous.hide();
+            }
+            this.home.hide();
             next();
         };
-        this.onPrerender = function(ctx, next) {
+        this.onExitWork = function(ctx, next) {
+            this.previous = this.work;
+            next();
+        };
+        this.onExitAbout = function(ctx, next) {
+            this.about.hide();
+            next();
+        };
+        this.onExitProject = function(ctx, next) {
+            this.work.reset();
+            next();
+        };
+
+        this.onPrerender = function(view) {
             if (this.menu.animated) {
-                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+                this.menu.activateMenu(view);
             } else {
 
                 this.menu.execute();
             }
+        };
 
-            if (this.home.loaded === false) {
-                this.home.execute();
-                this.current = this.home;
-                this.home.hide();
-                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+        this.onPrerenderWork = function(ctx, next) {
+            this.onPrerender('work');
+            next();
+        };
+        this.onPrerenderAbout = function(ctx, next) {
+            this.onPrerender('about');
+            this.previous.hide();
+            next();
+        };
+
+        this.onPrerenderProject = function(ctx, next) {
+            this.onPrerender('work');
+            if (this.work.$el.hasClass('hidden')) {
+                this.work.execute();
+                this.work.reset();
+                var s = setTimeout(function() {
+                    next();
+                    clearTimeout(s);
+
+                }.bind(this), 1000);
+            }else{
+                next();
             }
 
-            next();
         };
-        this.onPrerenderProject = function(ctx, next) {
-           // this.onHome();
-            //this.work.execute();
-            //this.current = this.work;
-            next();
-        };
+
         this.onHome = function(ctx, next) {
             this.menu.hide();
             this.home.execute();
-            this.current = this.home;
         };
         this.onWork = function(ctx, next) {
             this.work.execute();
-            this.current = this.work;
         };
         this.onProject = function(ctx, next) {
-             console.log('onProject', ctx.path);
-             var project = ctx.path.split('/')[2];
-             var section = ctx.path.split('/')[3];
-             this.work.showSection(project, section);
+            var project = ctx.path.split('/')[2];
+            var section = ctx.path.split('/')[3];
+            this.work.showSection(project, section);
         };
         this.onAbout = function(ctx, next) {
             this.about.execute();
-            this.current = this.about;
         };
         this.notFound = function(ctx, next) {
             console.log('notFound');

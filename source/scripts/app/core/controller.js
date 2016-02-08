@@ -7,6 +7,8 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             this.home = new Home(app);
             this.work = new Work(app);
             this.about = new About(app);
+            this.previous;
+            this.current;
         };
 
         this.start = function() {
@@ -17,12 +19,17 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             this.about.init();
             this.masterPage();
 
+            this.current = this.home;
+
             page('/', this.onHome.bind(this));
-            page('/work', this.onPrerender.bind(this), this.onWork.bind(this));
-            page('/about', this.onPrerender.bind(this), this.onAbout.bind(this));
-            page('/work/:project/:section', this.onPrerenderProject.bind(this), this.onProject.bind(this));            
-            page.exit('/', this.onExit.bind(this));
-            page.exit('/about', this.onExit.bind(this));
+            page('/work', this.onPrerenderWork.bind(this), this.onWork.bind(this));
+            page('/about', this.onPrerenderAbout.bind(this), this.onAbout.bind(this));
+            page('/work/:project/:section', this.onPrerenderProject.bind(this), this.onProject.bind(this));
+
+            page.exit('/', this.onExitHome.bind(this));
+            page.exit('/about', this.onExitAbout.bind(this));
+            page.exit('/work', this.onExitWork.bind(this));
+            page.exit('/work/:project/:section', this.onExitProject.bind(this));
 
             page('*', this.notFound.bind(this));
 
@@ -40,53 +47,75 @@ define(['page', 'views/menu', 'views/home', 'views/work', 'views/about'], functi
             page(path);
         };
 
-
-        this.onExit = function(ctx, next) {
-            console.log('exit', ctx.path, this.current);
-            this.current.hide();
+        this.onExitHome = function(ctx, next) {
+            if (this.previous) {
+                this.previous.hide();
+            }
+            this.home.hide();
             next();
         };
-        this.onPrerender = function(ctx, next) {
+        this.onExitWork = function(ctx, next) {
+            this.previous = this.work;
+            next();
+        };
+        this.onExitAbout = function(ctx, next) {
+            this.about.hide();
+            next();
+        };
+        this.onExitProject = function(ctx, next) {
+            this.work.reset();
+            next();
+        };
+
+        this.onPrerender = function(view) {
             if (this.menu.animated) {
-                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+                this.menu.activateMenu(view);
             } else {
 
                 this.menu.execute();
             }
+        };
 
-            if (this.home.loaded === false) {
-                this.home.execute();
-                this.current = this.home;
-                this.home.hide();
-                this.menu.activateMenu(ctx.path.replace(/\//, ''));
+        this.onPrerenderWork = function(ctx, next) {
+            this.onPrerender('work');
+            next();
+        };
+        this.onPrerenderAbout = function(ctx, next) {
+            this.onPrerender('about');
+            this.previous.hide();
+            next();
+        };
+
+        this.onPrerenderProject = function(ctx, next) {
+            this.onPrerender('work');
+            if (this.work.$el.hasClass('hidden')) {
+                this.work.execute();
+                this.work.reset();
+                var s = setTimeout(function() {
+                    next();
+                    clearTimeout(s);
+
+                }.bind(this), 1000);
+            }else{
+                next();
             }
 
-            next();
         };
-        this.onPrerenderProject = function(ctx, next) {
-           // this.onHome();
-            //this.work.execute();
-            //this.current = this.work;
-            next();
-        };
+
         this.onHome = function(ctx, next) {
             this.menu.hide();
             this.home.execute();
-            this.current = this.home;
         };
         this.onWork = function(ctx, next) {
             this.work.execute();
-            this.current = this.work;
         };
         this.onProject = function(ctx, next) {
-             console.log('onProject', ctx.path);
-             var project = ctx.path.split('/')[2];
-             var section = ctx.path.split('/')[3];
-             this.work.showSection(project, section);
+            var project = ctx.path.split('/')[2];
+            var section = ctx.path.split('/')[3];
+            this.work.showSection(project, section);
         };
         this.onAbout = function(ctx, next) {
             this.about.execute();
-            this.current = this.about;
         };
         this.notFound = function(ctx, next) {
             console.log('notFound');
