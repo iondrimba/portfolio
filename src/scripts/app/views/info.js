@@ -1,4 +1,4 @@
-﻿define(['text!source/templates/info.html'], function(template) {
+﻿define(['text!src/templates/info.html'], function(template) {
     var Info = function(options) {
         this.el = options.el;
         this.$$ = options.app.$$;
@@ -20,11 +20,15 @@
 
         this.show = function() {
             this.$el.removeClass('hidden');
-            this.animateIn();
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.animateIn();
+            }.bind(this), 100);
         };
 
         this.hide = function() {
             this.$el.addClass('hidden');
+            this.removeAnimation();
         };
 
         this.animateIn = function() {

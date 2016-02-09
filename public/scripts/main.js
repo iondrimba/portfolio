@@ -1925,9 +1925,9 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!source/templates/menu.html',[],function () { return '<a href="/work" class="btn-work text-animation">\r\n    <div class="line-ph">\r\n        <i></i>\r\n    </div>\r\n    <div class="text-ph">\r\n        <span>Latest Work</span>\r\n    </div>\r\n</a>\r\n<a href="/about" class="btn-about text-animation">\r\n    <div class="line-ph">\r\n        <i></i>\r\n    </div>\r\n    <div class="text-ph">\r\n        <span>About</span>\r\n    </div>\r\n</a>\r\n';});
+define('text!src/templates/menu.html',[],function () { return '<a href="/work" class="btn-work text-animation">\r\n    <div class="line-ph">\r\n        <i></i>\r\n    </div>\r\n    <div class="text-ph">\r\n        <span>Latest Work</span>\r\n    </div>\r\n</a>\r\n<a href="/about" class="btn-about text-animation">\r\n    <div class="line-ph">\r\n        <i></i>\r\n    </div>\r\n    <div class="text-ph">\r\n        <span>About</span>\r\n    </div>\r\n</a>\r\n';});
 
-define('views/menu',['text!source/templates/menu.html'], function(template) {
+define('views/menu',['text!src/templates/menu.html'], function(template) {
     var Menu = function(app) {
         this.el = '.menu';
         this.$$ = app.$$;
@@ -2682,10 +2682,10 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
     return Grid3D;
 });
 
-define('text!source/templates/home.html',[],function () { return '<a href="/"><h1>Web Developer <span>JAVASCRIPT &amp;&amp; CSHARP</span></h1></a>\r\n<div class="grid3d visible-false"></div>\r\n';});
+define('text!src/templates/home.html',[],function () { return '<a href="/"><h1>Web Developer <span>JAVASCRIPT &amp;&amp; CSHARP</span></h1></a>\r\n<div class="grid3d visible-false"></div>\r\n';});
 
 /* global Detector */
-define('views/home',['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, template) {
+define('views/home',['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, template) {
     var Home = function(app) {
         this.el = '.home';
         this.$$ = app.$$;
@@ -2727,6 +2727,8 @@ define('views/home',['views/grid3d', 'text!source/templates/home.html'], functio
             //OPEN FULL MODE
             this.show();
 
+
+
             this.loaded = true;
         };
 
@@ -2741,8 +2743,11 @@ define('views/home',['views/grid3d', 'text!source/templates/home.html'], functio
 
             this.$$('.scroll-down-button').removeClass('hidden');
             this.$$('body').removeClass('show-scroll');
-            this.$$('.scroll-down-button').addClass('draw-in');
 
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.$$('.scroll-down-button').addClass('draw-in');
+            }.bind(this), 100);
         };
         this.hide = function() {
             this.$$('.content-wrapper').removeClass('show-full');
@@ -2802,12 +2807,12 @@ define('models/project',[], function() {
 });
 
 
-define('text!source/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">        \r\n      <!--INFO TEMPLATE-->\r\n      <!--TECH TEMPLATE-->\r\n      <!--GALLERY TEMPLATE-->       \r\n    </div>\r\n</div>\r\n';});
+define('text!src/templates/project.html',[],function () { return '<div class="project {{id}} clearfix" id="{{id}}">\r\n    <div class="column infos">\r\n        <a class="btn" href="/work/{{id}}/info">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <h2>{{name}}</h2>\r\n        </a>\r\n        <p class="opacity">{{description}}</p>\r\n        <div class="work-infos">\r\n            <a class="tech" href="/work/{{id}}/tech">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>TECH</span>\r\n                <i class="sprite sprite-tech"></i>\r\n            </a>\r\n            <a class="gallery" href="/work/{{id}}/gallery">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>IMAGES</span>\r\n                <i class="sprite sprite-images"></i>\r\n            </a>\r\n            <a class="external" href="{{url}}" target="_blank">\r\n                <div class="line-ph">\r\n                    <i class=""></i>\r\n                </div>\r\n                <span>LAUNCH</span>\r\n                <i class="sprite sprite-external"></i>\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class="column views">        \r\n      <!--INFO TEMPLATE-->\r\n      <!--TECH TEMPLATE-->\r\n      <!--GALLERY TEMPLATE-->       \r\n    </div>\r\n</div>\r\n';});
 
 
-define('text!source/templates/gallery.html',[],function () { return '<div class="gallery view hidden">\r\n    <a class="close" href="/work/{{id}}/info">✕</a>\r\n    <div class="images-ph">\r\n        <a class="rounded-button prev">\r\n            <div class="svg-ph">\r\n                <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                    <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                </svg>\r\n            </div>\r\n            <i class="arrow" title="arrow icon"></i>\r\n        </a>\r\n        <div class="image-list">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <div class="ph">\r\n                {{#each gallery}}\r\n                <img src="{{this}}" /> \r\n                {{/each}}\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n        <a class="rounded-button next">\r\n            <div class="svg-ph">\r\n                <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                    <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                </svg>\r\n            </div>\r\n            <i class="arrow" title="arrow icon"></i>\r\n        </a>\r\n        <div class="images-menu">\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n        </div>\r\n    </div>\r\n    <div class="clearfix"></div>\r\n</div>\r\n';});
+define('text!src/templates/gallery.html',[],function () { return '<div class="gallery view hidden">\r\n    <a class="close" href="/work/{{id}}/info">✕</a>\r\n    <div class="images-ph">\r\n        <a class="rounded-button prev">\r\n            <div class="svg-ph">\r\n                <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                    <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                </svg>\r\n            </div>\r\n            <i class="arrow" title="arrow icon"></i>\r\n        </a>\r\n        <div class="image-list">\r\n            <div class="line-ph">\r\n                <i class=""></i>\r\n            </div>\r\n            <div class="ph">\r\n                {{#each gallery}}\r\n                <img src="{{this}}" /> \r\n                {{/each}}\r\n            </div>\r\n            <div class="clearfix"></div>\r\n        </div>\r\n        <a class="rounded-button next">\r\n            <div class="svg-ph">\r\n                <svg xmlns="http://www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">\r\n                    <path class="path" stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>\r\n                </svg>\r\n            </div>\r\n            <i class="arrow" title="arrow icon"></i>\r\n        </a>\r\n        <div class="images-menu">\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n            <a class="images-menu-item"></a>\r\n        </div>\r\n    </div>\r\n    <div class="clearfix"></div>\r\n</div>\r\n';});
 
-define('views/gallery',['text!source/templates/gallery.html'], function(template) {
+define('views/gallery',['text!src/templates/gallery.html'], function(template) {
     var Gallery = function(app, el) {
         this.el = '.gallery';
         this.$$ = app.$$;
@@ -2847,7 +2852,10 @@ define('views/gallery',['text!source/templates/gallery.html'], function(template
 
             this.showImage(this.current);
 
-            this.animateLine();
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.animateIn();
+            }.bind(this), 100);
 
             this.drawSVGButtons();
         };
@@ -2861,7 +2869,7 @@ define('views/gallery',['text!source/templates/gallery.html'], function(template
             }.bind(this), 100);
         };
 
-        this.animateLine = function() {
+        this.animateIn = function() {
             this.$$(this.el + ' .image-list ').addClass('animate-in-upper-line');
         };
 
@@ -2940,22 +2948,25 @@ define('views/gallery',['text!source/templates/gallery.html'], function(template
 });
 
 
-define('text!source/templates/tech.html',[],function () { return '<div class="tech view hidden">\r\n    <a class="close" href="/work/{{id}}/info">\r\n        <label>✕</label>\r\n    </a>\r\n    <fieldset class="front-end">\r\n        <legend>\r\n            Front-End:\r\n        </legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            {{#each frontend}}\r\n            <li>{{this}}</li>\r\n            {{/each}}\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset class="back-end">\r\n        <legend>Back-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            {{#each backend}}\r\n            <li>{{this}}</li>\r\n            {{/each}}\r\n        </ul>\r\n    </fieldset>\r\n</div>\r\n';});
+define('text!src/templates/tech.html',[],function () { return '<div class="tech view hidden">\r\n    <a class="close" href="/work/{{id}}/info">\r\n        <label>✕</label>\r\n    </a>\r\n    <fieldset class="front-end">\r\n        <legend>\r\n            Front-End:\r\n        </legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            {{#each tech.frontend}}\r\n            <li>{{this}}</li>\r\n            {{/each}}\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset class="back-end">\r\n        <legend>Back-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            {{#each tech.backend}}\r\n            <li>{{this}}</li>\r\n            {{/each}}\r\n        </ul>\r\n    </fieldset>\r\n</div>\r\n';});
 
-define('views/tech',['text!source/templates/tech.html'], function(template) {
+define('views/tech',['text!src/templates/tech.html'], function(template) {
     var Tech = function(options) {
         this.el = options.el;
         this.$$ = options.app.$$;
+
+        this.setup = function() {
+            this.$el = this.$$(this.el);
+            this.frontendLine = this.$$(this.el + ' .front-end');
+            this.frontendText = this.$$(this.el + ' .front-end').find('ul');
+            this.backendLine = this.$$(this.el + ' .back-end');
+            this.backendText = this.$$(this.el + ' .back-end').find('ul');
+        };
 
         this.view = function(model) {
             var view = options.app.handlebars.compile(template),
                 html = view(model);
             return html;
-
-        };
-
-        this.initialize = function() {
-            this.setup();
         };
 
         this.execute = function() {
@@ -2970,10 +2981,12 @@ define('views/tech',['text!source/templates/tech.html'], function(template) {
 
             this.$el = this.$$(this.el);
 
+            console.log('addAnimationsListeners', this.frontendLine);
 
             //LISTENS TO THE LINE ANIMATION COMPLETE (FRONT END)
             options.app.prefixedEventListener(this.frontendLine.elmts[0], 'AnimationEnd', function(e) {
                 countleft++;
+                console.log('f complete', countleft);
                 if (countleft === 2) {
                     this.$$(e.target).removeClass('animate-in-legend-left');
                     this.$$(this.el + ' .front-end ul').addClass('animate-text');
@@ -2991,17 +3004,13 @@ define('views/tech',['text!source/templates/tech.html'], function(template) {
             }.bind(this));
         };
 
-        this.setup = function() {
-            this.$el = this.$$(this.el);
-            this.frontendLine = this.$$(this.el + ' .front-end');
-            this.frontendText = this.$$(this.el + ' .front-end').find('ul');
-            this.backendLine = this.$$(this.el + ' .back-end');
-            this.backendText = this.$$(this.el + ' .back-end').find('ul');
-        };
 
-        this.show = function() {
+        this.show = function() {            
             this.$el.removeClass('hidden');
-            this.animateIn();
+            var s = setTimeout(function(){
+                clearTimeout(s);
+                this.animateIn();
+            }.bind(this), 100)
         };
 
         this.hide = function() {
@@ -3012,7 +3021,6 @@ define('views/tech',['text!source/templates/tech.html'], function(template) {
             options.app.removePrefixedEventListener(this.backendLine.elmts[0]);
 
         };
-
 
         this.animateIn = function() {
             this.frontendLine.addClass('animate-in-legend-left');
@@ -3029,15 +3037,14 @@ define('views/tech',['text!source/templates/tech.html'], function(template) {
             this.hide();
         };
 
-        this.initialize();
     };
     return Tech;
 });
 
 
-define('text!source/templates/info.html',[],function () { return '<div class="info view hidden">\r\n    <div class="preview">\r\n        <div class="picture-mask picture-one">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-two">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-tree">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-four">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-five">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
+define('text!src/templates/info.html',[],function () { return '<div class="info view hidden">\r\n    <div class="preview">\r\n        <div class="picture-mask picture-one">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-two">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-tree">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-four">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n        <div class="picture-mask picture-five">\r\n            <img src="{{this.preview}}" />\r\n        </div>\r\n    </div>\r\n</div>\r\n';});
 
-define('views/info',['text!source/templates/info.html'], function(template) {
+define('views/info',['text!src/templates/info.html'], function(template) {
     var Info = function(options) {
         this.el = options.el;
         this.$$ = options.app.$$;
@@ -3059,11 +3066,15 @@ define('views/info',['text!source/templates/info.html'], function(template) {
 
         this.show = function() {
             this.$el.removeClass('hidden');
-            this.animateIn();
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.animateIn();
+            }.bind(this), 100);
         };
 
         this.hide = function() {
             this.$el.addClass('hidden');
+            this.removeAnimation();
         };
 
         this.animateIn = function() {
@@ -3091,7 +3102,7 @@ define('views/info',['text!source/templates/info.html'], function(template) {
     return Info;
 });
 
-define('views/project',['text!source/templates/project.html', 'views/gallery', 'views/tech', 'views/info'], function(template, Gallery, Tech, Info) {
+define('views/project',['text!src/templates/project.html', 'views/gallery', 'views/tech', 'views/info'], function(template, Gallery, Tech, Info) {
     var Project = function(app, model) {
         this.el = '.project' + '.' + model.id;
         this.$$ = app.$$;
@@ -3332,9 +3343,9 @@ define('views/work',['models/project', 'views/project'], function(ProjectModel, 
 });
 
 
-define('text!source/templates/about.html',[],function () { return '<p>\r\n    Hi, my name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.\r\n    <br /> I\'m focused on front-end development with javascript and back-end development with C#(.NET).\r\n    <br />\r\n    <br>Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.\r\n    <br />\r\n    <br /> Thanks for stopping by =]\r\n</p>\r\n<div class="skills-set">\r\n    <fieldset>\r\n        <legend>Front-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>Javascript/jQuery</li>\r\n            <li>Sass/Less</li>\r\n            <li>Handlebars</li>\r\n            <li>Backbone</li>\r\n            <li>Grunt/Gulp/npm</li>\r\n            <li>CSS3</li>\r\n            <li>HTML5</li>\r\n            <li>Bootstrap</li>\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset>\r\n        <legend>Back-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>C#</li>\r\n            <li>MVC </li>\r\n            <li>Web API</li>\r\n            <li>Web Forms</li>\r\n            <li>WPF</li>\r\n            <li>SQL Server</li>\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset>\r\n        <legend>Design:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>Photoshop</li>\r\n            <li>Flash</li>\r\n        </ul>\r\n    </fieldset>\r\n</div>\r\n<br />\r\n<br />\r\n<div class="about-project">\r\n    <strong>About this project:</strong>\r\n    <p>\r\n        No jQuery\r\n        <br /> CSS3 animations\r\n        <br /> Html5 Pushstate\r\n        <br /> Responsive\r\n        <br /> 3D Grid: ThreeJs + TweenMax\r\n        <br /> Routing system: Page.Js\r\n    </p>\r\n</div>\r\n';});
+define('text!src/templates/about.html',[],function () { return '<p>\r\n    Hi, my name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.\r\n    <br /> I\'m focused on front-end development with javascript and back-end development with C#(.NET).\r\n    <br />\r\n    <br>Over the past 9 years I worked on various types of projects, like casual games, single page applications, small local business websites to large companies systems.\r\n    <br />\r\n    <br /> Thanks for stopping by =]\r\n</p>\r\n<div class="skills-set">\r\n    <fieldset>\r\n        <legend>Front-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>Javascript/jQuery</li>\r\n            <li>Sass/Less</li>\r\n            <li>Handlebars</li>\r\n            <li>Backbone</li>\r\n            <li>Grunt/Gulp/npm</li>\r\n            <li>CSS3</li>\r\n            <li>HTML5</li>\r\n            <li>Bootstrap</li>\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset>\r\n        <legend>Back-End:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>C#</li>\r\n            <li>MVC </li>\r\n            <li>Web API</li>\r\n            <li>Web Forms</li>\r\n            <li>WPF</li>\r\n            <li>SQL Server</li>\r\n        </ul>\r\n    </fieldset>\r\n    <fieldset>\r\n        <legend>Design:</legend>\r\n        <div class="line-ph">\r\n            <i></i>\r\n        </div>\r\n        <ul>\r\n            <li>Photoshop</li>\r\n            <li>Flash</li>\r\n        </ul>\r\n    </fieldset>\r\n</div>\r\n<br />\r\n<br />\r\n<div class="about-project">\r\n    <strong>About this project:</strong>\r\n    <p>\r\n        No jQuery\r\n        <br /> CSS3 animations\r\n        <br /> Html5 Pushstate\r\n        <br /> Responsive\r\n        <br /> 3D Grid: ThreeJs + TweenMax\r\n        <br /> Routing system: Page.Js\r\n    </p>\r\n</div>\r\n';});
 
-define('views/about',['text!source/templates/about.html'], function(template) {
+define('views/about',['text!src/templates/about.html'], function(template) {
     var About = function(app) {
         this.el = '.about';
         this.$$ = app.$$;
@@ -3356,14 +3367,19 @@ define('views/about',['text!source/templates/about.html'], function(template) {
             this.secondLine = this.$$('fieldset:nth-child(2)');
             this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
             this.thirdLine = this.$$('fieldset:last-child');
-            this.thirdText = this.$$('fieldset:last-child').find('ul');            
+            this.thirdText = this.$$('fieldset:last-child').find('ul');
         };
         this.execute = function() {
+            console.log('execute');
             this.$el.removeClass('hidden');
             this.addAnimationsListeners();
-            this.animateIn();
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.animateIn();
+            }.bind(this), 100);
         };
         this.addAnimationsListeners = function() {
+            console.log('addAnimationsListeners');
             var countleft = 0,
                 countcenter = 0,
                 countright = 0;
@@ -3398,6 +3414,7 @@ define('views/about',['text!source/templates/about.html'], function(template) {
 
         };
         this.animateIn = function() {
+            console.log('animateIn');
             this.$$('p').addClass('animate-text-opacity-about');
             this.firstLine.addClass('animate-in-legend-left');
             this.secondLine.addClass('animate-in-legend-center');
@@ -3405,14 +3422,23 @@ define('views/about',['text!source/templates/about.html'], function(template) {
             this.$$('.about-project').addClass('animate-text-project');
         };
         this.removeAnimation = function() {
+            console.log('removeAnimation');
             this.$$('.about-project').removeClass('animate-text-project');
             this.$$('p').removeClass('animate-text-opacity-about');
             this.$$('ul').removeClass('animate-text');
+            this.firstLine.removeClass('animate-in-legend-left');
+            this.secondLine.removeClass('animate-in-legend-center');
+            this.thirdLine.removeClass('animate-in-legend-right');
         };
 
         this.hide = function() {
+            console.log('hide');
             this.$el.addClass('hidden');
             this.removeAnimation();
+
+            app.removePrefixedEventListener(this.firstLine.elmts[0]);
+            app.removePrefixedEventListener(this.secondLine.elmts[0]);
+            app.removePrefixedEventListener(this.thirdLine.elmts[0]);
         };
 
     };
@@ -51464,5 +51490,5 @@ require([
     window.app = new App();
 });
 
-define("source/scripts/app/main", function(){});
+define("src/scripts/app/main", function(){});
 

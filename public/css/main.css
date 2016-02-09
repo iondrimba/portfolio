@@ -482,7 +482,7 @@ html.notmobile .social-icons .sprite:hover {
   transition: all .2s ease; }
 
 .social-icons .sprite {
-  background: url("/images/social.png") no-repeat;
+  background: url("images/social.png") no-repeat;
   width: 35px;
   height: 34px;
   display: block;
@@ -1078,7 +1078,7 @@ html.notmobile .gallery .close:hover {
     position: relative;
     left: -100%;
     margin-top: 25px;
-    width: 960px; }
+    width: 950px; }
   .gallery .arrow {
     border-color: #333 !important;
     width: 15%;
@@ -1271,7 +1271,7 @@ html.notmobile .tech.view .close:hover label {
   float: left;
   height: auto; }
   .work h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     text-transform: uppercase; }
   .work .btn {
     display: block;

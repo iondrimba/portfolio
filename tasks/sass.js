@@ -3,7 +3,7 @@ var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 
 module.exports = function() {
-    gulp.src('./source/styles/app/main.scss')
+    gulp.src('./src/styles/app/main.scss')
         .pipe(sass.sync().on('error', sass.logError))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],

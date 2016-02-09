@@ -1,4 +1,4 @@
-﻿define(['text!source/templates/menu.html'], function(template) {
+﻿define(['text!src/templates/menu.html'], function(template) {
     var Menu = function(app) {
         this.el = '.menu';
         this.$$ = app.$$;

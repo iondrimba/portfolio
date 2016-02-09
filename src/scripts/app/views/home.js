@@ -1,5 +1,5 @@
 ﻿/* global Detector */
-define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, template) {
+define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, template) {
     var Home = function(app) {
         this.el = '.home';
         this.$$ = app.$$;
@@ -41,6 +41,8 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
             //OPEN FULL MODE
             this.show();
 
+
+
             this.loaded = true;
         };
 
@@ -55,8 +57,11 @@ define(['views/grid3d', 'text!source/templates/home.html'], function(Grid3D, tem
 
             this.$$('.scroll-down-button').removeClass('hidden');
             this.$$('body').removeClass('show-scroll');
-            this.$$('.scroll-down-button').addClass('draw-in');
 
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.$$('.scroll-down-button').addClass('draw-in');
+            }.bind(this), 100);
         };
         this.hide = function() {
             this.$$('.content-wrapper').removeClass('show-full');

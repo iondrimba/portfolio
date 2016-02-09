@@ -2,6 +2,6 @@ var gulp = require('gulp');
 var watch = require('gulp-watch');
 
 module.exports = function() {
-    gulp.watch('./source/styles/**/*.{sass,scss}', ['sass']);
-    gulp.watch('./source/scripts/**/*.js', ['requirejs:dev']);
+    gulp.watch('./src/styles/**/*.{sass,scss}', ['sass']);
+    gulp.watch('./src/scripts/**/*.js', ['requirejs:dev']);
 };

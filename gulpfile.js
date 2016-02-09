@@ -1,15 +1,15 @@
 ﻿var gulp = require('gulp');
+var requirejsOptimize = require('gulp-requirejs-optimize');
 
 var requirePaths = {
-    lib: 'source/scripts/app/lib',
-    models: 'source/scripts/app/models',
-    views: 'source/scripts/app/views',
-    page: 'node_modules/page/page',
-    vendors: 'source/scripts/vendors',
     noJquery: 'node_modules/nojquery/nojquery',
-    TweenLite: 'source/scripts/vendors/TweenLite',
+    TweenLite: 'src/scripts/vendors/TweenLite',
     handlebars: 'node_modules/handlebars/dist/handlebars',
-    core: 'source/scripts/app/core'
+    page: 'node_modules/page/page',
+    models: 'src/scripts/app/models',
+    views: 'src/scripts/app/views',
+    vendors: 'src/scripts/vendors',
+    core: 'src/scripts/app/core'
 };
 
 //sass - scss task
@@ -25,12 +25,14 @@ gulp.task('cssmin', require('./tasks/cssmin.js'));
 gulp.task('minifyjs', require('./tasks/minifyjs.js'));
 
 //require dev  task
-gulp.task('requirejs:dev', function(){
+gulp.task('requirejs:dev', function() {
     return require('./tasks/requirejs.js')(requirePaths, 'none');
 });
 
+
+
 //require production  task
-gulp.task('requirejs:prod', function(){
+gulp.task('requirejs:prod', function() {
     return require('./tasks/requirejs.js')(requirePaths, 'uglify');
 });
 

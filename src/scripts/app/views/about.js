@@ -1,4 +1,4 @@
-﻿define(['text!source/templates/about.html'], function(template) {
+﻿define(['text!src/templates/about.html'], function(template) {
     var About = function(app) {
         this.el = '.about';
         this.$$ = app.$$;
@@ -20,14 +20,19 @@
             this.secondLine = this.$$('fieldset:nth-child(2)');
             this.secondText = this.$$('fieldset:nth-child(2)').find('ul');
             this.thirdLine = this.$$('fieldset:last-child');
-            this.thirdText = this.$$('fieldset:last-child').find('ul');            
+            this.thirdText = this.$$('fieldset:last-child').find('ul');
         };
         this.execute = function() {
+            console.log('execute');
             this.$el.removeClass('hidden');
             this.addAnimationsListeners();
-            this.animateIn();
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.animateIn();
+            }.bind(this), 100);
         };
         this.addAnimationsListeners = function() {
+            console.log('addAnimationsListeners');
             var countleft = 0,
                 countcenter = 0,
                 countright = 0;
@@ -62,6 +67,7 @@
 
         };
         this.animateIn = function() {
+            console.log('animateIn');
             this.$$('p').addClass('animate-text-opacity-about');
             this.firstLine.addClass('animate-in-legend-left');
             this.secondLine.addClass('animate-in-legend-center');
@@ -69,14 +75,23 @@
             this.$$('.about-project').addClass('animate-text-project');
         };
         this.removeAnimation = function() {
+            console.log('removeAnimation');
             this.$$('.about-project').removeClass('animate-text-project');
             this.$$('p').removeClass('animate-text-opacity-about');
             this.$$('ul').removeClass('animate-text');
+            this.firstLine.removeClass('animate-in-legend-left');
+            this.secondLine.removeClass('animate-in-legend-center');
+            this.thirdLine.removeClass('animate-in-legend-right');
         };
 
         this.hide = function() {
+            console.log('hide');
             this.$el.addClass('hidden');
             this.removeAnimation();
+
+            app.removePrefixedEventListener(this.firstLine.elmts[0]);
+            app.removePrefixedEventListener(this.secondLine.elmts[0]);
+            app.removePrefixedEventListener(this.thirdLine.elmts[0]);
         };
 
     };

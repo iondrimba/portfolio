@@ -1,4 +1,4 @@
-﻿define(['text!source/templates/gallery.html'], function(template) {
+﻿define(['text!src/templates/gallery.html'], function(template) {
     var Gallery = function(app, el) {
         this.el = '.gallery';
         this.$$ = app.$$;
@@ -38,7 +38,10 @@
 
             this.showImage(this.current);
 
-            this.animateLine();
+            var s = setTimeout(function() {
+                clearTimeout(s);
+                this.animateIn();
+            }.bind(this), 100);
 
             this.drawSVGButtons();
         };
@@ -52,7 +55,7 @@
             }.bind(this), 100);
         };
 
-        this.animateLine = function() {
+        this.animateIn = function() {
             this.$$(this.el + ' .image-list ').addClass('animate-in-upper-line');
         };
 

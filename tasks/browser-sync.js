@@ -12,6 +12,6 @@ module.exports = function() {
     gulp.watch("./public/scripts/*.js").on('change', browserSync.reload);
     gulp.watch("*.html").on('change', browserSync.reload);
 
-    gulp.watch('./source/styles/**/*.{sass,scss}', ['sass']);
-    gulp.watch('./source/scripts/**/*.js', ['requirejs:dev']);
+    gulp.watch('./src/styles/**/*.{sass,scss}', ['sass']);
+    gulp.watch('./src/scripts/**/*.js', ['requirejs:dev']);
 };

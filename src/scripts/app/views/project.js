@@ -1,4 +1,4 @@
-﻿define(['text!source/templates/project.html', 'views/gallery', 'views/tech', 'views/info'], function(template, Gallery, Tech, Info) {
+﻿define(['text!src/templates/project.html', 'views/gallery', 'views/tech', 'views/info'], function(template, Gallery, Tech, Info) {
     var Project = function(app, model) {
         this.el = '.project' + '.' + model.id;
         this.$$ = app.$$;
