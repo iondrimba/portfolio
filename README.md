@@ -31,7 +31,7 @@ __Includes:__
   * BrowserSync
   * RequireJs 
   * Sass
-  * [NoJquery] (personal lightweight jquery like lib)
+  * [NoJquery]
   * Imagemin (images optimization)
   * Uglify
   * Watch
