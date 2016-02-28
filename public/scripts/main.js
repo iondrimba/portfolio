@@ -3370,7 +3370,6 @@ define('views/about',['text!src/templates/about.html'], function(template) {
             this.thirdText = this.$$('fieldset:last-child').find('ul');
         };
         this.execute = function() {
-            console.log('execute');
             this.$el.removeClass('hidden');
             this.addAnimationsListeners();
             var s = setTimeout(function() {
@@ -3379,7 +3378,6 @@ define('views/about',['text!src/templates/about.html'], function(template) {
             }.bind(this), 100);
         };
         this.addAnimationsListeners = function() {
-            console.log('addAnimationsListeners');
             var countleft = 0,
                 countcenter = 0,
                 countright = 0;
@@ -3414,7 +3412,6 @@ define('views/about',['text!src/templates/about.html'], function(template) {
 
         };
         this.animateIn = function() {
-            console.log('animateIn');
             this.$$('p').addClass('animate-text-opacity-about');
             this.firstLine.addClass('animate-in-legend-left');
             this.secondLine.addClass('animate-in-legend-center');
@@ -3422,7 +3419,6 @@ define('views/about',['text!src/templates/about.html'], function(template) {
             this.$$('.about-project').addClass('animate-text-project');
         };
         this.removeAnimation = function() {
-            console.log('removeAnimation');
             this.$$('.about-project').removeClass('animate-text-project');
             this.$$('p').removeClass('animate-text-opacity-about');
             this.$$('ul').removeClass('animate-text');
@@ -3432,7 +3428,6 @@ define('views/about',['text!src/templates/about.html'], function(template) {
         };
 
         this.hide = function() {
-            console.log('hide');
             this.$el.addClass('hidden');
             this.removeAnimation();
 
