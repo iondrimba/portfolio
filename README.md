@@ -30,7 +30,10 @@ __Testing:__
 __Includes:__
   * BrowserSync
   * RequireJs 
+<<<<<<< HEAD
   * Backbone 
+=======
+>>>>>>> origin/development
   * Sass
   * [NoJquery]
   * Imagemin (images optimization)
@@ -69,4 +72,8 @@ __Structure:__
 └── text.js (requirejs import text files)
 ````
 
+<<<<<<< HEAD
 [NoJquery]:<https://www.npmjs.com/package/nojquery>
+=======
+[NoJquery]:<https://www.npmjs.com/package/nojquery>
+>>>>>>> origin/development
