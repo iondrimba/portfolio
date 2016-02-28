@@ -29,11 +29,8 @@ __Testing:__
 
 __Includes:__
   * BrowserSync
-  * RequireJs 
-<<<<<<< HEAD
+  * RequireJs
   * Backbone 
-=======
->>>>>>> origin/development
   * Sass
   * [NoJquery]
   * Imagemin (images optimization)
