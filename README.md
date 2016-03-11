@@ -1,13 +1,13 @@
 # Portfolio 
 Personal portfolio
 
-[![Travis build status](https://travis-ci.org/iondrimba/Portfolio.svg?branch=master)](https://travis-ci.org/iondrimba/Portfolio) [![Coverage Status](https://coveralls.io/repos/github/iondrimba/Portfolio/badge.svg?branch=master)](https://coveralls.io/github/iondrimba/Portfolio?branch=master)
+[![Travis build status](https://travis-ci.org/iondrimba/portfolio.svg?branch=master)](https://travis-ci.org/iondrimba/portfolio) [![Coverage Status](https://coveralls.io/repos/github/iondrimba/portfolio/badge.svg?branch=master)](https://coveralls.io/github/iondrimba/portfolio?branch=master)
 
 ### Installation
 
 ```sh
-$ git clone https://github.com/iondrimba/Portfolio.git
-$ cd Portfolio
+$ git clone https://github.com/iondrimba/portfolio.git
+$ cd portfolio
 $ npm install
 
 $ gulp
