@@ -13,7 +13,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
         };
         this.init = function() {
 
-            this.$$('body').removeClass('body-gradient');
+            
             this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
@@ -21,6 +21,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
 
             //INIT WEBGL GRID ONLY IDF SUPPORTED
             if (Detector.webgl) {
+                this.$$('body').removeClass('body-gradient');
                 this.grid3D = new Grid3D(app);
             }
 
@@ -40,8 +41,6 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
 
             //OPEN FULL MODE
             this.show();
-
-
 
             this.loaded = true;
         };
