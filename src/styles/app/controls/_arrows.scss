@@ -5,19 +5,6 @@
     transform: $degree;
 }
 
-.arrow-full {
-    @extend %base-arrow;
-    border-left: $size solid $arrow-color;
-    border-right: $size solid $arrow-color;
-    border-top: $size solid $arrow-color;
-    border-bottom: $size solid $arrow-color;
-}
-
-.loading-arrow {
-    @extend %base-arrow;
-    border-color: transparent;
-}
-
 .arrow-half-down {
     @extend %base-arrow;
     border-left: $size solid transparent;

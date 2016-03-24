@@ -65,67 +65,195 @@
     <meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/portfoliogoogleplus.jpg">
     <title>Portfolio of Ion Drimba Filho</title>
     <style>
-    .body-gradient {
-        background: -webkit-linear-gradient(140deg, #5824c1, #435085, #d73f26);
-        background: -o-linear-gradient(140deg, #5824c1, #435085, #d73f26);
-        background: linear-gradient(230deg, #5824c1, #435085, #d73f26);
-        background-size: 600% 600%;
-        height: 100vh;
-        -webkit-animation: AnimationName 21s ease infinite;
-        -moz-animation: AnimationName 21s ease infinite;
-        -o-animation: AnimationName 21s ease infinite;
-        animation: AnimationName 21s ease infinite;
+        .body-gradient {
+            background: -webkit-linear-gradient(140deg, #5824c1, #435085, #d73f26);
+            background: -o-linear-gradient(140deg, #5824c1, #435085, #d73f26);
+            background: linear-gradient(230deg, #5824c1, #435085, #d73f26);
+            background-size: 600% 600%;
+            height: 100vh;
+            -webkit-animation: AnimationName 21s ease infinite;
+            -moz-animation: AnimationName 21s ease infinite;
+            -o-animation: AnimationName 21s ease infinite;
+            animation: AnimationName 21s ease infinite;
+        }
+        
+        @-webkit-keyframes AnimationName {
+            0% {
+                background-position: 17% 0%
+            }
+            50% {
+                background-position: 84% 100%
+            }
+            100% {
+                background-position: 17% 0%
+            }
+        }
+        
+        @-moz-keyframes AnimationName {
+            0% {
+                background-position: 17% 0%
+            }
+            50% {
+                background-position: 84% 100%
+            }
+            100% {
+                background-position: 17% 0%
+            }
+        }
+        
+        @-o-keyframes AnimationName {
+            0% {
+                background-position: 17% 0%
+            }
+            50% {
+                background-position: 84% 100%
+            }
+            100% {
+                background-position: 17% 0%
+            }
+        }
+        
+        @keyframes AnimationName {
+            0% {
+                background-position: 17% 0%
+            }
+            50% {
+                background-position: 84% 100%
+            }
+            100% {
+                background-position: 17% 0%
+            }
+        }
+        
+        .loading-arrow {
+            width: 0;
+            height: 0;
+            transform: rotate(45deg);
+            border-color: transparent;
+             left: 50%;
+            top: 50%;
+            -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
+            transform: translateX(-50%) translateY(-50%) rotate(45deg);
+            position: absolute; 
+        }
+        
+        .arrow-full {
+            width: 0;
+            height: 0;
+            transform: rotate(45deg);
+            border-left:20px solid #E5E5E5;
+            border-right:20px solid #E5E5E5;
+            border-top: 20px solid #E5E5E5;
+            border-bottom: 20px solid #E5E5E5;
+        }
+        .animate-in {
+    animation: left .5s 0s forwards, top .5s .3s forwards, right .5s .6s forwards, bottom .5s .9s forwards, left-r .5s 1.2s forwards, top-r .5s 1.5s forwards, right-r .5s 1.8s forwards, bottom-r .5s 2.1s forwards;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    height:0;
+    display:none!important;
+}
+/*ANIMATION IN*/
+
+@-moz-keyframes bottom {
+    from {
+        border-bottom-color: transparent;
     }
-    
-    @-webkit-keyframes AnimationName {
-        0% {
-            background-position: 17% 0%
-        }
-        50% {
-            background-position: 84% 100%
-        }
-        100% {
-            background-position: 17% 0%
-        }
+    to {
+        border-bottom-color: #eaeaea;
     }
-    
-    @-moz-keyframes AnimationName {
-        0% {
-            background-position: 17% 0%
-        }
-        50% {
-            background-position: 84% 100%
-        }
-        100% {
-            background-position: 17% 0%
-        }
+}
+
+@-webkit-keyframes bottom {
+    from {
+        border-bottom-color: transparent;
     }
-    
-    @-o-keyframes AnimationName {
-        0% {
-            background-position: 17% 0%
-        }
-        50% {
-            background-position: 84% 100%
-        }
-        100% {
-            background-position: 17% 0%
-        }
+    to {
+        border-bottom-color: #eaeaea;
     }
-    
-    @keyframes AnimationName {
-        0% {
-            background-position: 17% 0%
-        }
-        50% {
-            background-position: 84% 100%
-        }
-        100% {
-            background-position: 17% 0%
-        }
+}
+
+@keyframes bottom {
+    from {
+        border-bottom-color: transparent;
     }
+    to {
+        border-bottom-color: #eaeaea;
+    }
+}
+
+@keyframes top {
+    from {
+        border-top-color: transparent;
+    }
+    to {
+        border-top-color: #dddddd;
+    }
+}
+
+@keyframes left {
+    from {
+        border-left-color: transparent;
+    }
+    to {
+        border-left-color: #f5f5f5;
+    }
+}
+
+
+/*ANIMATION OUT*/
+
+@keyframes right {
+    from {
+        border-right-color: transparent;
+    }
+    to {
+        border-right-color: #cccccc;
+    }
+}
+
+@keyframes bottom-r {
+    to {
+        border-bottom-color: transparent;
+    }
+    from {
+        border-bottom-color: #eaeaea;
+    }
+}
+
+@keyframes top-r {
+    to {
+        border-top-color: transparent;
+    }
+    from {
+        border-top-color: #dddddd;
+    }
+}
+
+@keyframes left-r {
+    to {
+        border-left-color: transparent;
+    }
+    from {
+        border-left-color: #f5f5f5;
+    }
+}
+
+@keyframes right-r {
+    to {
+        border-right-color: transparent;
+    }
+    from {
+        border-right-color: #cccccc;
+    }
+}
+
     </style>
-    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" async />
 </head>
 
 <body class="body-gradient">
@@ -140,7 +268,8 @@
                         <a href="/work" class="rounded-button scroll-down-button">
                             <div class="svg-ph">
                                 <svg xmlns="//www.w3.org/2000/svg" width="288" viewBox="265 48 670 236">
-                                    <path class="path" stroke="#fff" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500" stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>
+                                    <path class="path" stroke="#fff" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-dasharray="500"
+                                    stroke-dashoffset="500" fill="none" d="M335 182.9c-35.8 0-64.9-29.1-64.9-64.9s29.1-64.9 64.9-64.9 64.9 29.1 64.9 64.9-29.1 64.9-64.9 64.9z"></path>
                                 </svg>
                             </div>
                             <i class="arrow" title="arrow icon"></i>
@@ -174,7 +303,7 @@
         </div>
     </main>
     <script>
-    var loading = document.getElementById('loading-arrow'),
+        var loading = document.getElementById('loading-arrow'),
         hanldetimeout;
 
     hanldetimeout = setInterval(function() {
