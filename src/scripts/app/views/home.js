@@ -11,9 +11,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
             return html;
 
         };
-        this.init = function() {
-
-            
+        this.init = function() {            
             this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
@@ -25,9 +23,6 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
                 this.grid3D = new Grid3D(app);
             }
 
-            //HIDE LOADER
-            this.$$('.loading-arrow').remove();
-            this.$el.removeClass('body-gradient');
         };
         this.execute = function() {
             if (Detector.webgl) {
@@ -38,6 +33,9 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
 
             //SHOW VIEW
             this.$el.removeClass('hidden');
+
+            //HIDE LOADER
+            this.$$('.loading-arrow').remove();            
 
             //OPEN FULL MODE
             this.show();
