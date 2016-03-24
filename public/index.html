@@ -253,7 +253,9 @@
 }
 
     </style>
-    <link href="css/main.css" rel="stylesheet"  media="bogus" />
+     <!--[if IE]>
+    <link rel="stylesheet" href="css/main.css"> <!-- blocking, but what else can ya do? 
+    <![endif]-->
 </head>
 
 <body class="body-gradient">
@@ -301,6 +303,10 @@
                 </footer>
             </div>
         </div>
+        
+        <!--[if !IE]> -->
+        <link rel="stylesheet" href="css/main.css" lazyload>
+        <!-- <![endif]-->
     </main>
     <script>
         var loading = document.getElementById('loading-arrow'),
@@ -331,6 +337,6 @@
 
     document.getElementsByTagName('html')[0].className += svgsmill() === false ? ' no-svgsmill' : '';
     </script>
-    <link href="css/main.css" rel="stylesheet" />
+    
     <script data-main="scripts/main.js" src="scripts/require.js" async></script>
 </body>
