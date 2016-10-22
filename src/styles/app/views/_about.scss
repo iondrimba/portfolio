@@ -1,6 +1,14 @@
 ﻿@import "../_variables.scss";
 @import "../controls/_close.scss";
 
+@mixin icon() {
+  width: 80px;
+  height: 80px;
+  background-image: url(/images/logosv2.png);
+  background-repeat: no-repeat;
+  display: block;
+  position: relative;
+}
 
 .about {
   //background-image: url(../images/bg.png);
@@ -15,6 +23,69 @@
   top: 0;
   z-index: 1;
   overflow-y: scroll;
+
+  .ibope {
+    .back {
+      @include icon();
+      background-position: 0 0;
+    }
+  }
+
+  .lg {
+    .back {
+      @include icon();
+      background-position: -106px 0;
+    }
+  }
+
+  .bauducco {
+    .back {
+      @include icon();
+      background-position: -212px 0;
+    }
+  }
+
+  .kia {
+    .back {
+      @include icon();
+      background-position: -318px -1px;
+    }
+  }
+
+  .pfizer {
+    .back {
+      @include icon();
+      background-position: -423px 0;
+    }
+  }
+
+  .mcdonalds {
+    .back {
+      @include icon();
+      background-position: -2px -101px;
+    }
+  }
+
+  .nestle {
+    .back {
+      @include icon();
+      background-position: -107px -101px;
+    }
+  }
+
+  .natura {
+    .back {
+      @include icon();
+      background-position: -212px -100px;
+    }
+  }
+
+  .johnsons {
+    .back {
+      @include icon();
+      background-position: -318px -100px;
+    }
+  }
 
   .title {
     font-family: 'medium';
@@ -36,7 +107,53 @@
   }
 
   .brands {
+    width: 500px;
     margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .flip-container {
+      height: 80px;
+      width: 80px;
+      background-color: #000;
+      margin-left: 10px;
+      margin-right: 10px;
+      perspective: 600px;
+      margin-bottom: 20px;
+    }
+
+    .flip3d {
+      transition: .5s;
+      transform-style: preserve-3d;
+      height: inherit;
+      width: inherit;
+      position: relative;
+
+      .front {
+        background-color: #fff;
+        z-index: 2;
+      }
+
+      .back {
+        transform: rotateY(180deg);
+      }
+
+      .front,
+      .back {
+        height: inherit;
+        position: absolute;
+        width: inherit;
+        backface-visibility: hidden;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+
+  .flip-container:hover {
+    .flip3d {
+      transform: rotateY(180deg);
+    }
   }
 
   .skills {
@@ -54,7 +171,7 @@
     margin-bottom: 100px;
 
     div {
-      width: 350px;
+      width: 50%;
       margin-bottom: 30px;
     }
   }
@@ -72,7 +189,7 @@
 
   .content {
     padding-top: 64px;
-    max-width: 700px;
+    max-width: 600px;
     width: 100%;
     margin: 0 auto;
     font-size: 1rem;

@@ -525,6 +525,78 @@ h1.title-show-out {
   top: 0;
   z-index: 1;
   overflow-y: scroll; }
+  .about .ibope .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: 0 0; }
+  .about .lg .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -106px 0; }
+  .about .bauducco .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -212px 0; }
+  .about .kia .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -318px -1px; }
+  .about .pfizer .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -423px 0; }
+  .about .mcdonalds .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -2px -101px; }
+  .about .nestle .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -107px -101px; }
+  .about .natura .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -212px -100px; }
+  .about .johnsons .back {
+    width: 80px;
+    height: 80px;
+    background-image: url(/images/logosv2.png);
+    background-repeat: no-repeat;
+    display: block;
+    position: relative;
+    background-position: -318px -100px; }
   .about .title {
     font-family: 'medium';
     font-stretch: condensed;
@@ -539,7 +611,48 @@ h1.title-show-out {
     padding: 0;
     margin: 0; }
   .about .brands {
-    margin-top: 30px; }
+    width: 500px;
+    margin-top: 30px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap; }
+    .about .brands .flip-container {
+      height: 80px;
+      width: 80px;
+      background-color: #000;
+      margin-left: 10px;
+      margin-right: 10px;
+      -webkit-perspective: 600px;
+      perspective: 600px;
+      margin-bottom: 20px; }
+    .about .brands .flip3d {
+      transition: .5s;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      height: inherit;
+      width: inherit;
+      position: relative; }
+      .about .brands .flip3d .front {
+        background-color: #fff;
+        z-index: 2; }
+      .about .brands .flip3d .back {
+        -webkit-transform: rotateY(180deg);
+        transform: rotateY(180deg); }
+      .about .brands .flip3d .front,
+      .about .brands .flip3d .back {
+        height: inherit;
+        position: absolute;
+        width: inherit;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        top: 0;
+        left: 0; }
+  .about .flip-container:hover .flip3d {
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg); }
   .about .skills {
     padding: 0;
     margin: 0;
@@ -556,7 +669,7 @@ h1.title-show-out {
     flex-wrap: wrap;
     margin-bottom: 100px; }
     .about .group-list div {
-      width: 350px;
+      width: 50%;
       margin-bottom: 30px; }
   .about .skills-title {
     font-size: 22px;
@@ -567,7 +680,7 @@ h1.title-show-out {
     padding: 0; }
   .about .content {
     padding-top: 64px;
-    max-width: 700px;
+    max-width: 600px;
     width: 100%;
     margin: 0 auto;
     font-size: 1rem;
@@ -627,12 +740,16 @@ div, section, article {
     transform: translateX(50%); }
   .about .content {
     padding-left: 20px;
-    padding-right: 20px; } }
+    padding-right: 20px; }
+  .about .group-list div {
+    width: 100%;
+    margin-bottom: 30px; } }
 
 @media only screen and (max-width: 768px) and (min-width: 481px) {
   .about .content {
     padding-left: 20px;
     padding-right: 20px; }
   .about .group-list div {
-    width: 210px;
-    margin-bottom: 30px; } }
+    margin-bottom: 30px; }
+  .about .brands {
+    width: 480px; } }
