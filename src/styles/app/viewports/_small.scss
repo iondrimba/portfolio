@@ -1,3 +1,28 @@
 ﻿@import "../_variables.scss";
-@media only screen and (max-width:480px) {
+
+@media only screen and (max-width: 480px) {
+  .home h1 {
+    font-size: 40pt;
+    width: 301px;
+
+    span {
+      font-size: 15pt;
+      letter-spacing: 3px;
+      margin-top: -10px;
+    }
+  }
+
+  .home {
+    .social {
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+
+  .about {
+    .content {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
 }

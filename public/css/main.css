@@ -585,7 +585,9 @@ h1.title-show-out {
     height: 20px;
     padding: 22px;
     text-align: center;
-    font-size: 1em; }
+    font-size: 1em;
+    z-index: 2;
+    position: relative; }
 
 body {
   font-family: "regular";
@@ -610,3 +612,27 @@ div, section, article {
   -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
   transform: translateX(-50%) translateY(-50%) rotate(45deg);
   position: absolute; }
+
+@media only screen and (max-width: 480px) {
+  .home h1 {
+    font-size: 40pt;
+    width: 301px; }
+    .home h1 span {
+      font-size: 15pt;
+      letter-spacing: 3px;
+      margin-top: -10px; }
+  .home .social {
+    right: 50%;
+    -webkit-transform: translateX(50%);
+    transform: translateX(50%); }
+  .about .content {
+    padding-left: 20px;
+    padding-right: 20px; } }
+
+@media only screen and (max-width: 768px) and (min-width: 481px) {
+  .about .content {
+    padding-left: 20px;
+    padding-right: 20px; }
+  .about .group-list div {
+    width: 210px;
+    margin-bottom: 30px; } }
