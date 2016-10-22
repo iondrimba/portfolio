@@ -1,66 +1,114 @@
 ﻿@import "../_variables.scss";
-$easingtime:.7s;
+
+@mixin social-button() {
+  width: 35px;
+  height: 35px;
+  background-image: url(/images/social-mini.png);
+  background-repeat: no-repeat;
+  display: block;
+  position: relative;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .home {
-    overflow: hidden;
-    position: relative;
-    height: round(100vh);
-    h1 {
-        position: absolute;
-        z-index: 1;
-        color: #FFF;
-        font-size: 46pt;
-        top: round(50%);
-        font-family: 'Open Sans', sans-serif;
-        transform: translateX(round(-50%)) translateY(round(-50%));
-        left: round(50%);
-        width: 600px;
-        height: auto;
-        letter-spacing: 5pt;
-        text-transform: uppercase;
-        text-shadow: 1px 1px 0 #1d1c1c;
-        font-weight: 800;
-        line-height: 45pt;
-        display: block;
-        margin: 0;
-        transition: all $easingtime $easing;
-        span {
-            font-weight: 100;
-            font-size: 31pt;
-            text-align: center;
-            display: block;
-        }
+  overflow: hidden;
+  position: relative;
+  height: round(100vh);
+
+  h1 {
+    position: absolute;
+    z-index: 1;
+    color: #fff;
+    font-size: 68pt;
+    top: round(50%);
+    font-family: 'bold';
+    transform: translateX(round(-50%)) translateY(round(-50%));
+    left: round(50%);
+    width: 510px;
+    height: auto;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 #1d1c1c;
+    font-weight: 800;
+    line-height: 45pt;
+    display: block;
+    margin: 0;
+    transition: transform $easingtime $easing;
+
+    span {
+      font-weight: 100;
+      font-size: 25pt;
+      text-align: center;
+      display: block;
+      font-family: 'regular';
+      letter-spacing: 6px;
+      margin-top: 20px;
     }
+  }
+
+  .social {
+    display: flex;
+    float: right;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+  }
+
+  .npm {
+    @include social-button();
+    background-position: 0 0;
+  }
+
+  .github {
+    @include social-button();
+    background-position: -45px 0;
+  }
+
+  .coderwall {
+    @include social-button();
+    background-position: -84px 0;
+  }
+
+  .linkedin {
+    @include social-button();
+    background-position: -130px 0;
+  }
 }
 
-.show-full {
-    transform: translateY(0);
-    transition: all $easingtime $easing;
-}
-
-.show-min {
-    transform: translateY(round(-70vh));
-    transition: all $easingtime $easing;
+.link {
+  background-color: #fff;
+  color: #000;
+  font-weight: 800;
+  padding: 6px;
+  position: absolute;
+  bottom: 90px;
+  display: block;
+  width: 100px;
+  text-align: center;
+  font-size: 29px;
+  text-decoration: none;
 }
 
 h1.title-show-in {
-    opacity: 0;
-    transform: translateX(round(-50%)) translateY(round(-50%));
-    top: round(15%);
-    animation: opacity .5s .5s  1 forwards;
+  opacity: 0;
+  transform: translateX(round(-50%)) translateY(round(-50%));
+  top: round(15%);
+  animation: opacity .5s .5s 1 forwards;
 }
 
 h1.title-show-out {
-    transform: translateX(round(-50%)) translateY(round(-50%));
-    top: round(50%);
+  transform: translateX(round(-50%)) translateY(round(-50%));
+  top: round(50%);
 }
 
-@keyframes opacity { 
-    50%{
-        opacity:0;
-        transform: opacity;
-    }
-    100% { 
-        opacity:1;
-        transform: opacity;
-    } 
+@keyframes opacity {
+  50% {
+    opacity: 0;
+    transform: opacity;
+  }
+
+  100% {
+    opacity: 1;
+    transform: opacity;
+  }
 }

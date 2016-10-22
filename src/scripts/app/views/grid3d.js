@@ -103,6 +103,8 @@ define(['views/AnimateColors'], function (AnimateColors) {
             this.objUp = this.addExtrudeUpObj(this.scene, this.materials);
 
             this.objDown = this.addExtrudeDownObj(this.scene, this.materials);
+
+            this.onWindowResize();
         };
 
         this.addExtrudeUpObj = function (scene, materials) {

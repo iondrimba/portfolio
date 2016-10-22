@@ -1,85 +1,88 @@
-﻿@-moz-document url-prefix() {
-    fieldset {
-        .line-ph i {
-            top: -11%!important;
-        }
-    }
-}
+﻿@import "../_variables.scss";
+@import "../controls/_close.scss";
+
 
 .about {
-    margin-bottom: 50px;
-    > p {
-        padding-bottom: 5%;
-        opacity: 0;
-    }
-    h2 {
-        padding-bottom: 20px;
-    }
-    .about-project {
-        font-size: 9pt;
-        opacity: 0;
-        display: inline-block;
-        margin-top: 20px;
-        p {
-            line-height: 16pt;
-            font-style: italic;
-        }
-    }
-    fieldset {
-        position: relative;
-        padding: 0 0.0 0.75em;
-        display: block;
-        float: left;
-        .line-ph i {
-            top: 5%;
-        }
-        ul {
-            opacity: 0;
-        }
-    }
-    legend {
-        opacity: 0;
-    }
-    .skills-set {
-        float: left;
-        width: 100%;
-        fieldset:not(:first-child) {
-            margin-left: 10%;
-        }
-    }
-    .animate-in-legend-left {
-        .line-ph i {            
-            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
-        }
-        legend {
-            
-            animation: fadeIn .5s .7s 1 forwards;
-        }
-    }
-    .animate-in-legend-center {
-        .line-ph i {            
-            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
-        }
-        legend {            
-            animation: fadeIn .5s .7s 1 forwards;
-        }
-    }
-    .animate-in-legend-right {
-        .line-ph i {
-            animation: scaleLineIn .5s .2s, scaleLineOut .5s .5s;
-        }
-        legend {
-            animation: fadeIn .5s .7s 1 forwards;
-        }
-    }
-    .animate-text {
-        animation: fadeIn .2s 0s 1 forwards;
-    }
-    .animate-text-project {
-        animation: fadeIn .5s 1s 1 forwards;
-    }
-}
+  //background-image: url(../images/bg.png);
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+  float: left;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  overflow-y: scroll;
 
-.animate-text-opacity-about {
-    animation: fadeIn .5s .3s 1 forwards;
+  .title {
+    font-family: 'medium';
+    font-stretch: condensed;
+    padding: 0;
+    margin: 0;
+    margin-top: -10px;
+    font-size: 2.4em;
+  }
+
+  .intro {
+    margin-top: 32px;
+    font-size: 18px;
+  }
+
+  p {
+    padding: 0;
+    margin: 0;
+  }
+
+  .brands {
+    margin-top: 30px;
+  }
+
+  .skills {
+    padding: 0;
+    margin: 0;
+    margin-top: 75px;
+    margin-bottom: 75px;
+    font-size: 29px;
+    font-family: medium;
+  }
+
+  .group-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+
+    div {
+      width: 350px;
+      margin-bottom: 30px;
+    }
+  }
+
+  .skills-title {
+    font-size: 22px;
+    font-family: medium;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .content {
+    padding-top: 64px;
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+
+  .close {
+    @include close();
+  }
 }

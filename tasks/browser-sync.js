@@ -13,6 +13,6 @@ module.exports = function() {
     gulp.watch("./public/*.html").on('change', browserSync.reload);
 
     gulp.watch('./src/styles/**/*.{sass,scss}', ['sass']);
-    gulp.watch('./src/templates/*.html', ['sass']);
+    gulp.watch('./src/templates/*.html', ['sass', 'requirejs:dev']);
     gulp.watch('./src/scripts/**/*.js', ['requirejs:dev']);
 };

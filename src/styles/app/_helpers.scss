@@ -1,20 +1,17 @@
-﻿
-
-.clearfix:before,
+﻿.clearfix:before,
 .clearfix:after {
-    content: ' ';
-    display: table;
+  content: ' ';
+  display: table;
 }
 
 .clearfix:after {
-    clear: both;
+  clear: both;
 }
 
-.column {
-    float: left;
-    width: 50%;
+.hidden {
+  display: none;
 }
 
 .visible-false {
-    opacity: 0;
+  opacity: 0;
 }

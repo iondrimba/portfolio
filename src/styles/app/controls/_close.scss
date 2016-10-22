@@ -1,0 +1,12 @@
+﻿@mixin close() {
+  display: block;
+  float: right;
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+  width: 20px;
+  height: 20px;
+  padding: 22px;
+  text-align: center;
+  font-size: 1em;
+}
