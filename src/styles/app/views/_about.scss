@@ -8,6 +8,8 @@
   background-repeat: no-repeat;
   display: block;
   position: relative;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .about {
@@ -23,68 +25,56 @@
   top: 0;
   z-index: 1;
   overflow-y: scroll;
+  transform: translateY(100vh);
+  transition: transform .3s;
+
+  &.show {
+    transform: translateY(-0vh);
+  }
 
   .ibope {
-    .back {
-      @include icon();
-      background-position: 0 0;
-    }
+    @include icon();
+    background-position: 0 0;
   }
 
   .lg {
-    .back {
-      @include icon();
-      background-position: -106px 0;
-    }
+    @include icon();
+    background-position: -106px 0;
   }
 
   .bauducco {
-    .back {
-      @include icon();
-      background-position: -212px 0;
-    }
+    @include icon();
+    background-position: -212px 0;
   }
 
   .kia {
-    .back {
-      @include icon();
-      background-position: -318px -1px;
-    }
+    @include icon();
+    background-position: -318px -1px;
   }
 
   .pfizer {
-    .back {
-      @include icon();
-      background-position: -423px 0;
-    }
+    @include icon();
+    background-position: -423px 0;
   }
 
   .mcdonalds {
-    .back {
-      @include icon();
-      background-position: -2px -101px;
-    }
+    @include icon();
+    background-position: -2px -101px;
   }
 
   .nestle {
-    .back {
-      @include icon();
-      background-position: -107px -101px;
-    }
+    @include icon();
+    background-position: -107px -101px;
   }
 
   .natura {
-    .back {
-      @include icon();
-      background-position: -212px -100px;
-    }
+    @include icon();
+    background-position: -212px -100px;
   }
 
   .johnsons {
-    .back {
-      @include icon();
-      background-position: -318px -100px;
-    }
+    @include icon();
+    background-position: -318px -100px;
   }
 
   .title {
@@ -107,7 +97,7 @@
   }
 
   .brands {
-    width: 500px;
+    max-width: 500px;
     margin-top: 30px;
     display: flex;
     flex-wrap: wrap;

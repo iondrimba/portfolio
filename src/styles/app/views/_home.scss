@@ -9,6 +9,7 @@
   position: relative;
   margin-left: 10px;
   margin-right: 10px;
+  transform: translateY(50px);
 }
 
 .home {
@@ -25,7 +26,6 @@
     font-family: 'bold';
     transform: translateX(round(-50%)) translateY(round(-50%));
     left: round(50%);
-    width: 510px;
     height: auto;
     text-transform: uppercase;
     text-shadow: 1px 1px 0 #1d1c1c;
@@ -41,7 +41,7 @@
       text-align: center;
       display: block;
       font-family: 'regular';
-      letter-spacing: 6px;
+      letter-spacing: 3px;
       margin-top: 20px;
     }
   }
@@ -87,6 +87,11 @@
   text-align: center;
   font-size: 29px;
   text-decoration: none;
+  transition: transform .3s;
+}
+
+.hide-button-about {
+  transform: translateX(-120px);
 }
 
 h1.title-show-in {

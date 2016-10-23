@@ -399,7 +399,6 @@ th {
     -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
     left: 50%;
-    width: 510px;
     height: auto;
     text-transform: uppercase;
     text-shadow: 1px 1px 0 #1d1c1c;
@@ -416,7 +415,7 @@ th {
       text-align: center;
       display: block;
       font-family: 'regular';
-      letter-spacing: 6px;
+      letter-spacing: 3px;
       margin-top: 20px; }
   .home .social {
     display: -webkit-flex;
@@ -435,6 +434,8 @@ th {
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
     background-position: 0 0; }
   .home .github {
     width: 35px;
@@ -445,6 +446,8 @@ th {
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
     background-position: -45px 0; }
   .home .coderwall {
     width: 35px;
@@ -455,6 +458,8 @@ th {
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
     background-position: -84px 0; }
   .home .linkedin {
     width: 35px;
@@ -465,6 +470,8 @@ th {
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
     background-position: -130px 0; }
 
 .link {
@@ -478,7 +485,14 @@ th {
   width: 100px;
   text-align: center;
   font-size: 29px;
-  text-decoration: none; }
+  text-decoration: none;
+  transition: -webkit-transform .3s;
+  transition: transform .3s;
+  transition: transform .3s, -webkit-transform .3s; }
+
+.hide-button-about {
+  -webkit-transform: translateX(-120px);
+  transform: translateX(-120px); }
 
 h1.title-show-in {
   opacity: 0;
@@ -524,78 +538,104 @@ h1.title-show-out {
   position: absolute;
   top: 0;
   z-index: 1;
-  overflow-y: scroll; }
-  .about .ibope .back {
+  overflow-y: scroll;
+  -webkit-transform: translateY(100vh);
+  transform: translateY(100vh);
+  transition: -webkit-transform .3s;
+  transition: transform .3s;
+  transition: transform .3s, -webkit-transform .3s; }
+  .about.show {
+    -webkit-transform: translateY(0vh);
+    transform: translateY(0vh); }
+  .about .ibope {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: 0 0; }
-  .about .lg .back {
+  .about .lg {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -106px 0; }
-  .about .bauducco .back {
+  .about .bauducco {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -212px 0; }
-  .about .kia .back {
+  .about .kia {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -318px -1px; }
-  .about .pfizer .back {
+  .about .pfizer {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -423px 0; }
-  .about .mcdonalds .back {
+  .about .mcdonalds {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -2px -101px; }
-  .about .nestle .back {
+  .about .nestle {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -107px -101px; }
-  .about .natura .back {
+  .about .natura {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -212px -100px; }
-  .about .johnsons .back {
+  .about .johnsons {
     width: 80px;
     height: 80px;
     background-image: url(/images/logosv2.png);
     background-repeat: no-repeat;
     display: block;
     position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-position: -318px -100px; }
   .about .title {
     font-family: 'medium';
@@ -611,7 +651,7 @@ h1.title-show-out {
     padding: 0;
     margin: 0; }
   .about .brands {
-    width: 500px;
+    max-width: 500px;
     margin-top: 30px;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -750,6 +790,4 @@ div, section, article {
     padding-left: 20px;
     padding-right: 20px; }
   .about .group-list div {
-    margin-bottom: 30px; }
-  .about .brands {
-    width: 480px; } }
+    margin-bottom: 30px; } }

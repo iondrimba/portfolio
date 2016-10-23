@@ -4,7 +4,7 @@
         this.$$ = app.$$;
         this.view = function () {
             var view = app.handlebars.compile(template),
-                html = view()
+                html = view();
 
             return html;
 
@@ -15,27 +15,18 @@
         this.setup = function () {
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
-             this.$el.addClass('hidden');
         };
         this.execute = function () {
-            this.$el.removeClass('hidden');
-            this.addAnimationsListeners();
             var s = setTimeout(function () {
                 clearTimeout(s);
                 this.animateIn();
             }.bind(this), 100);
         };
-        this.addAnimationsListeners = function () {
-        };
         this.animateIn = function () {
-
+            this.$el.addClass('show');
         };
-        this.removeAnimation = function () {
-        };
-
         this.hide = function () {
-            this.$el.addClass('hidden');
-            this.removeAnimation();
+            this.$el.removeClass('show');
         };
 
     };

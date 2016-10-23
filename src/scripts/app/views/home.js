@@ -4,6 +4,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
         this.el = '.home';
         this.$$ = app.$$;
         this.loaded = false;
+        this.btnAbout;
         this.view = function() {
             var view = app.handlebars.compile(template),
                 html = view()
@@ -15,7 +16,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
             this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
-
+            this.btnAbout = this.$$('.link');
 
             //INIT WEBGL GRID ONLY IDF SUPPORTED
             if (Detector.webgl) {
@@ -23,8 +24,20 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
                 this.grid3D = new Grid3D(app);
             }
 
+            //click about
+            this.btnAbout.on('click', this.onAboutClick.bind(this));
+
+        };
+        this.onAboutClick = function onAboutClick(evt) {    
+            console.log('click');
+            evt.preventDefault();
+            this.btnAbout.addClass('hide-button-about');
+            setTimeout(function(){
+                app.controller.navigate('/about');
+            }.bind(this),100);
         };
         this.execute = function() {
+            console.log('execute');
             if (Detector.webgl) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
@@ -44,34 +57,11 @@ define(['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, templa
         };
 
         this.show = function() {
-            this.$$('.content-wrapper').removeClass('show-min');
-
-            //ANIMATE FULL VIEW
-            this.$$('.content-wrapper').addClass('show-full');
-
-            this.$el.find('h1').removeClass('title-show-in');
-            this.$el.find('h1').addClass('title-show-out');
-
-            this.$$('.scroll-down-button').removeClass('hidden');
-            this.$$('body').removeClass('show-scroll');
-
-            var s = setTimeout(function() {
-                clearTimeout(s);
-                this.$$('.scroll-down-button').addClass('draw-in');
-            }.bind(this), 100);
+            console.log('show');
+            this.btnAbout.removeClass('hide-button-about');
         };
         this.hide = function() {
-            this.$$('.content-wrapper').removeClass('show-full');
-
-            this.$el.find('h1').removeClass('title-show-out');
-            this.$el.find('h1').addClass('title-show-in');
-
-            //ANIMATE MINIMIZED VIEW
-            this.$$('.content-wrapper').addClass('show-min');
-
-            this.$$('.scroll-down-button').addClass('hidden');
-            this.$$('body').addClass('show-scroll');
-            this.$$('.scroll-down-button').removeClass('draw-in');
+            console.log('hide');
         };
 
     };
