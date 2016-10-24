@@ -9,7 +9,7 @@
   position: relative;
   margin-left: 10px;
   margin-right: 10px;
-  transform: translateY(50px);
+  transform: translateY(50px) translate3d(0, 0, 0) translate3d(0, 0, 0);
   transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -26,7 +26,7 @@
     font-size: 68pt;
     top: round(50%);
     font-family: 'bold';
-    transform: translateX(round(-50%)) translateY(round(-50%));
+    transform: translateX(round(-50%)) translateY(round(10%)) translate3d(0, 0, 0);
     left: round(50%);
     height: auto;
     text-transform: uppercase;
@@ -35,7 +35,8 @@
     line-height: 45pt;
     display: block;
     margin: 0;
-    transition: transform $easingtime $easing;
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.23, 1, 0.32, 1);
 
     span {
       font-weight: 100;
@@ -45,6 +46,19 @@
       font-family: 'regular';
       letter-spacing: 3px;
       margin-top: 20px;
+      transform: translateY(50px) translate3d(0, 0, 0);
+      opacity: 0;
+      transition: all .3s .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  }
+
+  .title-animate {
+    transform: translateX(round(-50%)) translateY(round(-50%)) translate3d(0, 0, 0);
+    opacity: 1;
+
+    span {
+      transform: translateY(0px) translate3d(0, 0, 0);
+      opacity: 1;
     }
   }
 
@@ -54,10 +68,11 @@
     position: absolute;
     bottom: 10px;
     right: 20px;
+    transform: translate3d(0, 0, 0);
   }
 
   a.social-animate-in {
-    transform: translateY(0px);
+    transform: translateY(0px) translate3d(0, 0, 0);
   }
 
   .npm {
@@ -93,10 +108,11 @@
   text-align: center;
   font-size: 29px;
   text-decoration: none;
+  transform: translate3d(0, 0, 0);
   transition: transform .3s .2s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hide-button-about {
-  transform: translateX(-120px);
+  transform: translateX(-120px) translate3d(0, 0, 0);
   transition: transform .3s;
 }

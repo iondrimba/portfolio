@@ -8,13 +8,11 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
         this.btnAbout;
         this.view = function () {
             var view = app.handlebars.compile(template),
-                html = view()
-
+                html = view();
             return html;
 
         };
         this.init = function () {
-            this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
             this.btnAbout = this.$$('.link');
@@ -25,63 +23,78 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
                 this.grid3D = new Grid3D(app);
             }
 
-            //click about
+            //about click
             this.btnAbout.on('click', this.onAboutClick.bind(this));
 
         };
-        this.onAboutClick = function onAboutClick(evt) {
-            console.log('click');
-            evt.preventDefault();
+        this.titleShow = function() {
+             this.$$('.hero-title').addClass('title-animate');
+             this.$$('.hero-subtitle').addClass('subtitle-animate');
+        };
+        this.titleHide = function() {
+             this.$$('.hero-title').removeClass('title-animate');
+             this.$$('.hero-subtitle').removeClass('subtitle-animate');
+        };
+        this.hideAboutButton = function () {
             this.btnAbout.addClass('hide-button-about');
-
+        };
+        this.showAboutButton = function () {
+            this.btnAbout.removeClass('hide-button-about');
+        };
+        this.gotoAbout = function () {
             app.controller.navigate('/about');
-
         };
-        this.animateSocialIcons = function animateSocialIcons() {
-            this.$$('.social').find('a').each(function (elmt, index) {
-                TweenLite.delayedCall(.1 * index, function () {
-                    this.$$(elmt).addClass('social-animate-in');
-                }.bind(this));
-            }.bind(this));
+        this.hideLoader = function () {
+            this.$$('.loading-arrow').remove();
         };
 
-        this.removeSocialIcons = function animateSocialIcons() {
+        this.onAboutClick = function onAboutClick(evt) {
+            evt.preventDefault();
+            this.hideAboutButton();
+            this.gotoAbout();
+        };
+
+        this.showSocialIcons = function animateSocialIcons() {
+            this.socialIconsAnimation('addClass');
+        };
+
+        this.hideSocialIcons = function animateSocialIcons() {
+            this.socialIconsAnimation('removeClass');
+        };
+
+        this.socialIconsAnimation = function animateSocialIcons(callback) {
             this.$$('.social').find('a').each(function (elmt, index) {
                 TweenLite.delayedCall(.1 * index, function () {
-                    this.$$(elmt).removeClass('social-animate-in');
+                    this.$$(elmt)[callback]('social-animate-in');
                 }.bind(this));
             }.bind(this));
         };
 
 
         this.execute = function () {
-            console.log('execute');
             if (Detector.webgl) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
                 }
             }
 
-            //SHOW VIEW
             this.$el.removeClass('hidden');
 
-            //HIDE LOADER
-            this.$$('.loading-arrow').remove();
+            this.hideLoader();
 
-            //OPEN FULL MODE
             this.show();
 
             this.loaded = true;
         };
 
         this.show = function () {
-            console.log('show');
-            this.btnAbout.removeClass('hide-button-about');
-            this.animateSocialIcons();
+            this.titleShow();
+            this.showAboutButton();
+            this.showSocialIcons();
         };
         this.hide = function () {
-            console.log('hide');
-            this.removeSocialIcons();
+            this.titleHide();
+            this.hideSocialIcons();
         };
 
     };

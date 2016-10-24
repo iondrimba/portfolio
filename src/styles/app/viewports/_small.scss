@@ -15,7 +15,7 @@
   .home {
     .social {
       right: 50%;
-      transform: translateX(50%);
+      transform: translateX(50%) translate3d(0,0,0);
     }
   }
 

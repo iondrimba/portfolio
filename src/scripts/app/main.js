@@ -7,7 +7,8 @@
     'vendors/TweenMax',
     'handlebars'
 
-], function (NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax, handlebars) {
+], function (NoJQuery, Controller, THREE , OrbitControls, Detector, TweenMax, handlebars) {
+    
     var App = function () {     
         this.handlebars = handlebars;
         this.$$ = NoJQuery;

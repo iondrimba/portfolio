@@ -1914,16 +1914,15 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
 
         this.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
-            this.render();
+            this.render();            
+
+            this.camera.lookAt(this.scene.position);
+            this.renderer.render(this.scene, this.camera);
         };
 
         this.render = function () {
             this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
             this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
-
-            this.camera.lookAt(this.scene.position);
-
-            this.renderer.render(this.scene, this.camera);
         };
 
         this.showValXUp = function (obj, index, value) {
@@ -2572,7 +2571,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!src/templates/home.html',[],function () { return '<h1>Ion Drimba F.<span>Front-End Developer</span></h1>\r\n<div class="grid3d visible-false"></div>\r\n<a href="/about" class="link"><span>about</span>\r\n</a>\r\n<div class="social">\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://www.npmjs.com/~iondrimba" class="npm" title="NPM"> </a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://github.com/iondrimba" class="github" title="Github">\r\n\t</a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://coderwall.com/iondrimba" class="coderwall" title="Coderwall">\r\n\t</a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://www.linkedin.com/in/iondrimbafilho" class="linkedin" title="LinkedIn">\r\n\t</a>\r\n</div>';});
+define('text!src/templates/home.html',[],function () { return '<h1 class="hero-title">Ion Drimba F.<span>Front-End Developer</span></h1>\r\n<div class="grid3d visible-false"></div>\r\n<a href="/about" class="link"><span>about</span>\r\n</a>\r\n<div class="social">\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://www.npmjs.com/~iondrimba" class="npm" title="NPM"> </a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://github.com/iondrimba" class="github" title="Github">\r\n\t</a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://coderwall.com/iondrimba" class="coderwall" title="Coderwall">\r\n\t</a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://www.linkedin.com/in/iondrimbafilho" class="linkedin" title="LinkedIn">\r\n\t</a>\r\n</div>';});
 
 /* global Detector */
 /* global TweenLite */
@@ -2584,13 +2583,11 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
         this.btnAbout;
         this.view = function () {
             var view = app.handlebars.compile(template),
-                html = view()
-
+                html = view();
             return html;
 
         };
         this.init = function () {
-            this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
             this.btnAbout = this.$$('.link');
@@ -2601,63 +2598,78 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
                 this.grid3D = new Grid3D(app);
             }
 
-            //click about
+            //about click
             this.btnAbout.on('click', this.onAboutClick.bind(this));
 
         };
-        this.onAboutClick = function onAboutClick(evt) {
-            console.log('click');
-            evt.preventDefault();
+        this.titleShow = function() {
+             this.$$('.hero-title').addClass('title-animate');
+             this.$$('.hero-subtitle').addClass('subtitle-animate');
+        };
+        this.titleHide = function() {
+             this.$$('.hero-title').removeClass('title-animate');
+             this.$$('.hero-subtitle').removeClass('subtitle-animate');
+        };
+        this.hideAboutButton = function () {
             this.btnAbout.addClass('hide-button-about');
-
+        };
+        this.showAboutButton = function () {
+            this.btnAbout.removeClass('hide-button-about');
+        };
+        this.gotoAbout = function () {
             app.controller.navigate('/about');
-
         };
-        this.animateSocialIcons = function animateSocialIcons() {
-            this.$$('.social').find('a').each(function (elmt, index) {
-                TweenLite.delayedCall(.1 * index, function () {
-                    this.$$(elmt).addClass('social-animate-in');
-                }.bind(this));
-            }.bind(this));
+        this.hideLoader = function () {
+            this.$$('.loading-arrow').remove();
         };
 
-        this.removeSocialIcons = function animateSocialIcons() {
+        this.onAboutClick = function onAboutClick(evt) {
+            evt.preventDefault();
+            this.hideAboutButton();
+            this.gotoAbout();
+        };
+
+        this.showSocialIcons = function animateSocialIcons() {
+            this.socialIconsAnimation('addClass');
+        };
+
+        this.hideSocialIcons = function animateSocialIcons() {
+            this.socialIconsAnimation('removeClass');
+        };
+
+        this.socialIconsAnimation = function animateSocialIcons(callback) {
             this.$$('.social').find('a').each(function (elmt, index) {
                 TweenLite.delayedCall(.1 * index, function () {
-                    this.$$(elmt).removeClass('social-animate-in');
+                    this.$$(elmt)[callback]('social-animate-in');
                 }.bind(this));
             }.bind(this));
         };
 
 
         this.execute = function () {
-            console.log('execute');
             if (Detector.webgl) {
                 if (this.grid3D.executed == false) {
                     this.grid3D.execute();
                 }
             }
 
-            //SHOW VIEW
             this.$el.removeClass('hidden');
 
-            //HIDE LOADER
-            this.$$('.loading-arrow').remove();
+            this.hideLoader();
 
-            //OPEN FULL MODE
             this.show();
 
             this.loaded = true;
         };
 
         this.show = function () {
-            console.log('show');
-            this.btnAbout.removeClass('hide-button-about');
-            this.animateSocialIcons();
+            this.titleShow();
+            this.showAboutButton();
+            this.showSocialIcons();
         };
         this.hide = function () {
-            console.log('hide');
-            this.removeSocialIcons();
+            this.titleHide();
+            this.hideSocialIcons();
         };
 
     };
@@ -27519,7 +27531,7 @@ THREE.WebGLShader = ( function () {
 
 		if ( gl.getShaderInfoLog( shader ) !== '' ) {
 
-			THREE.warn( 'THREE.WebGLShader: gl.getShaderInfoLog()', gl.getShaderInfoLog( shader ), addLineNumbers( string ) );
+			//THREE.warn( 'THREE.WebGLShader: gl.getShaderInfoLog()', gl.getShaderInfoLog( shader ), addLineNumbers( string ) );
 
 		}
 
@@ -50699,7 +50711,8 @@ require([
     'vendors/TweenMax',
     'handlebars'
 
-], function (NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax, handlebars) {
+], function (NoJQuery, Controller, THREE , OrbitControls, Detector, TweenMax, handlebars) {
+    
     var App = function () {     
         this.handlebars = handlebars;
         this.$$ = NoJQuery;

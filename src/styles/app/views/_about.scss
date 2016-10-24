@@ -11,7 +11,7 @@
   margin-left: 10px;
   margin-right: 10px;
   opacity: 0;
-  transform: translateY(50px);
+  transform: translateY(50px) translate3d(0,0,0);
 }
 
 .about {
@@ -28,18 +28,18 @@
   z-index: 1;
   opacity: 0;
   overflow-y: scroll;
-  transform: translateY(30vh);
+  transform: translateY(30vh) translate3d(0,0,0);
   transition: transform .3s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: -1;
 
   &.show {
-    transform: translateY(-0vh);
+    transform: translateY(-0vh) translate3d(0,0,0);
     opacity: 1;
     z-index: 2;
   }
 
   &.animate-out {
-    transform: translateY(100vh);
+    transform: translateY(100vh) translate3d(0,0,0);
     z-index: 2;
   }
 
@@ -95,7 +95,7 @@
     margin: 0;
     margin-top: -10px;
     font-size: 2.4em;
-    transform: translateY(50px);
+    transform: translateY(50px) translate3d(0,0,0);
     opacity: 0;
     transition: all .3s cubic-bezier(0.23, 1, 0.32, 1);
   }
@@ -103,25 +103,25 @@
   .first-block,
   .second-block,
   .third-block {
-    transform: translateY(50px);
+    transform: translateY(50px) translate3d(0,0,0);
     opacity: 0;
     transition: all .3s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .block-animate-in {
-    transform: translateY(0px);
+    transform: translateY(0px) translate3d(0,0,0);
     opacity: 1;
     transition: all .3s .1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .icon-animate-in {
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateY(0px) translate3d(0,0,0);
     transition: all .2s .05s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .title-animate-in {
-    transform: translateY(0px);
+    transform: translateY(0px) translate3d(0,0,0);
     opacity: 1;
     transition: all .3s .3s cubic-bezier(0.23, 1, 0.32, 1);
   }
@@ -150,37 +150,37 @@
     margin-bottom: 45px;
     font-size: 29px;
     font-family: medium;
-    transform: translateY(50px);
+    transform: translateY(50px) translate3d(0,0,0);
     opacity: 0;
     transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .primary {
-    transform: translateY(50px);
+    transform: translateY(50px) translate3d(0,0,0);
     opacity: 0;
     transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .secondary {
-    transform: translateY(50px);
+    transform: translateY(50px) translate3d(0,0,0);
     opacity: 0;
     transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .primary-animate-in {
-    transform: translateY(0px);
+    transform: translateY(0px) translate3d(0,0,0);
     opacity: 1;
     transition: all .3s .35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .secondary-animate-in {
-    transform: translateY(0px);
+    transform: translateY(0px) translate3d(0,0,0);
     opacity: 1;
     transition: all .3s .40s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .skills-animate-in {
-    transform: translateY(0px);
+    transform: translateY(0px) translate3d(0,0,0);
     opacity: 1;
     transition: all .3s .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
@@ -215,18 +215,18 @@
     font-size: 1rem;
     position: absolute;
     left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%) translate3d(0,0,0);
+    transform: translateX(-50%) translate3d(0,0,0);
   }
 
   .close {
     @include close();
-    transform: translateY(-100%);
+    transform: translateY(-100%) translate3d(0,0,0);
     transition: transform .2s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   a.close-animate-in {
-    transform: translateY(0%);
+    transform: translateY(0%) translate3d(0,0,0);
     transition: transform .3s .3s cubic-bezier(0.23, 1, 0.32, 1);
   }
 }

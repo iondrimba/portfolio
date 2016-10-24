@@ -314,16 +314,15 @@ define(['views/AnimateColors'], function (AnimateColors) {
 
         this.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
-            this.render();
+            this.render();            
+
+            this.camera.lookAt(this.scene.position);
+            this.renderer.render(this.scene, this.camera);
         };
 
         this.render = function () {
             this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
             this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
-
-            this.camera.lookAt(this.scene.position);
-
-            this.renderer.render(this.scene, this.camera);
         };
 
         this.showValXUp = function (obj, index, value) {
