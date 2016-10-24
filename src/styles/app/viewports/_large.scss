@@ -1,5 +1,9 @@
 ﻿@import "../_variables.scss";
 
-@media only screen and (max-width:1160px) and (min-width:769px) {
-   
+@media only screen and (max-width: 1160px) and (min-width: 769px) {
+  .home {
+    h1 {
+      width: 460px;
+    }
+  }
 }

@@ -10,6 +10,8 @@
   position: relative;
   margin-left: 10px;
   margin-right: 10px;
+  opacity: 0;
+  transform: translateY(50px);
 }
 
 .about {
@@ -24,12 +26,21 @@
   position: absolute;
   top: 0;
   z-index: 1;
+  opacity: 0;
   overflow-y: scroll;
-  transform: translateY(100vh);
-  transition: transform .3s;
+  transform: translateY(30vh);
+  transition: transform .3s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: -1;
 
   &.show {
     transform: translateY(-0vh);
+    opacity: 1;
+    z-index: 2;
+  }
+
+  &.animate-out {
+    transform: translateY(100vh);
+    z-index: 2;
   }
 
   .ibope {
@@ -84,6 +95,35 @@
     margin: 0;
     margin-top: -10px;
     font-size: 2.4em;
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .first-block,
+  .second-block,
+  .third-block {
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .block-animate-in {
+    transform: translateY(0px);
+    opacity: 1;
+    transition: all .3s .1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .icon-animate-in {
+    opacity: 1;
+    transform: translateY(0px);
+    transition: all .2s .05s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .title-animate-in {
+    transform: translateY(0px);
+    opacity: 1;
+    transition: all .3s .3s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .intro {
@@ -101,58 +141,48 @@
     margin-top: 30px;
     display: flex;
     flex-wrap: wrap;
-
-    .flip-container {
-      height: 80px;
-      width: 80px;
-      background-color: #000;
-      margin-left: 10px;
-      margin-right: 10px;
-      perspective: 600px;
-      margin-bottom: 20px;
-    }
-
-    .flip3d {
-      transition: .5s;
-      transform-style: preserve-3d;
-      height: inherit;
-      width: inherit;
-      position: relative;
-
-      .front {
-        background-color: #fff;
-        z-index: 2;
-      }
-
-      .back {
-        transform: rotateY(180deg);
-      }
-
-      .front,
-      .back {
-        height: inherit;
-        position: absolute;
-        width: inherit;
-        backface-visibility: hidden;
-        top: 0;
-        left: 0;
-      }
-    }
-  }
-
-  .flip-container:hover {
-    .flip3d {
-      transform: rotateY(180deg);
-    }
   }
 
   .skills {
     padding: 0;
     margin: 0;
     margin-top: 75px;
-    margin-bottom: 75px;
+    margin-bottom: 45px;
     font-size: 29px;
     font-family: medium;
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .primary {
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .secondary {
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .primary-animate-in {
+    transform: translateY(0px);
+    opacity: 1;
+    transition: all .3s .35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .secondary-animate-in {
+    transform: translateY(0px);
+    opacity: 1;
+    transition: all .3s .40s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .skills-animate-in {
+    transform: translateY(0px);
+    opacity: 1;
+    transition: all .3s .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .group-list {
@@ -191,5 +221,12 @@
 
   .close {
     @include close();
+    transform: translateY(-100%);
+    transition: transform .2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  a.close-animate-in {
+    transform: translateY(0%);
+    transition: transform .3s .3s cubic-bezier(0.23, 1, 0.32, 1);
   }
 }

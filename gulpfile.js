@@ -5,6 +5,7 @@ var requirePaths = {
     noJquery: 'node_modules/nojquery/nojquery',
     TweenLite: 'src/scripts/vendors/TweenLite',
     handlebars: 'node_modules/handlebars/dist/handlebars',
+    notifyCss: 'src/scripts/app/core/notifyCss',
     page: 'node_modules/page/page',
     models: 'src/scripts/app/models',
     views: 'src/scripts/app/views',

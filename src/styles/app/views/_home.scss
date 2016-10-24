@@ -10,6 +10,7 @@
   margin-left: 10px;
   margin-right: 10px;
   transform: translateY(50px);
+  transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .home {
@@ -20,6 +21,7 @@
   h1 {
     position: absolute;
     z-index: 1;
+    text-align: center;
     color: #fff;
     font-size: 68pt;
     top: round(50%);
@@ -52,6 +54,10 @@
     position: absolute;
     bottom: 10px;
     right: 20px;
+  }
+
+  a.social-animate-in {
+    transform: translateY(0px);
   }
 
   .npm {
@@ -87,33 +93,10 @@
   text-align: center;
   font-size: 29px;
   text-decoration: none;
-  transition: transform .3s;
+  transition: transform .3s .2s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hide-button-about {
   transform: translateX(-120px);
-}
-
-h1.title-show-in {
-  opacity: 0;
-  transform: translateX(round(-50%)) translateY(round(-50%));
-  top: round(15%);
-  animation: opacity .5s .5s 1 forwards;
-}
-
-h1.title-show-out {
-  transform: translateX(round(-50%)) translateY(round(-50%));
-  top: round(50%);
-}
-
-@keyframes opacity {
-  50% {
-    opacity: 0;
-    transform: opacity;
-  }
-
-  100% {
-    opacity: 1;
-    transform: opacity;
-  }
+  transition: transform .3s;
 }

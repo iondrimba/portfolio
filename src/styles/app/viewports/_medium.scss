@@ -1,6 +1,18 @@
 ﻿@import "../_variables.scss";
 
 @media only screen and (max-width: 768px) and (min-width: 481px) {
+  .home {
+    h1 {
+      width: 460px;
+      font-size: 55pt;
+
+      span {
+        font-size: 19pt;
+        margin-top: 0;
+      }
+    }
+  }
+
   .about {
     .content {
       padding-left: 20px;

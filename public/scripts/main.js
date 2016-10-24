@@ -2575,20 +2575,21 @@ define('text',['module'], function (module) {
 define('text!src/templates/home.html',[],function () { return '<h1>Ion Drimba F.<span>Front-End Developer</span></h1>\r\n<div class="grid3d visible-false"></div>\r\n<a href="/about" class="link"><span>about</span>\r\n</a>\r\n<div class="social">\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://www.npmjs.com/~iondrimba" class="npm" title="NPM"> </a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://github.com/iondrimba" class="github" title="Github">\r\n\t</a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://coderwall.com/iondrimba" class="coderwall" title="Coderwall">\r\n\t</a>\r\n\t<a target="_blank" rel="noopener noreferrer"  href="https://www.linkedin.com/in/iondrimbafilho" class="linkedin" title="LinkedIn">\r\n\t</a>\r\n</div>';});
 
 /* global Detector */
-define('views/home',['views/grid3d', 'text!src/templates/home.html'], function(Grid3D, template) {
-    var Home = function(app) {
+/* global TweenLite */
+define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, template) {
+    var Home = function (app) {
         this.el = '.home';
         this.$$ = app.$$;
         this.loaded = false;
         this.btnAbout;
-        this.view = function() {
+        this.view = function () {
             var view = app.handlebars.compile(template),
                 html = view()
 
             return html;
 
         };
-        this.init = function() {            
+        this.init = function () {
             this.$$(this.el).addClass('body-gradient');
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
@@ -2604,15 +2605,32 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function(G
             this.btnAbout.on('click', this.onAboutClick.bind(this));
 
         };
-        this.onAboutClick = function onAboutClick(evt) {    
+        this.onAboutClick = function onAboutClick(evt) {
             console.log('click');
             evt.preventDefault();
             this.btnAbout.addClass('hide-button-about');
-            setTimeout(function(){
-                app.controller.navigate('/about');
-            }.bind(this),100);
+
+            app.controller.navigate('/about');
+
         };
-        this.execute = function() {
+        this.animateSocialIcons = function animateSocialIcons() {
+            this.$$('.social').find('a').each(function (elmt, index) {
+                TweenLite.delayedCall(.1 * index, function () {
+                    this.$$(elmt).addClass('social-animate-in');
+                }.bind(this));
+            }.bind(this));
+        };
+
+        this.removeSocialIcons = function animateSocialIcons() {
+            this.$$('.social').find('a').each(function (elmt, index) {
+                TweenLite.delayedCall(.1 * index, function () {
+                    this.$$(elmt).removeClass('social-animate-in');
+                }.bind(this));
+            }.bind(this));
+        };
+
+
+        this.execute = function () {
             console.log('execute');
             if (Detector.webgl) {
                 if (this.grid3D.executed == false) {
@@ -2624,7 +2642,7 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function(G
             this.$el.removeClass('hidden');
 
             //HIDE LOADER
-            this.$$('.loading-arrow').remove();            
+            this.$$('.loading-arrow').remove();
 
             //OPEN FULL MODE
             this.show();
@@ -2632,12 +2650,14 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function(G
             this.loaded = true;
         };
 
-        this.show = function() {
+        this.show = function () {
             console.log('show');
             this.btnAbout.removeClass('hide-button-about');
+            this.animateSocialIcons();
         };
-        this.hide = function() {
+        this.hide = function () {
             console.log('hide');
+            this.removeSocialIcons();
         };
 
     };
@@ -2645,12 +2665,13 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function(G
 });
 
 
-define('text!src/templates/about.html',[],function () { return '<div>\r\n\t<a href="/" class="close">&#10005;</a>\r\n\t<section class="content">\r\n\t\t<h1 class="title">ABOUT ME</h1>\r\n\t\t<article class="intro">\r\n\t\t\t<p>My name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.<br>I’m passionate about developing highly interactive\r\n\t\t\t\tinterfaces\r\n\t\t\t\t<br>with javascript, CSS and html.</p><br>\r\n\r\n\t\t\t<p>I also have 5+ years of C# development using .NET Stack, mostly<br>ASP.Net MVC.</p><br>\r\n\r\n\t\t\t<p>With over 10+ years woking in the industry, I helped the development of<br>Websites/Hotsites, Casual games, SPA Apps,\r\n\t\t\t\tMobile Apps,\r\n\t\t\t\t<br>Enterprise Systems and API’s for companies like:</p>\r\n\r\n\t\t\t<div class="brands">\r\n\t\t\t\t<div class="ibope">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="lg">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="bauducco">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="kia">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="pfizer">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="mcdonalds">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="nestle">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="natura">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="johnsons">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</article>\r\n\t\t<h4 class="skills">SKILLS & EXPERTISE</h4>\r\n\t\t<div class="group-list">\r\n\t\t\t<div class="primary">\r\n\t\t\t\t<h3 class="skills-title">PRIMARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Javascript(ES6)</li>\r\n\t\t\t\t\t<li>Canvas</li>\r\n\t\t\t\t\t<li>WebGL(TreeJs)</li>\r\n\t\t\t\t\t<li>CSS(3)</li>\r\n\t\t\t\t\t<li>HTML(5)</li>\r\n\t\t\t\t\t<li>Backbone/React/Redux</li>\r\n\t\t\t\t\t<li>Sass/Less</li>\r\n\t\t\t\t\t<li>Tests(Karma/Jasmine)</li>\r\n\t\t\t\t\t<li>NodeJS</li>\r\n\t\t\t\t\t<li>Handlebars</li>\r\n\t\t\t\t\t<li>Grunt/Gulp/npm</li>\r\n\t\t\t\t\t<li>Bootstrap/Foundation</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="secondary">\r\n\t\t\t\t<h3 class="skills-title">SECONDARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>C#</li>\r\n\t\t\t\t\t<li>ASP.NET MVC</li>\r\n\t\t\t\t\t<li>PHP</li>\r\n\t\t\t\t\t<li>API’s</li>\r\n\t\t\t\t\t<li>SQL Server/MySQL</li>\r\n\t\t\t\t\t<li>AWS</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="passive">\r\n\t\t\t\t<h3 class="skills-title">PASSIVE</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Loves to code</li>\r\n\t\t\t\t\t<li>Enjoys new tecnologies</li>\r\n\t\t\t\t\t<li>Fast learner</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="tools">\r\n\t\t\t\t<h3 class="skills-title">TOOLS</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>VS Code</li>\r\n\t\t\t\t\t<li>Sublime Text</li>\r\n\t\t\t\t\t<li>Visual Studio</li>\r\n\t\t\t\t\t<li>Photoshop/Animate CC(Flash)</li>\r\n\t\t\t\t\t<li>GitHub</li>\r\n\t\t\t\t\t<li>CI (Travis/Appveyor)</li>\r\n\t\t\t\t\t<li>Coverage (Coveralls)</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</section>\r\n</div>';});
+define('text!src/templates/about.html',[],function () { return '<div>\r\n\t<a href="/" class="close">&#10005;</a>\r\n\t<section class="content">\r\n\t\t<h1 class="title">ABOUT ME</h1>\r\n\t\t<article class="intro">\r\n\t\t\t<p class="first-block">My name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.<br>I’m passionate about developing highly interactive\r\n\t\t\t\tinterfaces\r\n\t\t\t\t<br>with javascript, CSS and html.</p><br>\r\n\r\n\t\t\t<p class="second-block">I also have 5+ years of C# development using .NET Stack, mostly<br>ASP.Net MVC.</p><br>\r\n\r\n\t\t\t<p class="third-block">With over 10+ years woking in the industry, I helped the development of<br>Websites/Hotsites, Casual games, SPA Apps,\r\n\t\t\t\tMobile Apps,\r\n\t\t\t\t<br>Enterprise Systems and API’s for companies like:</p>\r\n\r\n\t\t\t<div class="brands">\r\n\t\t\t\t<div class="ibope">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="lg">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="bauducco">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="kia">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="pfizer">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="mcdonalds">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="nestle">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="natura">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="johnsons">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</article>\r\n\t\t<h4 class="skills">SKILLS & EXPERTISE</h4>\r\n\t\t<div class="group-list">\r\n\t\t\t<div class="primary">\r\n\t\t\t\t<h3 class="skills-title">PRIMARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Javascript(ES6)</li>\r\n\t\t\t\t\t<li>Canvas</li>\r\n\t\t\t\t\t<li>CSS(3)</li>\r\n\t\t\t\t\t<li>HTML(5)</li>\r\n\t\t\t\t\t<li>Backbone/React/Redux</li>\r\n\t\t\t\t\t<li>Sass/Less</li>\r\n\t\t\t\t\t<li>Tests(Karma/Jasmine)</li>\r\n\t\t\t\t\t<li>NodeJS</li>\r\n\t\t\t\t\t<li>Handlebars</li>\r\n\t\t\t\t\t<li>Grunt/Gulp/npm</li>\r\n\t\t\t\t\t<li>Bootstrap/Foundation</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="secondary">\r\n\t\t\t\t<h3 class="skills-title">SECONDARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>C#</li>\t\t\t\t\t\r\n\t\t\t\t\t<li>WebGL(TreeJs)</li>\r\n\t\t\t\t\t<li>ASP.NET MVC</li>\r\n\t\t\t\t\t<li>PHP</li>\r\n\t\t\t\t\t<li>API’s</li>\r\n\t\t\t\t\t<li>SQL Server/MySQL</li>\r\n\t\t\t\t\t<li>AWS</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="passive">\r\n\t\t\t\t<h3 class="skills-title">PASSIVE</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Loves to code</li>\r\n\t\t\t\t\t<li>Enjoys new tecnologies</li>\r\n\t\t\t\t\t<li>Fast learner</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="tools">\r\n\t\t\t\t<h3 class="skills-title">TOOLS</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>VS Code</li>\r\n\t\t\t\t\t<li>Sublime Text</li>\r\n\t\t\t\t\t<li>Visual Studio</li>\r\n\t\t\t\t\t<li>Photoshop/Animate CC(Flash)</li>\r\n\t\t\t\t\t<li>GitHub</li>\r\n\t\t\t\t\t<li>CI (Travis/Appveyor)</li>\r\n\t\t\t\t\t<li>Coverage (Coveralls)</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</section>\r\n</div>';});
 
 define('views/about',['text!src/templates/about.html'], function (template) {
     var About = function (app) {
         this.el = '.about';
         this.$$ = app.$$;
+        this.notifyCss = app.notifyCss;
         this.view = function () {
             var view = app.handlebars.compile(template),
                 html = view();
@@ -2665,7 +2686,7 @@ define('views/about',['text!src/templates/about.html'], function (template) {
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
         };
-        this.execute = function () {
+        this.execute = function () { 
             var s = setTimeout(function () {
                 clearTimeout(s);
                 this.animateIn();
@@ -2673,9 +2694,44 @@ define('views/about',['text!src/templates/about.html'], function (template) {
         };
         this.animateIn = function () {
             this.$el.addClass('show');
+            this.$$('.close').addClass('close-animate-in');
+            this.$$('.title').addClass('title-animate-in');
+
+            this.$$('.skills').addClass('skills-animate-in');
+            this.$$('.primary').addClass('primary-animate-in');
+            this.$$('.secondary').addClass('secondary-animate-in');
+
+            this.$$('.intro').find('p').each(function (elmt, index) {
+                TweenLite.delayedCall(.2 + (index * .15), function () {
+                    this.$$(elmt).addClass('block-animate-in');
+                }.bind(this));
+            }.bind(this));
+
+            this.$$('.brands').find('div').each(function (elmt, index) {
+                TweenLite.delayedCall(.2 + (index * .05), function () {
+                    this.$$(elmt).addClass('icon-animate-in');
+                }.bind(this));
+            }.bind(this));
+ 
         };
         this.hide = function () {
-            this.$el.removeClass('show');
+            this.$el.addClass('animate-out');
+            TweenLite.delayedCall(.5, function () {                
+                this.$el.removeClass('show');
+                this.$el.removeClass('animate-out');
+            }.bind(this));
+            
+            this.$$('.close').removeClass('close-animate-in');
+            this.$$('.title').removeClass('title-animate-in');
+            this.$$('.skills').removeClass('skills-animate-in');
+            this.$$('.primary').removeClass('primary-animate-in');
+            this.$$('.secondary').removeClass('secondary-animate-in');
+            this.$$('.intro').find('p').each(function (elmt, index) {
+                this.$$(elmt).removeClass('block-animate-in');
+            }.bind(this));
+            this.$$('.brands').find('div').each(function (elmt, index) {
+                this.$$(elmt).removeClass('icon-animate-in');
+            }.bind(this));
         };
 
     };
@@ -50643,23 +50699,8 @@ require([
     'vendors/TweenMax',
     'handlebars'
 
-], function(NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax, handlebars) {
-    var App = function() {
-        var pfx = ["webkit", "moz", "MS", "o", ""];
-        this.prefixedEventListener = function(element, type, callback) {
-            element['callback'] = callback;
-            for (var p = 0; p < pfx.length; p++) {
-                if (!pfx[p]) type = type.toLowerCase();                
-                element[pfx[p]] = pfx[p] + type;
-                element.addEventListener(pfx[p] + type, callback, false);
-            }
-        };
-         this.removePrefixedEventListener = function(element) {
-            for (var p = 0; p < pfx.length; p++) {   
-                element.removeEventListener(element[pfx[p]], element['callback'] );
-            }
-        };
-
+], function (NoJQuery, Controller, TREE, OrbitControls, Detector, TweenMax, handlebars) {
+    var App = function () {     
         this.handlebars = handlebars;
         this.$$ = NoJQuery;
         this.controller = new Controller(this);
