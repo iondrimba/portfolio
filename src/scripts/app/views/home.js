@@ -17,7 +17,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
             this.$el.html(this.view());
             this.btnAbout = this.$$('.link');
 
-            //INIT WEBGL GRID ONLY IDF SUPPORTED
+            //display 3d grid only if WGL supported
             if (Detector.webgl) {
                 this.$$('body').removeClass('body-gradient');
                 this.grid3D = new Grid3D(app);
@@ -27,13 +27,11 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
             this.btnAbout.on('click', this.onAboutClick.bind(this));
 
         };
-        this.titleShow = function() {
-             this.$$('.hero-title').addClass('title-animate');
-             this.$$('.hero-subtitle').addClass('subtitle-animate');
+        this.titleShow = function () {
+            this.$$('.hero-title').addClass('title-animate');
         };
-        this.titleHide = function() {
-             this.$$('.hero-title').removeClass('title-animate');
-             this.$$('.hero-subtitle').removeClass('subtitle-animate');
+        this.titleHide = function () {
+            this.$$('.hero-title').removeClass('title-animate');
         };
         this.hideAboutButton = function () {
             this.btnAbout.addClass('hide-button-about');

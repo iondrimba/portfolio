@@ -1606,7 +1606,7 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
         this.$$ = app.$$;
         this.completed = false;
 
-        this.initialize = function () {            
+        this.initialize = function () {
 
             this.camera;
             this.scene;
@@ -1663,8 +1663,8 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
         };
 
         this.initGrid = function () {
-            
-            
+
+
             window.addEventListener('mousemove', this.onMouseMove.bind(this));
 
             window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -1672,14 +1672,14 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
             this.container = document.getElementsByClassName(this.el)[0];
 
             this.gridGroup = new THREE.Object3D();
-            
+
             this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             this.renderer.setClearColor(this.baseColor, 1);
             this.renderer.setPixelRatio(window.devicePixelRatio);
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.container.appendChild(this.renderer.domElement);
 
-            this.scene = new THREE.Scene();            
+            this.scene = new THREE.Scene();
             this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
             this.camera.position.set(0, 0, 500);
 
@@ -1758,11 +1758,11 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
 
             obj = new THREE.Object3D();
             obj.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
+                .add(triangleMesh1)
+                .add(triangleMesh2)
+                .add(triangleMesh3)
+                .add(triangleMesh4)
+                .add(triangleMesh5);
             scene.add(obj);
 
             obj.position.x = -1000;
@@ -1821,11 +1821,11 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
 
             obj = new THREE.Object3D();
             obj.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
+                .add(triangleMesh1)
+                .add(triangleMesh2)
+                .add(triangleMesh3)
+                .add(triangleMesh4)
+                .add(triangleMesh5);
             scene.add(obj);
 
             obj.position.x = -1000;
@@ -1886,11 +1886,11 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
             group = new THREE.Object3D();
             group.name = 'group';
             group.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
+                .add(triangleMesh1)
+                .add(triangleMesh2)
+                .add(triangleMesh3)
+                .add(triangleMesh4)
+                .add(triangleMesh5);
 
             obj = new THREE.Object3D();
             obj.add(group);
@@ -1914,7 +1914,7 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
 
         this.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
-            this.render();            
+            this.render();
 
             this.camera.lookAt(this.scene.position);
             this.renderer.render(this.scene, this.camera);
@@ -1982,7 +1982,7 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
                 childUp = this.objUp.children[i];
 
                 rotation = targetChild.rotation,
-                position = targetChild.position;
+                    position = targetChild.position;
 
                 rotation.x = childUp.rotation.x;
                 rotation.y = childUp.rotation.y;
@@ -2012,8 +2012,8 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
             var groudSource = new THREE.Object3D();
 
             groudSource.add(this.objDown)
-            .add(this.objUp)
-            .add(this.objPlain);
+                .add(this.objUp)
+                .add(this.objPlain);
 
             this.scene.add(groudSource);
 
@@ -2023,7 +2023,7 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
         this.buildGrid = function () {
             var posAnterior = 0,
                 anchorY = 1000,
-                i = 0, 
+                i = 0,
                 cols = 13,
                 lines = 25,
                 objY;
@@ -2051,16 +2051,16 @@ define('views/grid3d',['views/AnimateColors'], function (AnimateColors) {
 
                     this.addAuxiliaryFaces(objY);
 
-                    objY.position.y = posAnterior; 
+                    objY.position.y = posAnterior;
 
                     this.gridGroup.add(objY);
                 }
             }
- 
+
             this.scene.add(this.gridGroup);
 
             this.gridGroup.rotateZ(-0.4);
-            
+
             this.$$('.grid3d').removeClass('visible-false');
         };
 
@@ -2592,7 +2592,7 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
             this.$el.html(this.view());
             this.btnAbout = this.$$('.link');
 
-            //INIT WEBGL GRID ONLY IDF SUPPORTED
+            //display 3d grid only if WGL supported
             if (Detector.webgl) {
                 this.$$('body').removeClass('body-gradient');
                 this.grid3D = new Grid3D(app);
@@ -2602,13 +2602,11 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
             this.btnAbout.on('click', this.onAboutClick.bind(this));
 
         };
-        this.titleShow = function() {
-             this.$$('.hero-title').addClass('title-animate');
-             this.$$('.hero-subtitle').addClass('subtitle-animate');
+        this.titleShow = function () {
+            this.$$('.hero-title').addClass('title-animate');
         };
-        this.titleHide = function() {
-             this.$$('.hero-title').removeClass('title-animate');
-             this.$$('.hero-subtitle').removeClass('subtitle-animate');
+        this.titleHide = function () {
+            this.$$('.hero-title').removeClass('title-animate');
         };
         this.hideAboutButton = function () {
             this.btnAbout.addClass('hide-button-about');
@@ -2683,7 +2681,6 @@ define('views/about',['text!src/templates/about.html'], function (template) {
     var About = function (app) {
         this.el = '.about';
         this.$$ = app.$$;
-        this.notifyCss = app.notifyCss;
         this.view = function () {
             var view = app.handlebars.compile(template),
                 html = view();
@@ -2691,61 +2688,99 @@ define('views/about',['text!src/templates/about.html'], function (template) {
             return html;
 
         };
+
         this.init = function () {
             this.setup();
         };
+
         this.setup = function () {
             this.$el = this.$$(this.el);
             this.$el.html(this.view());
         };
-        this.execute = function () { 
-            var s = setTimeout(function () {
-                clearTimeout(s);
+
+        this.execute = function () {
+            var timeOut = setTimeout(function () {
+                clearTimeout(timeOut);
                 this.animateIn();
             }.bind(this), 100);
         };
+
         this.animateIn = function () {
             this.$el.addClass('show');
-            this.$$('.close').addClass('close-animate-in');
-            this.$$('.title').addClass('title-animate-in');
+            this.buttonCloseShow();
+            this.titleShow();
+            this.introTextShow();
+            this.brandsShow();
+            this.skillShow();
+        };
 
+        this.hide = function () {
+            this.$el.addClass('animate-out');
+            TweenLite.delayedCall(.5, function () {
+                this.$el.removeClass('show');
+                this.$el.removeClass('animate-out');
+            }.bind(this));
+
+            this.buttonCloseHide();
+            this.titleHide();
+            this.introTextHide();
+            this.brandsHide();
+            this.skillsHide();
+        };
+
+        this.buttonCloseShow = function () {
+            this.$$('.close').addClass('close-animate-in');
+        };
+
+        this.buttonCloseHide = function () {
+            this.$$('.close').removeClass('close-animate-in');
+        };
+
+        this.titleShow = function () {
+            this.$$('.title').addClass('title-animate-in');
+        };
+
+        this.titleHide = function () {
+            this.$$('.title').removeClass('title-animate-in');
+        };
+
+        this.skillShow = function () {
             this.$$('.skills').addClass('skills-animate-in');
             this.$$('.primary').addClass('primary-animate-in');
             this.$$('.secondary').addClass('secondary-animate-in');
+        };
+        this.skillsHide = function () {
+            this.$$('.skills').removeClass('skills-animate-in');
+            this.$$('.primary').removeClass('primary-animate-in');
+            this.$$('.secondary').removeClass('secondary-animate-in');
+        };
 
+        this.introTextShow = function () {
             this.$$('.intro').find('p').each(function (elmt, index) {
                 TweenLite.delayedCall(.2 + (index * .15), function () {
                     this.$$(elmt).addClass('block-animate-in');
                 }.bind(this));
             }.bind(this));
+        };
+        this.introTextHide = function () {
+            this.$$('.intro').find('p').each(function (elmt, index) {
+                this.$$(elmt).removeClass('block-animate-in');
+            }.bind(this));
+        };
 
+        this.brandsShow = function () {
             this.$$('.brands').find('div').each(function (elmt, index) {
                 TweenLite.delayedCall(.2 + (index * .05), function () {
                     this.$$(elmt).addClass('icon-animate-in');
                 }.bind(this));
             }.bind(this));
- 
         };
-        this.hide = function () {
-            this.$el.addClass('animate-out');
-            TweenLite.delayedCall(.5, function () {                
-                this.$el.removeClass('show');
-                this.$el.removeClass('animate-out');
-            }.bind(this));
-            
-            this.$$('.close').removeClass('close-animate-in');
-            this.$$('.title').removeClass('title-animate-in');
-            this.$$('.skills').removeClass('skills-animate-in');
-            this.$$('.primary').removeClass('primary-animate-in');
-            this.$$('.secondary').removeClass('secondary-animate-in');
-            this.$$('.intro').find('p').each(function (elmt, index) {
-                this.$$(elmt).removeClass('block-animate-in');
-            }.bind(this));
+
+        this.brandsHide = function () {
             this.$$('.brands').find('div').each(function (elmt, index) {
                 this.$$(elmt).removeClass('icon-animate-in');
             }.bind(this));
         };
-
     };
     return About;
 });

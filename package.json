@@ -1,7 +1,7 @@
 {
-  "name": "GulpFileSPA",
+  "name": "portfolio",
   "version": "1.0.0",
-  "description": "Gulp file config for SPA project using Backbone + RequireJs Optimizer",
+  "description": "portfolio",
   "main": "gulpfile.js",
   "scripts": {},
   "author": "Ion D. Filho",

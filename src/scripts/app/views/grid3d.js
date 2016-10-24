@@ -6,7 +6,7 @@ define(['views/AnimateColors'], function (AnimateColors) {
         this.$$ = app.$$;
         this.completed = false;
 
-        this.initialize = function () {            
+        this.initialize = function () {
 
             this.camera;
             this.scene;
@@ -63,8 +63,8 @@ define(['views/AnimateColors'], function (AnimateColors) {
         };
 
         this.initGrid = function () {
-            
-            
+
+
             window.addEventListener('mousemove', this.onMouseMove.bind(this));
 
             window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -72,14 +72,14 @@ define(['views/AnimateColors'], function (AnimateColors) {
             this.container = document.getElementsByClassName(this.el)[0];
 
             this.gridGroup = new THREE.Object3D();
-            
+
             this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             this.renderer.setClearColor(this.baseColor, 1);
             this.renderer.setPixelRatio(window.devicePixelRatio);
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.container.appendChild(this.renderer.domElement);
 
-            this.scene = new THREE.Scene();            
+            this.scene = new THREE.Scene();
             this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
             this.camera.position.set(0, 0, 500);
 
@@ -158,11 +158,11 @@ define(['views/AnimateColors'], function (AnimateColors) {
 
             obj = new THREE.Object3D();
             obj.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
+                .add(triangleMesh1)
+                .add(triangleMesh2)
+                .add(triangleMesh3)
+                .add(triangleMesh4)
+                .add(triangleMesh5);
             scene.add(obj);
 
             obj.position.x = -1000;
@@ -221,11 +221,11 @@ define(['views/AnimateColors'], function (AnimateColors) {
 
             obj = new THREE.Object3D();
             obj.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
+                .add(triangleMesh1)
+                .add(triangleMesh2)
+                .add(triangleMesh3)
+                .add(triangleMesh4)
+                .add(triangleMesh5);
             scene.add(obj);
 
             obj.position.x = -1000;
@@ -286,11 +286,11 @@ define(['views/AnimateColors'], function (AnimateColors) {
             group = new THREE.Object3D();
             group.name = 'group';
             group.add(triangleMesh0)
-            .add(triangleMesh1)
-            .add(triangleMesh2)
-            .add(triangleMesh3)
-            .add(triangleMesh4)
-            .add(triangleMesh5);
+                .add(triangleMesh1)
+                .add(triangleMesh2)
+                .add(triangleMesh3)
+                .add(triangleMesh4)
+                .add(triangleMesh5);
 
             obj = new THREE.Object3D();
             obj.add(group);
@@ -314,7 +314,7 @@ define(['views/AnimateColors'], function (AnimateColors) {
 
         this.animate = function () {
             requestAnimationFrame(this.animate.bind(this));
-            this.render();            
+            this.render();
 
             this.camera.lookAt(this.scene.position);
             this.renderer.render(this.scene, this.camera);
@@ -382,7 +382,7 @@ define(['views/AnimateColors'], function (AnimateColors) {
                 childUp = this.objUp.children[i];
 
                 rotation = targetChild.rotation,
-                position = targetChild.position;
+                    position = targetChild.position;
 
                 rotation.x = childUp.rotation.x;
                 rotation.y = childUp.rotation.y;
@@ -412,8 +412,8 @@ define(['views/AnimateColors'], function (AnimateColors) {
             var groudSource = new THREE.Object3D();
 
             groudSource.add(this.objDown)
-            .add(this.objUp)
-            .add(this.objPlain);
+                .add(this.objUp)
+                .add(this.objPlain);
 
             this.scene.add(groudSource);
 
@@ -423,7 +423,7 @@ define(['views/AnimateColors'], function (AnimateColors) {
         this.buildGrid = function () {
             var posAnterior = 0,
                 anchorY = 1000,
-                i = 0, 
+                i = 0,
                 cols = 13,
                 lines = 25,
                 objY;
@@ -451,16 +451,16 @@ define(['views/AnimateColors'], function (AnimateColors) {
 
                     this.addAuxiliaryFaces(objY);
 
-                    objY.position.y = posAnterior; 
+                    objY.position.y = posAnterior;
 
                     this.gridGroup.add(objY);
                 }
             }
- 
+
             this.scene.add(this.gridGroup);
 
             this.gridGroup.rotateZ(-0.4);
-            
+
             this.$$('.grid3d').removeClass('visible-false');
         };
 
