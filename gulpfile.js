@@ -63,8 +63,8 @@ gulp.task('scss-lint', require('./tasks/scss-lint.js'));
 //sass/scss
 gulp.task('sass', require('./tasks/sass.js'));
 
-//copy js files
-gulp.task('copy-js', require('./tasks/copy.js'));
+//copy  files
+gulp.task('copy', require('./tasks/copy.js'));
 
 //css min
 gulp.task('cssmin', require('./tasks/cssmin.js'));
@@ -92,9 +92,13 @@ gulp.task('browser-sync', require('./tasks/browser-sync.js'));
 gulp.task('service-worker', function (callback) {
     var rootDir = 'public';
     swPrecache.write(path.join(rootDir, 'service-worker.js'), {
-        staticFileGlobs: [rootDir + '/**/*.{js,css,png,jpg,gif,svg,eot,ttf,woff,woff2}', rootDir + '/*.png'],
+        staticFileGlobs: [rootDir + '/**/*.{png,jpg,gif,svg,eot,ttf,woff,woff2}', rootDir + '/*.png'],
         stripPrefix: rootDir,
-        cacheId : pckg.version
+        cacheId: pckg.version,
+        runtimeCaching: [{
+            urlPattern: '(.*)',
+            handler: 'cacheFirst'
+        }]
     }, callback);
 });
 
@@ -113,7 +117,7 @@ gulp.task('bump-major', ['major', 'service-worker'], function renameMajor() {
 //watch task
 gulp.task('watch', require('./tasks/watch.js'));
 
-gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy-js', 'requirejs:dev'], 'browser-sync', 'watch'));
+gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy', 'requirejs:dev'], 'browser-sync', 'watch'));
 
-gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy-js', 'bump-patch', 'minifyjs'));
+gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy', 'bump-minor', 'minifyjs'));
 
