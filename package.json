@@ -23,7 +23,8 @@
     "gulp-sequence": "^0.4.6",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.10",
-    "node-sass": "^3.10.1"
+    "node-sass": "^3.10.1",
+    "sw-precache": "^4.2.1"
   },
   "dependencies": {
     "handlebars": "^4.0.5",

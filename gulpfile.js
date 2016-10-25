@@ -1,6 +1,8 @@
 ﻿var gulp = require('gulp');
 var requirejsOptimize = require('gulp-requirejs-optimize');
 var gulpSequence = require('gulp-sequence')
+var path = require('path');
+var swPrecache = require('sw-precache');
 
 var requirePaths = {
     noJquery: 'node_modules/nojquery/nojquery',
@@ -45,10 +47,21 @@ gulp.task('requirejs:prod', function () {
 //browsersync task
 gulp.task('browser-sync', require('./tasks/browser-sync.js'));
 
+//offline support
+gulp.task('service-worker', function (callback) {
+
+    var rootDir = 'public';
+
+    swPrecache.write(path.join(rootDir, 'service-worker.js'), {
+        staticFileGlobs: [rootDir + '/**/*.{js,css,png,jpg,gif,svg,eot,ttf,woff,woff2}', rootDir + '/*.png'],
+        stripPrefix: rootDir
+    }, callback);
+});
+
 //watch task
 gulp.task('watch', require('./tasks/watch.js'));
 
-gulp.task('default', ['eslint', 'scss-lint', 'sass', 'copy-js', 'requirejs:dev', 'browser-sync', 'watch']);
+gulp.task('default', ['eslint', 'scss-lint', 'sass', 'copy-js', 'requirejs:dev', 'service-worker', 'browser-sync', 'watch']);
 
-gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod' ], 'copy-js', 'minifyjs'));
+gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy-js', 'minifyjs'));
 
