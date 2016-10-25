@@ -491,7 +491,9 @@ th {
     text-transform: uppercase;
     top: 50%;
     transform: translateX(-50%) translateY(10%) translate3d(0, 0, 0);
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    transition-duration: .3s;
+    transition-property: transform, opacity;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 1; }
     .home h1 span {
       display: block;
@@ -503,7 +505,10 @@ th {
       opacity: 0;
       text-align: center;
       transform: translateY(50px) translate3d(0, 0, 0);
-      transition: all 0.3s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+      transition-delay: .2s;
+      transition-duration: .3s;
+      transition-property: transform, opacity;
+      transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .home .title-animate {
     opacity: 1;
     transform: translateX(-50%) translateY(-50%) translate3d(0, 0, 0); }

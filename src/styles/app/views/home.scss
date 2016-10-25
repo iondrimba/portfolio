@@ -25,7 +25,9 @@
     text-transform: uppercase;
     top: round(50%);
     transform: translateX(round(-50%)) translateY(round(10%)) translate3d(0, 0, 0);
-    transition: all .3s $out-quint;
+    transition-duration: .3s;
+    transition-property: transform, opacity;
+    transition-timing-function: $bounce;
     z-index: 1;
 
     span {
@@ -38,7 +40,10 @@
       opacity: 0;
       text-align: center;
       transform: translateY(50px) translate3d(0, 0, 0);
-      transition: all .3s .2s $bounce;
+      transition-delay: .2s;
+      transition-duration: .3s;
+      transition-property: transform, opacity;
+      transition-timing-function: $bounce;
     }
   }
 
