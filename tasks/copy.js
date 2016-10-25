@@ -4,6 +4,6 @@ var concat = require('gulp-concat');
 module.exports = function () {
     gulp.src(['src/scripts/vendors/require.js', 'src/scripts/vendors/page.js'])
         .pipe(gulp.dest('./public/scripts/'));
-    gulp.src(['manifest.json'])
+    gulp.src(['manifest.json', './src/templates/index.html'])
         .pipe(gulp.dest('./public/'));
 };

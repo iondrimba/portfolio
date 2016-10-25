@@ -2,9 +2,11 @@
 @import 'helpers';
 @import 'variables';
 @import 'fonts';
-@import 'views/home';
-@import 'views/about';
 @import 'global';
-@import 'viewports/small';
-@import 'viewports/medium';
-@import 'viewports/large';
+@import 'views/critical';
+@import 'controls/loader';
+// @import 'views/home';
+// @import 'views/about';
+// @import 'viewports/small';
+// @import 'viewports/medium';
+// @import 'viewports/large';

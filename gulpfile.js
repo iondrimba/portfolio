@@ -3,6 +3,13 @@ var requirejsOptimize = require('gulp-requirejs-optimize');
 var gulpSequence = require('gulp-sequence')
 var path = require('path');
 var swPrecache = require('sw-precache');
+var bump = require('gulp-bump');
+var semver = require('semver');
+var renameMe = require('rename-me');
+var pckg = require('./package.json');
+var patch = semver.inc(pckg.version, 'patch');
+var minor = semver.inc(pckg.version, 'minor');
+var major = semver.inc(pckg.version, 'major');
 
 var requirePaths = {
     noJquery: 'node_modules/nojquery/nojquery',
@@ -15,6 +22,40 @@ var requirePaths = {
     vendors: 'src/scripts/vendors',
     core: 'src/scripts/app/core'
 };
+
+function bumpPackageJson(type) {
+    return gulp.src(['./package.json'])
+        .pipe(bump({
+            version: type
+        }))
+        .pipe(gulp.dest('./'));
+}
+
+function bumpAppFiles(version) {
+    var options = {};
+    options.version = version;
+    options.indexFile = './public/index.html';
+
+    options.filePath = ['./public/scripts/main.js', './public/css/main.css'];
+    options.outputfolder = ['./public/scripts/', './public/css/'];
+
+    renameMe(options);
+}
+
+//PATCH 
+gulp.task('patch', function () {
+    return bumpPackageJson(patch);
+});
+
+//MINOR 
+gulp.task('minor', function () {
+    return bumpPackageJson(minor);
+});
+
+//MAJOR 
+gulp.task('major', function () {
+    return bumpPackageJson(major);
+});
 
 //scss - lint
 gulp.task('scss-lint', require('./tasks/scss-lint.js'));
@@ -49,19 +90,30 @@ gulp.task('browser-sync', require('./tasks/browser-sync.js'));
 
 //offline support
 gulp.task('service-worker', function (callback) {
-
     var rootDir = 'public';
-
     swPrecache.write(path.join(rootDir, 'service-worker.js'), {
         staticFileGlobs: [rootDir + '/**/*.{js,css,png,jpg,gif,svg,eot,ttf,woff,woff2}', rootDir + '/*.png'],
-        stripPrefix: rootDir
+        stripPrefix: rootDir,
+        cacheId : pckg.version
     }, callback);
+});
+
+gulp.task('bump-patch', ['patch', 'service-worker'], function renamePatch() {
+    bumpAppFiles(patch);
+});
+
+gulp.task('bump-minor', ['minor', 'service-worker'], function renameMinor() {
+    bumpAppFiles(minor);
+});
+
+gulp.task('bump-major', ['major', 'service-worker'], function renameMajor() {
+    bumpAppFiles(major);
 });
 
 //watch task
 gulp.task('watch', require('./tasks/watch.js'));
 
-gulp.task('default', ['eslint', 'scss-lint', 'sass', 'copy-js', 'requirejs:dev', 'service-worker', 'browser-sync', 'watch']);
+gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy-js', 'requirejs:dev'], 'browser-sync', 'watch'));
 
-gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy-js', 'minifyjs'));
+gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy-js', 'bump-patch', 'minifyjs'));
 

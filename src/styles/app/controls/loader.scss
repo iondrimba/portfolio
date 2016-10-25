@@ -1,0 +1,27 @@
+@import '../variables';
+
+.loader {
+  animation: spin 1s linear infinite;
+  border: 5px solid $base-color;
+  border-radius: 50%;
+  border-top: 5px solid #3498db;
+  bottom: 0;
+  display: block;
+  height: 50px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
