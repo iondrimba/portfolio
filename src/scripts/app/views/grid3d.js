@@ -1,6 +1,6 @@
 ﻿/* global THREE */
 /* global Detector */
-define(['views/AnimateColors'], function (AnimateColors) {
+define(['views/animateColors'], function (AnimateColors) {
     var Grid3D = function (app) {
         this.el = 'grid3d';
         this.$$ = app.$$;
