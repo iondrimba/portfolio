@@ -13,6 +13,9 @@ var requirePaths = {
     core: 'src/scripts/app/core'
 };
 
+//sass - lint
+gulp.task('scss-lint', require('./tasks/scss-lint.js'));
+
 //sass - scss task
 gulp.task('sass', require('./tasks/sass.js'));
 
@@ -43,6 +46,6 @@ gulp.task('browser-sync', require('./tasks/browser-sync.js'));
 //watch task
 gulp.task('watch', require('./tasks/watch.js'));
 
-gulp.task('default', ['sass', 'copy-js', 'requirejs:dev', 'browser-sync', 'watch']);
+gulp.task('default', ['scss-lint', 'sass', 'copy-js', 'requirejs:dev', 'browser-sync', 'watch']);
 
-gulp.task('prod', ['sass', 'copy-js', 'cssmin', 'minifyjs', 'requirejs:prod']);
+gulp.task('prod', ['scss-lint', 'sass', 'copy-js', 'cssmin', 'minifyjs', 'requirejs:prod']);

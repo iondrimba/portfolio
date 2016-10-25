@@ -1,0 +1,229 @@
+@import '../variables';
+@import '../controls/close';
+
+@mixin icon() {
+  width: 80px;
+  height: 80px;
+  background-image: url('/images/logosv2.png');
+  background-repeat: no-repeat;
+  display: block;
+  position: relative;
+  margin-left: 10px;
+  margin-right: 10px;
+  opacity: 0;
+  transform: translateY(50px) translate3d(0, 0, 0);
+}
+
+.about {
+  background-color: $base-color;
+  background-position: center top;
+  background-repeat: no-repeat;
+  float: left;
+  height: 100%;
+  min-height: 100vh;
+  opacity: 0;
+  overflow-y: scroll;
+  position: absolute;
+  top: 0;
+  transform: translateY(30vh) translate3d(0, 0, 0);
+  transition: transform .3s cubic-bezier(.23, 1, .32, 1);
+  width: 100%;
+  z-index: -1;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0) translate3d(0, 0, 0);
+    z-index: 2;
+  }
+
+  &.animate-out {
+    transform: translateY(100vh) translate3d(0, 0, 0);
+    z-index: 2;
+  }
+
+  .ibope {
+    @include icon();
+    background-position: 0 0;
+  }
+
+  .lg {
+    @include icon();
+    background-position: -106px 0;
+  }
+
+  .bauducco {
+    @include icon();
+    background-position: -212px 0;
+  }
+
+  .kia {
+    @include icon();
+    background-position: -318px -1px;
+  }
+
+  .pfizer {
+    @include icon();
+    background-position: -423px 0;
+  }
+
+  .mcdonalds {
+    @include icon();
+    background-position: -2px -101px;
+  }
+
+  .nestle {
+    @include icon();
+    background-position: -107px -101px;
+  }
+
+  .natura {
+    @include icon();
+    background-position: -212px -100px;
+  }
+
+  .johnsons {
+    @include icon();
+    background-position: -318px -100px;
+  }
+
+  .title {
+    font-family: 'medium';
+    font-size: 2.4em;
+    font-stretch: condensed;
+    margin: 0;
+    margin-top: -10px;
+    opacity: 0;
+    padding: 0;
+    transform: translateY(50px) translate3d(0, 0, 0);
+    transition: all .3s cubic-bezier(.23, 1, .32, 1);
+  }
+
+  .first-block,
+  .second-block,
+  .third-block {
+    opacity: 0;
+    transform: translateY(50px) translate3d(0, 0, 0);
+    transition: all .3s cubic-bezier(.23, 1, .32, 1);
+  }
+
+  .block-animate-in {
+    opacity: 1;
+    transform: translateY(0) translate3d(0, 0, 0);
+    transition: all .3s .1s $bounce;
+  }
+
+  .icon-animate-in {
+    opacity: 1;
+    transform: translateY(0) translate3d(0, 0, 0);
+    transition: all .2s .05s $bounce;
+  }
+
+  .title-animate-in {
+    opacity: 1;
+    transform: translateY(0) translate3d(0, 0, 0);
+    transition: all .3s .3s cubic-bezier(.23, 1, .32, 1);
+  }
+
+  .intro {
+    font-size: 18px;
+    margin-top: 32px;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .brands {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    max-width: 500px;
+  }
+
+  .skills {
+    font-family: medium;
+    font-size: 29px;
+    margin: 0;
+    margin-bottom: 45px;
+    margin-top: 75px;
+    opacity: 0;
+    padding: 0;
+    transform: translateY(50px) translate3d(0, 0, 0);
+    transition: all .3s $bounce;
+  }
+
+  .primary {
+    opacity: 0;
+    transform: translateY(50px) translate3d(0, 0, 0);
+    transition: all .3s $bounce;
+  }
+
+  .secondary {
+    opacity: 0;
+    transform: translateY(50px) translate3d(0, 0, 0);
+    transition: all .3s $bounce;
+  }
+
+  .primary-animate-in {
+    opacity: 1;
+    transform: translateY(0) translate3d(0, 0, 0);
+    transition: all .3s .35s $bounce;
+  }
+
+  .secondary-animate-in {
+    opacity: 1;
+    transform: translateY(0) translate3d(0, 0, 0);
+    transition: all .3s .40s $bounce;
+  }
+
+  .skills-animate-in {
+    opacity: 1;
+    transform: translateY(0) translate3d(0, 0, 0);
+    transition: all .3s .3s $bounce;
+  }
+
+  .group-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+
+    div {
+      margin-bottom: 30px;
+      width: 50%;
+    }
+  }
+
+  .skills-title {
+    font-family: medium;
+    font-size: 22px;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .content {
+    font-size: 1rem;
+    left: 50%;
+    margin: 0 auto;
+    max-width: 600px;
+    padding-top: 64px;
+    position: absolute;
+    transform: translateX(-50%) translate3d(0, 0, 0);
+    width: 100%;
+  }
+
+  .close {
+    @include close();
+    transform: translateY(-100%) translate3d(0, 0, 0);
+    transition: transform .2s cubic-bezier(.23, 1, .32, 1);
+  }
+
+  .close-animate-in {
+    transform: translateY(0) translate3d(0, 0, 0);
+    transition: transform .3s .3s cubic-bezier(.23, 1, .32, 1);
+  }
+}

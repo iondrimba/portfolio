@@ -1,78 +1,78 @@
-﻿@import "../_variables.scss";
+@import '../variables';
 
 @mixin social-button() {
   width: 35px;
   height: 35px;
-  background-image: url(/images/social-mini.png);
+  background-image: url('/images/social-mini.png');
   background-repeat: no-repeat;
   display: block;
   position: relative;
   margin-left: 10px;
   margin-right: 10px;
   transform: translateY(50px) translate3d(0, 0, 0) translate3d(0, 0, 0);
-  transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform .3s $bounce;
 }
 
 .home {
+  height: round(100vh);
   overflow: hidden;
   position: relative;
-  height: round(100vh);
 
   h1 {
-    position: absolute;
-    z-index: 1; 
-    text-align: center;
-    color: #fff;
-    font-size: 68pt;
-    top: round(50%);
-    font-family: 'bold';
-    transform: translateX(round(-50%)) translateY(round(10%)) translate3d(0, 0, 0);
-    left: round(50%);
-    height: auto;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 0 #1d1c1c;
-    font-weight: 800;
-    line-height: 45pt;
+    color: $base-color;
     display: block;
+    font-family: 'bold';
+    font-size: 68pt;
+    font-weight: 800;
+    height: auto;
+    left: round(50%);
+    line-height: 45pt;
     margin: 0;
     opacity: 0;
-    transition: all .3s cubic-bezier(0.23, 1, 0.32, 1);
+    position: absolute;
+    text-align: center;
+    text-shadow: 1px 1px 0 $shadow;
+    text-transform: uppercase;
+    top: round(50%);
+    transform: translateX(round(-50%)) translateY(round(10%)) translate3d(0, 0, 0);
+    transition: all .3s cubic-bezier(.23, 1, .32, 1);
+    z-index: 1;
 
     span {
-      font-weight: 100;
-      font-size: 25pt;
-      text-align: center;
       display: block;
       font-family: 'regular';
+      font-size: 25pt;
+      font-weight: 100;
       letter-spacing: 3px;
       margin-top: 20px;
-      transform: translateY(50px) translate3d(0, 0, 0);
       opacity: 0;
-      transition: all .3s .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      transform: translateY(50px) translate3d(0, 0, 0);
+      transition: all .3s .2s $bounce;
     }
   }
 
   .title-animate {
-    transform: translateX(round(-50%)) translateY(round(-50%)) translate3d(0, 0, 0);
     opacity: 1;
+    transform: translateX(round(-50%)) translateY(round(-50%)) translate3d(0, 0, 0);
 
     span {
-      transform: translateY(0px) translate3d(0, 0, 0);
       opacity: 1;
+      transform: translateY(0) translate3d(0, 0, 0);
     }
   }
 
   .social {
+    bottom: 10px;
     display: flex;
     float: right;
     position: absolute;
-    bottom: 10px;
-    right: 20px;
+    right: 0;
     transform: translate3d(0, 0, 0);
-  }
 
-  a.social-animate-in {
-    transform: translateY(0px) translate3d(0, 0, 0);
+    .social-animate-in {
+      transform: translateY(0) translate3d(0, 0, 0);
+    }
   }
 
   .npm {
@@ -97,19 +97,19 @@
 }
 
 .link {
-  background-color: #fff;
-  color: #000;
+  background-color: $base-color;
+  bottom: 90px;
+  color: $seconday-color;
+  display: block;
+  font-size: 29px;
   font-weight: 800;
   padding: 6px;
   position: absolute;
-  bottom: 90px;
-  display: block;
-  width: 100px;
   text-align: center;
-  font-size: 29px;
   text-decoration: none;
   transform: translate3d(0, 0, 0);
-  transition: transform .3s .2s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform .3s .2s cubic-bezier(.23, 1, .32, 1);
+  width: 100px;
 }
 
 .hide-button-about {

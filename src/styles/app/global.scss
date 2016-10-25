@@ -1,23 +1,23 @@
-﻿@import "_variables.scss";
+@import 'variables';
 
 body {
   font-family: $font-family;
   overflow: hidden;
-  -webkit-font-smoothing: antialiased;
-  -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .grid3d {
   overflow-y: hidden;
 }
 
-div, section, article {
+div,
+section,
+article {
   box-sizing: border-box;
 }
 
 .loading-arrow {
   left: 50%;
+  position: absolute;
   top: 50%;
   transform: translateX(round(-50%)) translateY(round(-50%)) rotate(45deg);
-  position: absolute;
 }

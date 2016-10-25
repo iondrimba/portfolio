@@ -1,15 +1,10 @@
-﻿@import "../vendors/_normalize.scss";
-
-@import "_helpers.scss";
-@import "_variables.scss";
-@import "_fonts.scss";
- 
-
-@import "views/_home.scss";
-@import "views/_about.scss";
-
-@import "_global.scss";
-
-@import "viewports/_small.scss";
-@import "viewports/_medium.scss";
-@import "viewports/_large.scss";
+@import '../vendors/normalize';
+@import 'helpers';
+@import 'variables';
+@import 'fonts';
+@import 'views/home';
+@import 'views/about';
+@import 'global';
+@import 'viewports/small';
+@import 'viewports/medium';
+@import 'viewports/large';

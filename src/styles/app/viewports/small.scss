@@ -1,4 +1,4 @@
-﻿@import "../_variables.scss";
+@import '../variables';
 
 @media only screen and (max-width: 480px) {
   .home h1 {
@@ -15,7 +15,7 @@
   .home {
     .social {
       right: 50%;
-      transform: translateX(50%) translate3d(0,0,0);
+      transform: translateX(50%) translate3d(0, 0, 0);
     }
   }
 
@@ -26,8 +26,9 @@
     }
 
     .group-list div {
-      width: 100%;
       margin-bottom: 30px;
+      width: 100%;
     }
   }
 }
+

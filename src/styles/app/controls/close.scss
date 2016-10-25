@@ -1,8 +1,10 @@
-﻿@mixin close() {
+@import '../variables';
+
+@mixin close() {
   display: block;
   float: right;
-  background-color: #000;
-  color: #fff;
+  background-color: $seconday-color;
+  color: $base-color;
   text-decoration: none;
   width: 20px;
   height: 20px;
