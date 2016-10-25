@@ -10,7 +10,7 @@ module.exports = function(requirePaths, uglify) {
                 baseUrl: '',
                 waitSeconds: 0,
                 optimizeAllPluginResources: true,
-                noGlobal: false,
+                noGlobal: true,
                 optimize: uglify,
                 mainConfigFile: 'src/scripts/app/main.js',
                 allowSourceOverwrites: false,

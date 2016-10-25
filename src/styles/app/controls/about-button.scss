@@ -1,0 +1,22 @@
+@import '../variables';
+
+.link {
+  background-color: $base-color;
+  bottom: 90px;
+  color: $seconday-color;
+  display: block;
+  font-size: 29px;
+  font-weight: 800;
+  padding: 6px;
+  position: absolute;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: transform .3s .2s cubic-bezier(.23, 1, .32, 1);
+  width: 100px;
+}
+
+.hide-button-about {
+  transform: translateX(-120px) translate3d(0, 0, 0);
+  transition: transform .3s;
+}

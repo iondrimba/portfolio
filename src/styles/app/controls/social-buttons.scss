@@ -1,0 +1,47 @@
+@import '../variables';
+
+@mixin social-button() {
+  width: 35px;
+  height: 35px;
+  background-image: url('/images/social-mini.png');
+  background-repeat: no-repeat;
+  display: block;
+  position: relative;
+  margin-left: 10px;
+  margin-right: 10px;
+  transform: translateY(50px) translate3d(0, 0, 0) translate3d(0, 0, 0);
+  transition: transform .3s $bounce;
+}
+
+.social {
+  bottom: 10px;
+  display: flex;
+  float: right;
+  position: absolute;
+  right: 0;
+  transform: translate3d(0, 0, 0);
+
+  .social-animate-in {
+    transform: translateY(0) translate3d(0, 0, 0);
+  }
+}
+
+.npm {
+  @include social-button();
+  background-position: 0 0;
+}
+
+.github {
+  @include social-button();
+  background-position: -45px 0;
+}
+
+.coderwall {
+  @include social-button();
+  background-position: -84px 0;
+}
+
+.linkedin {
+  @include social-button();
+  background-position: -130px 0;
+}

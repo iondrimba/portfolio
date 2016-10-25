@@ -1,18 +1,6 @@
 @import '../variables';
 @import '../controls/close';
-
-@mixin icon() {
-  width: 80px;
-  height: 80px;
-  background-image: url('/images/logosv2.png');
-  background-repeat: no-repeat;
-  display: block;
-  position: relative;
-  margin-left: 10px;
-  margin-right: 10px;
-  opacity: 0;
-  transform: translateY(50px) translate3d(0, 0, 0);
-}
+@import '../controls/brands-icons';
 
 .about {
   background-color: $base-color;
@@ -26,7 +14,7 @@
   position: absolute;
   top: 0;
   transform: translateY(30vh) translate3d(0, 0, 0);
-  transition: transform .3s cubic-bezier(.23, 1, .32, 1);
+  transition: transform .3s $out-quint;
   width: 100%;
   z-index: -1;
 
@@ -41,51 +29,6 @@
     z-index: 2;
   }
 
-  .ibope {
-    @include icon();
-    background-position: 0 0;
-  }
-
-  .lg {
-    @include icon();
-    background-position: -106px 0;
-  }
-
-  .bauducco {
-    @include icon();
-    background-position: -212px 0;
-  }
-
-  .kia {
-    @include icon();
-    background-position: -318px -1px;
-  }
-
-  .pfizer {
-    @include icon();
-    background-position: -423px 0;
-  }
-
-  .mcdonalds {
-    @include icon();
-    background-position: -2px -101px;
-  }
-
-  .nestle {
-    @include icon();
-    background-position: -107px -101px;
-  }
-
-  .natura {
-    @include icon();
-    background-position: -212px -100px;
-  }
-
-  .johnsons {
-    @include icon();
-    background-position: -318px -100px;
-  }
-
   .title {
     font-family: 'medium';
     font-size: 2.4em;
@@ -95,7 +38,7 @@
     opacity: 0;
     padding: 0;
     transform: translateY(50px) translate3d(0, 0, 0);
-    transition: all .3s cubic-bezier(.23, 1, .32, 1);
+    transition: all .3s $out-quint;
   }
 
   .first-block,
@@ -103,7 +46,7 @@
   .third-block {
     opacity: 0;
     transform: translateY(50px) translate3d(0, 0, 0);
-    transition: all .3s cubic-bezier(.23, 1, .32, 1);
+    transition: all .3s $out-quint;
   }
 
   .block-animate-in {
@@ -121,7 +64,7 @@
   .title-animate-in {
     opacity: 1;
     transform: translateY(0) translate3d(0, 0, 0);
-    transition: all .3s .3s cubic-bezier(.23, 1, .32, 1);
+    transition: all .3s .3s $out-quint;
   }
 
   .intro {
@@ -219,11 +162,11 @@
   .close {
     @include close();
     transform: translateY(-100%) translate3d(0, 0, 0);
-    transition: transform .2s cubic-bezier(.23, 1, .32, 1);
+    transition: transform .2s $out-quint;
   }
 
   .close-animate-in {
     transform: translateY(0) translate3d(0, 0, 0);
-    transition: transform .3s .3s cubic-bezier(.23, 1, .32, 1);
+    transition: transform .3s .3s $out-quint;
   }
 }

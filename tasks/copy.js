@@ -2,6 +2,6 @@
  var concat = require('gulp-concat');
  
  module.exports = function() {
-     gulp.src(['node_modules/gulp-requirejs/node_modules/requirejs/require.js', 'src/scripts/vendors/page.js'])
+     gulp.src(['src/scripts/vendors/require.js', 'src/scripts/vendors/page.js'])
          .pipe(gulp.dest('./public/scripts/'));
  };

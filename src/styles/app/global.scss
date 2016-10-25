@@ -5,19 +5,8 @@ body {
   overflow: hidden;
 }
 
-.grid3d {
-  overflow-y: hidden;
-}
-
 div,
 section,
 article {
   box-sizing: border-box;
-}
-
-.loading-arrow {
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translateX(round(-50%)) translateY(round(-50%)) rotate(45deg);
 }

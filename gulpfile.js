@@ -1,5 +1,6 @@
 ﻿var gulp = require('gulp');
 var requirejsOptimize = require('gulp-requirejs-optimize');
+var gulpSequence = require('gulp-sequence')
 
 var requirePaths = {
     noJquery: 'node_modules/nojquery/nojquery',
@@ -32,12 +33,12 @@ gulp.task('eslint', require('./tasks/eslint.js'));
 gulp.task('minifyjs', require('./tasks/minifyjs.js'));
 
 //require dev
-gulp.task('requirejs:dev', function() {
+gulp.task('requirejs:dev', function () {
     return require('./tasks/requirejs.js')(requirePaths, 'none');
 });
 
 //require production
-gulp.task('requirejs:prod', function() {
+gulp.task('requirejs:prod', function () {
     return require('./tasks/requirejs.js')(requirePaths, 'uglify');
 });
 
@@ -49,4 +50,5 @@ gulp.task('watch', require('./tasks/watch.js'));
 
 gulp.task('default', ['eslint', 'scss-lint', 'sass', 'copy-js', 'requirejs:dev', 'browser-sync', 'watch']);
 
-gulp.task('prod', ['eslint','scss-lint', 'sass', 'copy-js', 'cssmin', 'minifyjs', 'requirejs:prod']);
+gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod' ], 'copy-js', 'minifyjs'));
+
