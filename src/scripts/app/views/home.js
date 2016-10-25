@@ -71,7 +71,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
 
         this.execute = function () {
             if (Detector.webgl) {
-                if (this.grid3D.executed == false) {
+                if (this.grid3D.executed === false) {
                     this.grid3D.execute();
                 }
             }

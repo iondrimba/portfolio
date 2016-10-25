@@ -15,13 +15,33 @@
     'use strict';
 
     function parseHTML(html) {
-        var t = document.createElement('template'),
+        var template,
             content,
             nodes;
 
-        t.innerHTML = html;
-        content = t.content || t.firstChild;
-        nodes = content.cloneNode(true);
+        function supportsTemplate() {
+            return 'content' in document.createElement('template');
+        }
+
+        if (supportsTemplate()) {
+            template = document.createElement('template');
+            content = template.content;
+            template.innerHTML = html;
+            nodes = content.cloneNode(true);
+        } else {
+            var docfrag = document.createDocumentFragment();
+
+            template = document.createElement('nojquery');
+            template.innerHTML = html;
+
+            for (var i = 0; i < template.childNodes.length; i++) {
+                docfrag.appendChild(template.childNodes[i]);
+                i--;
+            }
+
+            content = docfrag;
+            nodes = content.cloneNode(true);
+        }
 
         return nodes;
     }
@@ -42,16 +62,25 @@
             if (isString(selector)) {
                 this.find(selector);
             } else {
+                if (selector.parentNode.classList.length) {
+                    this.currentSelector += ' .' + selector.parentNode.classList[0];
+                }
+
+                if (selector.classList.length) {
+                    this.currentSelector += ' ' + selector.classList[0];
+                }
                 this.elmts.push(selector);
             }
             this.length = this.elmts.length;
+
+
             var clone = {};
             clone.elmts = this.elmts;
             clone.length = this.length;
             clone.currentSelector = this.currentSelector;
             clone.previousElmt = this.previousElmt;
-
             clone['__proto__'] = NoJQuery.prototype;
+
             return clone;
         }.bind(this);
     };
@@ -62,12 +91,11 @@
             i = 0;
 
         try {
-
             this.currentSelector += ' ' + selector;
             nodes = document.querySelectorAll(this.currentSelector);
             total = nodes.length;
             if (total) {
-                this.previousElmt = this.elmts;
+                this.previousElmt = this.elmts.slice();
                 this.elmts = [];
                 this.length = total;
             } else {
@@ -86,6 +114,7 @@
     };
     NoJQuery.prototype.each = function(callback) {
         Array.prototype.forEach.call(this.elmts, function(el, i) {
+            el['index'] = i;
             callback(el, i);
         });
     };
@@ -255,7 +284,7 @@
             removed = [];
 
         try {
-            total = this.elmts.length;
+            total = this.length;
             for (i; i < total; i++) {
                 elmt = this.elmts[i];
                 elmt.parentNode.removeChild(elmt);
@@ -327,17 +356,15 @@
             if (textNode === false) {
                 node = el.elmts[0];
             }
+            if (textNode) {
+                node = parseHTML(el);
+            }
 
             if (total === 0) {
-                node = parseHTML(el);
-                this.elmts[0].appendChild(node);
+                this.elmts[this.elmts.length - 1].appendChild(node);
             }
 
             for (i; i < total; i++) {
-                if (textNode) {
-                    node = parseHTML(el);
-                }
-
                 this.elmts[i].appendChild(node);
             }
         } catch (err) {
@@ -345,17 +372,6 @@
         }
         return this;
     };
-    NoJQuery.prototype.parent = function() {
-        var parent;
-
-        try {
-            parent = this.elmts[0].parentNode || this.elmts[0].parent;
-        } catch (err) {
-            throw new Error('parent:: ' + err.message);
-        }
-        return parent;
-    };
-
     NoJQuery.prototype.prepend = function(el) {
         var total = 0,
             i = 0,
@@ -422,7 +438,6 @@
     };
     return new NoJQuery();
 }));
-
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define('page',[],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.page=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (process){
   /* globals require, module */
@@ -504,8 +519,8 @@
    *   page('/from', '/to')
    *   page();
    *
-   * @param {String|Function} path
-   * @param {Function} fn...
+   * @param {string|!Function|!Object} path
+   * @param {Function=} fn
    * @api public
    */
 
@@ -517,7 +532,7 @@
 
     // route <path> to <callback ...>
     if ('function' === typeof fn) {
-      var route = new Route(path);
+      var route = new Route(/** @type {string} */ (path));
       for (var i = 1; i < arguments.length; ++i) {
         page.callbacks.push(route.middleware(arguments[i]));
       }
@@ -539,7 +554,7 @@
 
   /**
    * Current path being processed
-   * @type {String}
+   * @type {string}
    */
   page.current = '';
 
@@ -557,7 +572,7 @@
   /**
    * Get or set basepath to `path`.
    *
-   * @param {String} path
+   * @param {string} path
    * @api public
    */
 
@@ -613,10 +628,11 @@
   /**
    * Show `path` with optional `state` object.
    *
-   * @param {String} path
-   * @param {Object} state
-   * @param {Boolean} dispatch
-   * @return {Context}
+   * @param {string} path
+   * @param {Object=} state
+   * @param {boolean=} dispatch
+   * @param {boolean=} push
+   * @return {!Context}
    * @api public
    */
 
@@ -632,8 +648,8 @@
    * Goes back in the history
    * Back should always let the current route push state and then go back.
    *
-   * @param {String} path - fallback path to go back if no more history exists, if undefined defaults to page.base
-   * @param {Object} [state]
+   * @param {string} path - fallback path to go back if no more history exists, if undefined defaults to page.base
+   * @param {Object=} state
    * @api public
    */
 
@@ -659,8 +675,8 @@
    * Register route to redirect from one path to other
    * or just redirect to another route
    *
-   * @param {String} from - if param 'to' is undefined redirects to 'from'
-   * @param {String} [to]
+   * @param {string} from - if param 'to' is undefined redirects to 'from'
+   * @param {string=} to
    * @api public
    */
   page.redirect = function(from, to) {
@@ -668,7 +684,7 @@
     if ('string' === typeof from && 'string' === typeof to) {
       page(from, function(e) {
         setTimeout(function() {
-          page.replace(to);
+          page.replace(/** @type {!string} */ (to));
         }, 0);
       });
     }
@@ -684,9 +700,11 @@
   /**
    * Replace `path` with optional `state` object.
    *
-   * @param {String} path
-   * @param {Object} state
-   * @return {Context}
+   * @param {string} path
+   * @param {Object=} state
+   * @param {boolean=} init
+   * @param {boolean=} dispatch
+   * @return {!Context}
    * @api public
    */
 
@@ -703,10 +721,9 @@
   /**
    * Dispatch the given `ctx`.
    *
-   * @param {Object} ctx
+   * @param {Context} ctx
    * @api private
    */
-
   page.dispatch = function(ctx) {
     var prev = prevContext,
       i = 0,
@@ -746,7 +763,6 @@
    * @param {Context} ctx
    * @api private
    */
-
   function unhandled(ctx) {
     if (ctx.handled) return;
     var current;
@@ -785,7 +801,7 @@
    * Accommodates whitespace in both x-www-form-urlencoded
    * and regular percent-encoded form.
    *
-   * @param {str} URL component to decode
+   * @param {string} val - URL component to decode
    */
   function decodeURLEncodedURIComponent(val) {
     if (typeof val !== 'string') { return val; }
@@ -796,8 +812,9 @@
    * Initialize a new "request" `Context`
    * with the given `path` and optional initial `state`.
    *
-   * @param {String} path
-   * @param {Object} state
+   * @constructor
+   * @param {string} path
+   * @param {Object=} state
    * @api public
    */
 
@@ -863,8 +880,9 @@
    *   - `sensitive`    enable case-sensitive routes
    *   - `strict`       enable strict matching for trailing slashes
    *
-   * @param {String} path
-   * @param {Object} options.
+   * @constructor
+   * @param {string} path
+   * @param {Object=} options
    * @api private
    */
 
@@ -874,8 +892,7 @@
     this.method = 'GET';
     this.regexp = pathtoRegexp(this.path,
       this.keys = [],
-      options.sensitive,
-      options.strict);
+      options);
   }
 
   /**
@@ -905,9 +922,9 @@
    * Check if this route matches `path`, if so
    * populate `params`.
    *
-   * @param {String} path
+   * @param {string} path
    * @param {Object} params
-   * @return {Boolean}
+   * @return {boolean}
    * @api private
    */
 
@@ -973,7 +990,8 @@
 
 
     // ensure link
-    var el = e.target;
+    // use shadow dom when available
+    var el = e.path ? e.path[0] : e.target;
     while (el && 'A' !== el.nodeName) el = el.parentNode;
     if (!el || 'A' !== el.nodeName) return;
 
@@ -1555,7 +1573,7 @@ define('views/AnimateColors',[], function () {
         function TweenProp(prop, rgb, material, duration) {
             TweenLite.to(prop, duration, {
                 r: rgb.r, g: rgb.g, b: rgb.b, onUpdate: function (material) {
-                    material.verticesNeedUpdate = true;                    
+                    material.verticesNeedUpdate = true;
                 }, onUpdateParams: [material]
             });
         }
@@ -1569,10 +1587,10 @@ define('views/AnimateColors',[], function () {
                 var index = this.getRandomIndex();
                 this.changeColors(index);
 
-            }.bind(this), this.delay);            
+            }.bind(this), this.delay);
         };
 
-        this.changeColors = function (index) {            
+        this.changeColors = function (index) {
             var rgbColor = hexToRgbTreeJs(this.grid.colors[index].materialColor),
                 rgbSpecular = hexToRgbTreeJs(this.grid.colors[index].specularColor);
 
@@ -1588,7 +1606,7 @@ define('views/AnimateColors',[], function () {
             //SPECULAR AUX
             TweenProp(this.grid.materialsAux[0].specular, rgbSpecular, this.grid.materialsAux[0], this.duration);
 
-            
+
         };
 
         this.execute = function () {
@@ -2646,7 +2664,7 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
 
         this.execute = function () {
             if (Detector.webgl) {
-                if (this.grid3D.executed == false) {
+                if (this.grid3D.executed === false) {
                     this.grid3D.execute();
                 }
             }
@@ -2675,7 +2693,7 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
 });
 
 
-define('text!src/templates/about.html',[],function () { return '<div>\r\n\t<a href="/" class="close">&#10005;</a>\r\n\t<section class="content">\r\n\t\t<h1 class="title">ABOUT ME</h1>\r\n\t\t<article class="intro">\r\n\t\t\t<p class="first-block">My name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.<br>I’m passionate about developing highly interactive\r\n\t\t\t\tinterfaces\r\n\t\t\t\t<br>with javascript, CSS and html.</p><br>\r\n\r\n\t\t\t<p class="second-block">I also have 5+ years of C# development using .NET Stack, mostly<br>ASP.Net MVC.</p><br>\r\n\r\n\t\t\t<p class="third-block">With over 10+ years woking in the industry, I helped the development of<br>Websites/Hotsites, Casual games, SPA,\r\n\t\t\t\tMobile Apps,\r\n\t\t\t\t<br>Enterprise Applications and API’s for companies like:</p>\r\n\r\n\t\t\t<div class="brands">\r\n\t\t\t\t<div class="ibope">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="lg">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="bauducco">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="kia">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="pfizer">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="mcdonalds">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="nestle">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="natura">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="johnsons">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</article>\r\n\t\t<h4 class="skills">SKILLS & EXPERTISE</h4>\r\n\t\t<div class="group-list">\r\n\t\t\t<div class="primary">\r\n\t\t\t\t<h3 class="skills-title">PRIMARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Javascript(ES6)</li>\r\n\t\t\t\t\t<li>Canvas</li>\r\n\t\t\t\t\t<li>CSS(3)</li>\r\n\t\t\t\t\t<li>HTML(5)</li>\r\n\t\t\t\t\t<li>Backbone/React/Redux</li>\r\n\t\t\t\t\t<li>Sass/Less</li>\r\n\t\t\t\t\t<li>Tests(Karma/Jasmine)</li>\r\n\t\t\t\t\t<li>NodeJS</li>\r\n\t\t\t\t\t<li>Handlebars</li>\r\n\t\t\t\t\t<li>Grunt/Gulp/npm</li>\r\n\t\t\t\t\t<li>Bootstrap/Foundation</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="secondary">\r\n\t\t\t\t<h3 class="skills-title">SECONDARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>C#</li>\t\t\t\t\t\r\n\t\t\t\t\t<li>WebGL(ThreeJs)</li>\r\n\t\t\t\t\t<li>ASP.NET MVC</li>\r\n\t\t\t\t\t<li>PHP</li>\r\n\t\t\t\t\t<li>API’s</li>\r\n\t\t\t\t\t<li>SQL Server/MySQL</li>\r\n\t\t\t\t\t<li>AWS</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="passive">\r\n\t\t\t\t<h3 class="skills-title">PASSIVE</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Loves to code</li>\r\n\t\t\t\t\t<li>Enjoys new tecnologies</li>\r\n\t\t\t\t\t<li>Fast learner</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="tools">\r\n\t\t\t\t<h3 class="skills-title">TOOLS</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>VS Code</li>\r\n\t\t\t\t\t<li>Sublime Text</li>\r\n\t\t\t\t\t<li>Visual Studio</li>\r\n\t\t\t\t\t<li>Photoshop/Animate CC(Flash)</li>\r\n\t\t\t\t\t<li>GitHub</li>\r\n\t\t\t\t\t<li>CI (Travis/Appveyor)</li>\r\n\t\t\t\t\t<li>Coverage (Coveralls)</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</section>\r\n</div>';});
+define('text!src/templates/about.html',[],function () { return '<div>\r\n\t<a href="/" class="close">&#10005;</a>\r\n\t<section class="content">\r\n\t\t<h1 class="title">ABOUT ME</h1>\r\n\t\t<article class="intro">\r\n\t\t\t<p class="first-block">My name is Ion Drimba Filho, I\'m a Web Developer based in Brazil.<br>I’m passionate about developing highly interactive\r\n\t\t\t\tinterfaces\r\n\t\t\t\t<br>with javascript, CSS and html.</p><br>\r\n\r\n\t\t\t<p class="second-block">I also have 5+ years of C# development using .NET Stack, mostly<br>ASP.Net MVC.</p><br>\r\n\r\n\t\t\t<p class="third-block">With over 10+ years woking in the industry, I helped the development of<br>Websites/Hotsites, Casual games, SPA,\r\n\t\t\t\tMobile Apps,\r\n\t\t\t\t<br>Enterprise Applications and API’s for companies like:</p>\r\n\r\n\t\t\t<div class="brands">\r\n\t\t\t\t<div class="ibope">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="lg">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="bauducco">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="kia">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="pfizer">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="mcdonalds">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="nestle">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="natura">\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class="johnsons">\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</article>\r\n\t\t<h4 class="skills">SKILLS & EXPERTISE</h4>\r\n\t\t<div class="group-list">\r\n\t\t\t<div class="primary">\r\n\t\t\t\t<h3 class="skills-title">PRIMARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Javascript(ES6)</li>\r\n\t\t\t\t\t<li>Canvas</li>\r\n\t\t\t\t\t<li>CSS(3)</li>\r\n\t\t\t\t\t<li>HTML(5)</li>\r\n\t\t\t\t\t<li>Backbone/React/Redux</li>\r\n\t\t\t\t\t<li>Sass/Less</li>\r\n\t\t\t\t\t<li>Tests(Karma/Jasmine)</li>\r\n\t\t\t\t\t<li>NodeJS</li>\r\n\t\t\t\t\t<li>Handlebars</li>\r\n\t\t\t\t\t<li>Gulp/Webpack/Grunt/npm</li>\r\n\t\t\t\t\t<li>Bootstrap/Foundation/Material Design</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="secondary">\r\n\t\t\t\t<h3 class="skills-title">SECONDARY</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>C#</li>\t\t\t\t\t\r\n\t\t\t\t\t<li>WebGL(ThreeJs)</li>\r\n\t\t\t\t\t<li>ASP.NET MVC</li>\r\n\t\t\t\t\t<li>PHP</li>\r\n\t\t\t\t\t<li>API’s</li>\r\n\t\t\t\t\t<li>SQL Server/MySQL</li>\r\n\t\t\t\t\t<li>AWS</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="passive">\r\n\t\t\t\t<h3 class="skills-title">PASSIVE</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>Loves to code</li>\r\n\t\t\t\t\t<li>Enjoys new tecnologies</li>\r\n\t\t\t\t\t<li>Fast learner</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t\t<div class="tools">\r\n\t\t\t\t<h3 class="skills-title">TOOLS</h3>\r\n\t\t\t\t<ul class="list">\r\n\t\t\t\t\t<li>VS Code</li>\r\n\t\t\t\t\t<li>Sublime Text</li>\r\n\t\t\t\t\t<li>Visual Studio</li>\r\n\t\t\t\t\t<li>Photoshop/Animate CC(Flash)</li>\r\n\t\t\t\t\t<li>GitHub</li>\r\n\t\t\t\t\t<li>CI (Travis/Appveyor)</li>\r\n\t\t\t\t\t<li>Coverage (Coveralls)</li>\r\n\t\t\t\t</ul>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</section>\r\n</div>';});
 
 define('views/about',['text!src/templates/about.html'], function (template) {
     var About = function (app) {
@@ -50746,9 +50764,9 @@ require([
     'vendors/TweenMax',
     'handlebars'
 
-], function (NoJQuery, Controller, THREE , OrbitControls, Detector, TweenMax, handlebars) {
-    
-    var App = function () {     
+], function (NoJQuery, Controller, THREE, OrbitControls, Detector, TweenMax, handlebars) {
+
+    var App = function () {
         this.handlebars = handlebars;
         this.$$ = NoJQuery;
         this.controller = new Controller(this);

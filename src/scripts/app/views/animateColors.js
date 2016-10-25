@@ -20,7 +20,7 @@ define([], function () {
         function TweenProp(prop, rgb, material, duration) {
             TweenLite.to(prop, duration, {
                 r: rgb.r, g: rgb.g, b: rgb.b, onUpdate: function (material) {
-                    material.verticesNeedUpdate = true;                    
+                    material.verticesNeedUpdate = true;
                 }, onUpdateParams: [material]
             });
         }
@@ -34,10 +34,10 @@ define([], function () {
                 var index = this.getRandomIndex();
                 this.changeColors(index);
 
-            }.bind(this), this.delay);            
+            }.bind(this), this.delay);
         };
 
-        this.changeColors = function (index) {            
+        this.changeColors = function (index) {
             var rgbColor = hexToRgbTreeJs(this.grid.colors[index].materialColor),
                 rgbSpecular = hexToRgbTreeJs(this.grid.colors[index].specularColor);
 
@@ -53,7 +53,7 @@ define([], function () {
             //SPECULAR AUX
             TweenProp(this.grid.materialsAux[0].specular, rgbSpecular, this.grid.materialsAux[0], this.duration);
 
-            
+
         };
 
         this.execute = function () {

@@ -1,0 +1,20 @@
+{
+    "globals": {
+        "jQuery": false,
+        "$": true
+    },
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "rules": {
+        "camelcase": 1,
+        "comma-dangle": 2,
+        "eqeqeq": 1,
+        "curly": 2,
+        "quotes": [
+            2,
+            "single"
+        ]
+    }
+}
