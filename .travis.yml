@@ -13,4 +13,4 @@ before_install:
 before_script:
 - npm install -g gulp
 script:
-- npm gulp prod
+- gulp prod

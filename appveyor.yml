@@ -14,7 +14,7 @@ install:
   - npm install
   - npm install promise
 test_script:
-  - npm gulp prod
+  - gulp prod
 build: off
 matrix:
   fast_finish: true

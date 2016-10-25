@@ -1,7 +1,7 @@
 # Portfolio 
 Personal portfolio
 
-[![Travis build status](https://travis-ci.org/iondrimba/portfolio.svg?branch=master)](https://travis-ci.org/iondrimba/portfolio) [![Coverage Status](https://coveralls.io/repos/github/iondrimba/portfolio/badge.svg?branch=master)](https://coveralls.io/github/iondrimba/portfolio?branch=master)
+[![Travis build status](https://travis-ci.org/iondrimba/portfolio.svg?branch=v2)](https://travis-ci.org/iondrimba/portfolio) [![Build Status: Windows](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva/branch/master?svg=true)](https://ci.appveyor.com/project/iondrimba/notifycss/branch/v2)
 
 ### Installation
 
