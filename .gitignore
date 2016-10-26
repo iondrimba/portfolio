@@ -1,3 +1,5 @@
-node_modules/
-public/css/*
-public/scripts/*
+node_modules
+public/css
+public/scripts
+public/index.html
+public/require.js
