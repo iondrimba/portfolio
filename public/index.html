@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+	<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="msapplication-TileColor" content="#de132d">
+	<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+	<meta name="application-name" content="Portfolio of Ion Drimba Filho">
+	<meta name="description" content="Web Developer (JS/CSHARP)">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="Developer, Javascript Developer, Front-End Developer, Portfolio, C# Developer, Web Developer">
+	<meta name="subject" content="Portfolio">
+	<meta name="copyright" content="Ion Drimba Filho">
+	<meta name="robots" content="index,follow">
+	<meta name="abstract" content="">
+	<meta name="topic" content="">
+	<meta name="summary" content="">
+	<meta name="Classification" content="Business">
+	<meta name="author" content="Ion Drimba Filho">
+	<meta name="designer" content="">
+	<meta name="owner" content="">
+	<meta name="url" content="http://iondrimbafilho.me">
+	<meta name="pagename" content="Portfolio of Ion Drimba Filho">
+	<meta name="category" content="">
+	<meta name="coverage" content="Worldwide">
+	<meta name="distribution" content="Global">
+	<meta name="rating" content="General">
+	<meta name="subtitle" content="Front-End Developer">
+	<meta name="target" content="all">
+	<!-- IE cleartype -->
+	<meta http-equiv="cleartype" content="on">
+	<!-- Social: Twitter -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="Portfolio of Ion Drimba Filho">
+	<meta name="twitter:creator" content="Ion Drimba Filho">
+	<meta name="twitter:title" content="Portfolio of Ion Drimba Filho">
+	<meta name="twitter:description" content="Front-End Developer">
+	<meta name="twitter:image:src" content="https://dl.dropboxusercontent.com/u/4633623/portfoliotwitter.jpg">
+	<!-- Social: Facebook  -->
+	<meta property="og:url" content="http://iondrimbafilho.me/">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Portfolio of Ion Drimba Filho">
+	<meta property="og:image" content="https://dl.dropboxusercontent.com/u/4633623/portfolioface.jpg" />
+	<meta property="og:description" content="Front-End Developer">
+	<meta property="og:site_name" content="Portfolio of Ion Drimba Filho">
+	<meta property="article:author" content="http://iondrimbafilho.me/">
+	<meta property="article:publisher" content="http://iondrimbafilho.me/">
+	<!-- Social: Google+ / Schema.org  -->
+	<meta itemprop="name" content="Portfolio of Ion Drimba Filho">
+	<meta itemprop="description" content="Front-End Developer">
+	<meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/portfoliogoogleplus.jpg">
+	<title>Portfolio of Ion Drimba Filho</title>
+	<link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body class="critical">
+	<div class="loader"></div>
+	<main class="hidden">
+		<div class="home clearfix body-gradient">
+		</div>
+		<div class="about">
+		</div>
+	</main>
+	<!--<script>
+		'use strict'; 
+		if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+			reg.update();
+			
+			reg.onupdatefound = function() {
+			var installingWorker = reg.installing;
+			installingWorker.onstatechange = function() {
+				switch (installingWorker.state) {
+				case 'installed':
+					if (navigator.serviceWorker.controller) {
+					console.log('New or updated content is available.');
+					} else {
+					console.log('Content is now available offline!');
+					}
+					break;
+				case 'redundant':
+					console.error('The installing service worker became redundant.');
+					break;
+				}
+			};
+			};
+		}).catch(function(e) {
+			console.error('Error during service worker registration:', e);
+		});
+		}
+</script>-->
+	<script>
+
+      var cb = function() {
+        var l = document.createElement('link'); l.rel = 'stylesheet';
+        l.href = 'css/about.css';
+		l.async = true;
+        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+      };
+      var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+          webkitRequestAnimationFrame || msRequestAnimationFrame;
+      if (raf) raf(cb);
+      else window.addEventListener('load', cb);
+    </script>
+	<script async data-main="scripts/main.js" src="scripts/require.js" ></script>
+</body>
