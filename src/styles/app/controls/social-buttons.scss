@@ -1,8 +1,8 @@
 @import '../variables';
 
 @mixin social-button() {
-  width: 35px;
-  height: 35px;
+  width: 21px;
+  height: 21px;
   background-image: url('/images/social-mini.png');
   background-repeat: no-repeat;
   display: block;
@@ -28,20 +28,20 @@
 
 .npm {
   @include social-button();
-  background-position: 0 0;
+  background-position: -26px -4px;
 }
 
 .github {
   @include social-button();
-  background-position: -45px 0;
+  background-position: -55px -4px;
 }
 
 .coderwall {
   @include social-button();
-  background-position: -84px 0;
+  background-position: -82px -4px;
 }
 
 .linkedin {
   @include social-button();
-  background-position: -130px 0;
+  background-position: -112px -4px;
 }
