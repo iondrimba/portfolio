@@ -9,5 +9,5 @@ module.exports = function() {
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        .pipe(gulp.dest('./public/css'));
+        .pipe(gulp.dest('./public/css'));  
 };

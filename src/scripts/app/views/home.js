@@ -80,9 +80,9 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
 
             this.hideLoader();
 
-            this.show();
-
             this.loaded = true;
+            
+            this.show();
         };
 
         this.show = function () {

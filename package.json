@@ -1,14 +1,17 @@
 {
   "name": "portfolio",
-  "version": "1.4.0",
+  "version": "1.14.0",
   "description": "portfolio",
   "main": "gulpfile.js",
-  "scripts": {},
+  "scripts": {
+    "deploy": "gulp prod && injectme public/css/main.css public/index.html -g"
+  },
   "author": "Ion D. Filho",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^6.5.1",
     "browser-sync": "^2.11.0",
+    "commander": "^2.9.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-bump": "^2.4.0",
@@ -24,6 +27,7 @@
     "gulp-sequence": "^0.4.6",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.10",
+    "injectme": "^0.1.4",
     "install": "^0.8.2",
     "node-sass": "^3.10.1",
     "npm": "^3.10.9",

@@ -64,6 +64,7 @@
 	<meta itemprop="description" content="Front-End Developer">
 	<meta itemprop="image" content="https://dl.dropboxusercontent.com/u/4633623/portfoliogoogleplus.jpg">
 	<title>Portfolio of Ion Drimba Filho</title>
+	<link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body class="critical">
@@ -74,7 +75,7 @@
 		<div class="about">
 		</div>
 	</main>
-	<script>
+	<!--<script>
 		'use strict'; 
 		if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.register('service-worker.js').then(function(reg) {
@@ -101,12 +102,13 @@
 			console.error('Error during service worker registration:', e);
 		});
 		}
-</script>
+</script>-->
 	<script>
 
       var cb = function() {
         var l = document.createElement('link'); l.rel = 'stylesheet';
-        l.href = 'css/main.css';
+        l.href = 'css/about.css';
+		l.async = true;
         var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
       };
       var raf = requestAnimationFrame || mozRequestAnimationFrame ||
@@ -114,17 +116,5 @@
       if (raf) raf(cb);
       else window.addEventListener('load', cb);
     </script>
-	<script>
-        var loading = document.getElementById('loading-arrow'),
-        hanldetimeout;
-
-    hanldetimeout = setInterval(function() {
-        if (window.app && window.app.controller.home.loaded) {
-            clearTimeout(hanldetimeout);
-        }
-
-    }, 2200);
-    </script>
-
-	<script data-main="scripts/main.js" src="scripts/require.js" async></script>
+	<script async data-main="scripts/main.js" src="scripts/require.js" ></script>
 </body>

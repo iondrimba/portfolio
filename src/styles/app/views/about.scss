@@ -159,14 +159,4 @@
     width: 100%;
   }
 
-  .close {
-    @include close();
-    transform: translateY(-100%) translate3d(0, 0, 0);
-    transition: transform .2s $out-quint;
-  }
-
-  .close-animate-in {
-    transform: translateY(0) translate3d(0, 0, 0);
-    transition: transform .3s .3s $out-quint;
-  }
 }

@@ -4,10 +4,10 @@
     'vendors/three',
     'vendors/OrbitControls',
     'vendors/Detector',
-    'vendors/TweenMax',
+    'vendors/TweenLite',
     'handlebars'
 
-], function (NoJQuery, Controller, THREE, OrbitControls, Detector, TweenMax, handlebars) {
+], function (NoJQuery, Controller, THREE, OrbitControls, Detector, TweenLite, handlebars) {
 
     var App = function () {
         this.handlebars = handlebars;

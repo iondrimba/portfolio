@@ -1,5 +1,19 @@
+@import 'variables';
+
+body {
+  font-family: $font-family;
+  margin: 0;
+  overflow: hidden;
+}
+
+div,
+section,
+article {
+  box-sizing: border-box;
+}
+
 .critical {
-  background: linear-gradient(193deg, rgba(4, 84, 130, 1) 0, rgba(46, 116, 255, 1) 100%);
+  background: linear-gradient(193deg, $gradient-primary 0, $gradient-secondary 100%);
   background-size: 600% 600%;
   height: 100vh;
 }

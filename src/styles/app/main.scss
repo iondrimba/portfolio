@@ -1,12 +1,9 @@
-@import '../vendors/normalize';
-@import 'helpers';
 @import 'variables';
 @import 'fonts';
-@import 'global';
 @import 'views/critical';
 @import 'controls/loader';
-@import 'views/home';
 @import 'views/about';
+@import 'views/home';
 @import 'viewports/small';
 @import 'viewports/medium';
 @import 'viewports/large';
