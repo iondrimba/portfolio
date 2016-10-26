@@ -4,6 +4,7 @@
   "description": "portfolio",
   "main": "gulpfile.js",
   "scripts": {
+    "start": "gulp",
     "deploy": "gulp prod && injectme public/css/main.css public/index.html -g"
   },
   "author": "Ion D. Filho",
