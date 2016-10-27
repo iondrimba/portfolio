@@ -11,8 +11,7 @@ define(['page',  'views/home', 'views/about'], function(page, Home, About) {
             this.setup();
             this.home.init();
             this.about.init();
-            this.masterPage();
-
+            
             page('/', this.onHome.bind(this));
             page('/about', this.onPrerenderAbout.bind(this), this.onAbout.bind(this));
 
@@ -22,14 +21,6 @@ define(['page',  'views/home', 'views/about'], function(page, Home, About) {
             page('*', this.notFound.bind(this));
 
             page();
-        };
-        this.masterPage = function(ctx, next) {
-
-            //LET ELEMENTS VISIBLE
-            app.$$('main').removeClass('hidden');
-            app.$$('footer').removeClass('hidden');
-            app.$$('.content').removeClass('hidden');
-
         };
         this.navigate = function(path) {
             page(path);

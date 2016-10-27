@@ -7,6 +7,9 @@
   height: round(100vh);
   overflow: hidden;
   position: relative;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   h1 {
     color: $base-color;
@@ -29,6 +32,7 @@
     transition-duration: .3s;
     transition-property: transform, opacity;
     transition-timing-function: $bounce;
+    width: 500px;    
     z-index: 1;
 
     span {

@@ -3,7 +3,13 @@
 body {
   font-family: $font-family;
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+* {
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: $seconday-color;
 }
 
 div,
@@ -13,7 +19,6 @@ article {
 }
 
 .critical {
-  background: linear-gradient(193deg, $gradient-primary 0, $gradient-secondary 100%);
-  background-size: 600% 600%;
+  background: $seconday-color;
   height: 100vh;
 }

@@ -18,8 +18,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
             this.btnAbout = this.$$('.link');
 
             //display 3d grid only if WGL supported
-            if (Detector.webgl) {
-                this.$$('body').removeClass('body-gradient');
+            if (this.webglSupport()) {
                 this.grid3D = new Grid3D(app);
             }
 
@@ -68,9 +67,15 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
             }.bind(this));
         };
 
-
+        this.webglSupport = function () {
+            try {
+                var canvas = document.createElement('canvas');
+                return !!window.WebGLRenderingContext && (
+                    canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+            } catch (e) { return false; }
+        };
         this.execute = function () {
-            if (Detector.webgl) {
+            if (this.webglSupport()) {
                 if (this.grid3D.executed === false) {
                     this.grid3D.execute();
                 }
@@ -81,16 +86,18 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
             this.hideLoader();
 
             this.loaded = true;
-            
+
             this.show();
         };
 
         this.show = function () {
+            this.grid3D.pause = false;
             this.titleShow();
             this.showAboutButton();
             this.showSocialIcons();
         };
         this.hide = function () {
+            this.grid3D.pause = true;
             this.titleHide();
             this.hideSocialIcons();
         };

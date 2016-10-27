@@ -27,18 +27,18 @@
         };
 
         this.animateIn = function () {
-            this.$el.addClass('show');
+            this.$el.addClass('animate');
             this.buttonCloseShow();
             this.titleShow();
             this.introTextShow();
             this.brandsShow();
             this.skillShow();
         };
-
+ 
         this.hide = function () {
             this.$el.addClass('animate-out');
             TweenLite.delayedCall(.5, function () {
-                this.$el.removeClass('show');
+                this.$el.removeClass('animate');
                 this.$el.removeClass('animate-out');
             }.bind(this));
 

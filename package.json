@@ -1,11 +1,11 @@
 {
   "name": "portfolio",
-  "version": "1.22.0",
+  "version": "1.36.0",
   "description": "portfolio",
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp",
-    "deploy": "gulp prod && injectme public/css/main.css public/index.html -g"
+    "deploy": "gulp prod"
   },
   "author": "Ion D. Filho",
   "license": "ISC",

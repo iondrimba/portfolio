@@ -1,9 +1,38 @@
 @import '../variables';
 
-@media only screen and (max-width: 1160px) and (min-width: 769px) {
+@media only screen and (max-width: 1024px) {
   .home {
+    background-image: url('../images/mobile-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .grid3d {
+    display: none;
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+  .home {
+    background-image: url('../images/mobile-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
     h1 {
-      width: 460px;
+      font-size: 48pt;
+    }
+  }
+
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+  .home {
+    background-image: url('../images/mobile-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    h1 {
+      font-size: 59pt;
     }
   }
 }

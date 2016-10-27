@@ -3,11 +3,10 @@
     'core/controller',
     'vendors/three',
     'vendors/OrbitControls',
-    'vendors/Detector',
     'vendors/TweenLite',
     'handlebars'
 
-], function (NoJQuery, Controller, THREE, OrbitControls, Detector, TweenLite, handlebars) {
+], function (NoJQuery, Controller, THREE, OrbitControls,  TweenLite, handlebars) {
 
     var App = function () {
         this.handlebars = handlebars;
@@ -18,3 +17,4 @@
 
     window.app = new App();
 });
+ 

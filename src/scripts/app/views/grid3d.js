@@ -53,6 +53,7 @@ define(['views/animateColors'], function (AnimateColors) {
         };
 
         this.onWindowResize = function () {
+            
             this.windowHalfX = window.innerWidth / 2;
             this.windowHalfY = window.innerHeight / 2;
 
@@ -62,10 +63,24 @@ define(['views/animateColors'], function (AnimateColors) {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
         };
 
+
+        this.animate = function () {
+            requestAnimationFrame(this.animate.bind(this));
+            this.render();
+
+            this.camera.lookAt(this.scene.position);
+            this.renderer.render(this.scene, this.camera);
+        };
+
+        this.render = function () {
+            this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
+            this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
+        };
+
         this.initGrid = function () {
-
-
-            window.addEventListener('mousemove', this.onMouseMove.bind(this));
+            if (window.innerWidth > 1024) {
+                window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
+            }
 
             window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
@@ -103,8 +118,6 @@ define(['views/animateColors'], function (AnimateColors) {
             this.objUp = this.addExtrudeUpObj(this.scene, this.materials);
 
             this.objDown = this.addExtrudeDownObj(this.scene, this.materials);
-
-            this.onWindowResize();
         };
 
         this.addExtrudeUpObj = function (scene, materials) {
@@ -312,18 +325,6 @@ define(['views/animateColors'], function (AnimateColors) {
             return triangle;
         };
 
-        this.animate = function () {
-            requestAnimationFrame(this.animate.bind(this));
-            this.render();
-
-            this.camera.lookAt(this.scene.position);
-            this.renderer.render(this.scene, this.camera);
-        };
-
-        this.render = function () {
-            this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
-            this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
-        };
 
         this.showValXUp = function (obj, index, value) {
             obj.children[index].rotation.x = value;

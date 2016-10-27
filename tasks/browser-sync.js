@@ -4,8 +4,8 @@ var reload = browserSync.reload;
 
 module.exports = function() {
     browserSync.init({
-        //server: './public',
-        proxy: "http://portfolio"
+        server: './public'
+        //proxy: "http://192.168.0.25:3000"
     });
 
 
