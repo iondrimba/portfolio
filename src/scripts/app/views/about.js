@@ -78,7 +78,7 @@
 
         this.introTextShow = function () {
             this.$$('.intro').find('p').each(function (elmt, index) {
-                TweenLite.delayedCall(.2 + (index * .15), function () {
+                TweenLite.delayedCall(.13 + (index * .13), function () {
                     this.$$(elmt).addClass('block-animate-in');
                 }.bind(this));
             }.bind(this));
