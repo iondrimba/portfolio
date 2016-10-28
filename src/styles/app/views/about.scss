@@ -41,7 +41,9 @@
 
   .first-block,
   .second-block,
-  .third-block {
+  .third-block,
+  .fourth-block,
+  .fifth-block {
     opacity: 0;
     transform: translateY(50px) translate3d(0, 0, 0);
     transition: all .3s $out-quint;
