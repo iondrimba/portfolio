@@ -2,14 +2,15 @@
 @import '../controls/social-buttons';
 @import '../controls/about-button';
 @import '../controls/grid3d';
+@import '../controls/alert-offline';
 
 .home {
-  height: round(100vh);
-  overflow: hidden;
-  position: relative;
   background-image: none;
   background-repeat: no-repeat;
   background-size: cover;
+  height: round(100vh);
+  overflow: hidden;
+  position: relative;
 
   h1 {
     color: $base-color;
@@ -32,7 +33,7 @@
     transition-duration: .3s;
     transition-property: transform, opacity;
     transition-timing-function: $bounce;
-    width: 500px;    
+    width: 500px;
     z-index: 1;
 
     span {
@@ -44,7 +45,7 @@
       margin-top: 20px;
       opacity: 0;
       text-align: center;
-      transform: translateY(50px) translate3d(0, 0, 0);
+      transform: translateY(round(50px)) translate3d(0, 0, 0);
       transition-delay: .4s;
       transition-duration: .3s;
       transition-property: transform, opacity;

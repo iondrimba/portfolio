@@ -11,7 +11,16 @@ if ('serviceWorker' in navigator) {
                         if (navigator.serviceWorker.controller) {
                             console.log('New or updated content is available.');
                         } else {
-                            console.log('Content is now available offline!');
+                            var alertOffline = document.getElementsByClassName('alert-offline')[0];
+                            alertOffline.classList.add('show-offlline-ready');
+                            alertOffline.onclick = function () {
+                                alertOffline.classList.remove('show-offlline-ready');
+                            };
+
+                            var timeout = setTimeout(function () {
+                                alertOffline.classList.remove('show-offlline-ready');
+                                clearTimeout(timeout);
+                            }, 3000);
                         }
                         break;
                     case 'redundant':

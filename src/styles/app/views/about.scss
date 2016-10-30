@@ -9,8 +9,8 @@
   float: left;
   opacity: .2;
   position: absolute;
-  top: -1000px;
-  transform: translateY(10vh) translate3d(0, 0, 0);
+  top: -200vh;
+  transform: translateY(round(10vh)) translate3d(0, 0, 0);
   transition: transform .3s $out-quint;
   width: 100%;
   z-index: -1;
@@ -23,7 +23,7 @@
   }
 
   &.animate-out {
-    transform: translateY(100vh) translate3d(0, 0, 0);
+    transform: translateY(round(100vh)) translate3d(0, 0, 0);
     z-index: 2;
   }
 
@@ -35,7 +35,7 @@
     margin-top: -10px;
     opacity: 0;
     padding: 0;
-    transform: translateY(50px) translate3d(0, 0, 0);
+    transform: translateY(round(50px)) translate3d(0, 0, 0);
     transition: all .3s $out-quint;
   }
 
@@ -45,7 +45,7 @@
   .fourth-block,
   .fifth-block {
     opacity: 0;
-    transform: translateY(50px) translate3d(0, 0, 0);
+    transform: translateY(round(50px)) translate3d(0, 0, 0);
     transition: all .3s $out-quint;
   }
 
@@ -92,19 +92,14 @@
     margin-top: 75px;
     opacity: 0;
     padding: 0;
-    transform: translateY(50px) translate3d(0, 0, 0);
+    transform: translateY(round(50px)) translate3d(0, 0, 0);
     transition: all .3s $bounce;
   }
 
-  .primary {
-    opacity: 0;
-    transform: translateY(50px) translate3d(0, 0, 0);
-    transition: all .3s $bounce;
-  }
-
+  .primary,
   .secondary {
     opacity: 0;
-    transform: translateY(50px) translate3d(0, 0, 0);
+    transform: translateY(round(50px)) translate3d(0, 0, 0);
     transition: all .3s $bounce;
   }
 

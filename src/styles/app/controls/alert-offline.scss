@@ -1,0 +1,23 @@
+@import '../variables';
+
+.alert-offline {
+  background-color: $offline-alert-bg;
+  color: $base-color;
+  cursor: pointer;
+  height: 50px;
+  opacity: 0;
+  padding-top: 13px;
+  position: fixed;
+  text-align: center;
+  transform: translateY(round(-20vh)) translate3d(0, 0, 0);
+  transition-duration: .3s;
+  transition-property: transform, opacity;
+  transition-timing-function: $out-quint;
+  width: 100%;
+  z-index: 10;
+}
+
+.show-offlline-ready {
+  opacity: 1;
+  transform: translateY(round(0)) translate3d(0, 0, 0);  
+}
