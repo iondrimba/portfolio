@@ -248,7 +248,7 @@ self.addEventListener('fetch', function(event) {
 
 
 // Runtime cache configuration, using the sw-toolbox library.
-toolbox.precache('*');
+toolbox.precache(['*']);
 toolbox.router.get("(.*)", toolbox.networkFirst, {});
 
 
