@@ -13,10 +13,10 @@ define(['page',  'views/home', 'views/about'], function(page, Home, About) {
             this.about.init();
             
             page('/', this.onHome.bind(this));
-            page('/about', this.onPrerenderAbout.bind(this), this.onAbout.bind(this));
+            page('/sobre', this.onPrerenderAbout.bind(this), this.onAbout.bind(this));
 
             page.exit('/', this.onExitHome.bind(this));
-            page.exit('/about', this.onExitAbout.bind(this));
+            page.exit('/sobre', this.onExitAbout.bind(this));
 
             page('*', this.notFound.bind(this));
 
@@ -49,7 +49,7 @@ define(['page',  'views/home', 'views/about'], function(page, Home, About) {
         };
 
         this.onPrerenderAbout = function(ctx, next) {
-            this.onPrerender('about');
+            this.onPrerender('sobre');
             next();
         };
 

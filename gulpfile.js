@@ -1,6 +1,6 @@
 ﻿var gulp = require('gulp');
 var requirejsOptimize = require('gulp-requirejs-optimize');
-var gulpSequence = require('gulp-sequence')
+var gulpSequence = require('gulp-sequence');
 var path = require('path');
 var swPrecache = require('sw-precache');
 var bump = require('gulp-bump');
@@ -11,6 +11,8 @@ var pckg = require('./package.json');
 var patch = semver.inc(pckg.version, 'patch');
 var minor = semver.inc(pckg.version, 'minor');
 var major = semver.inc(pckg.version, 'major');
+var isDevelopment = false;
+
 
 var requirePaths = {
     noJquery: 'node_modules/nojquery/nojquery',
@@ -45,10 +47,12 @@ function bumpAppFiles(version) {
 
 
 function injectFiles() {
+    console.log('injectFiles', isDevelopment);
     var options = {};
-
+    if (isDevelopment === false) {
+        options.jsPath = './public/sw-setup.js';
+    }
     options.cssPath = './public/css/main.css';
-    options.jsPath = './public/sw-setup.js';
     options.indexFile = './public/index.html';
 
     var injectedHtml = injectMe(options);
@@ -126,14 +130,19 @@ gulp.task('bump-major', ['major', 'service-worker'], function renameMajor() {
     bumpAppFiles(major);
 });
 
-gulp.task('inject', function inject() {
+gulp.task('inject:dev', function inject() {
+    isDevelopment = true;
+    injectFiles();
+});
+gulp.task('inject:prod', function inject() {
+    isDevelopment = false;
     injectFiles();
 });
 
 //watch task
 gulp.task('watch', require('./tasks/watch.js'));
 
-gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy', 'requirejs:dev'], 'inject', 'browser-sync', 'watch'));
+gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy', 'requirejs:dev'], 'watch', 'browser-sync'));
 
-gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy', 'bump-minor', 'minifyjs','inject'));
+gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy', 'bump-minor', 'minifyjs', 'inject:prod'));
 

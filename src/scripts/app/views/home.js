@@ -39,7 +39,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
             this.btnAbout.removeClass('hide-button-about');
         };
         this.gotoAbout = function () {
-            app.controller.navigate('/about');
+            app.controller.navigate('/sobre');
         };
         this.hideLoader = function () {
             this.$$('.loading-arrow').remove();
