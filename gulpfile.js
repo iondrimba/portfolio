@@ -113,7 +113,7 @@ gulp.task('service-worker', function (callback) {
         cacheId: pckg.version,
         runtimeCaching: [{
             urlPattern: '(.*)',
-            handler: 'cacheFirst'
+            handler: 'networkFirst'
         }]
     }, callback);
 });
