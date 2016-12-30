@@ -37,8 +37,8 @@ function bumpAppFiles(version) {
     options.version = version;
     options.indexFile = './public/index.html';
 
-    options.filePath = ['./public/scripts/main.js', './public/css/main.css'];
-    options.outputfolder = ['./public/scripts/', './public/css/'];
+    options.filePath = ['./public/scripts/main.js'];
+    options.outputfolder = ['./public/scripts/'];
 
     renameMe(options);
 }
@@ -68,6 +68,9 @@ gulp.task('minor', function () {
 gulp.task('major', function () {
     return bumpPackageJson(major);
 });
+
+//clean public files
+gulp.task('clean', require('./tasks/clean.js'));
 
 //scss - lint
 gulp.task('scss-lint', require('./tasks/scss-lint.js'));
@@ -142,5 +145,5 @@ gulp.task('watch', require('./tasks/watch.js'));
 
 gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy', 'requirejs:dev'], 'inject', 'browser-sync', 'watch'));
 
-gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod'], 'copy', 'bump-minor', 'minifyjs','inject'));
+gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod','clean'], 'copy', 'bump-minor', 'minifyjs','inject'));
 
