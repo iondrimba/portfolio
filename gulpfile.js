@@ -54,17 +54,17 @@ function injectFiles() {
     var injectedHtml = injectMe(options);
 }
 
-//PATCH 
+//PATCH
 gulp.task('patch', function () {
     return bumpPackageJson(patch);
 });
 
-//MINOR 
+//MINOR
 gulp.task('minor', function () {
     return bumpPackageJson(minor);
 });
 
-//MAJOR 
+//MAJOR
 gulp.task('major', function () {
     return bumpPackageJson(major);
 });
@@ -104,7 +104,12 @@ gulp.task('browser-sync', require('./tasks/browser-sync.js'));
 gulp.task('service-worker', function (callback) {
     var rootDir = 'public';
     swPrecache.write(path.join(rootDir, 'service-worker.js'), {
-        staticFileGlobs: [rootDir + '/**/*.{png,jpg,gif,svg,eot,ttf,woff,woff2}', rootDir + '/*.png'],
+        staticFileGlobs: [
+            rootDir + '/**/*.html',
+            rootDir + '/**/main.1.40.0.{js,css}',
+            rootDir + '/**/*.{png,jpg,gif}',
+            rootDir + '/**/*.{svg,eot,ttf,woff,woff2}',
+        ],
         stripPrefix: rootDir,
         cacheId: pckg.version,
         runtimeCaching: [{
