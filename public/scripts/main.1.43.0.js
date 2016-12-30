@@ -2827,7 +2827,7 @@ define('core/controller',['page',  'views/home', 'views/about'], function(page, 
             this.setup();
             this.home.init();
             this.about.init();
-            
+
             page('/', this.onHome.bind(this));
             page('/about', this.onPrerenderAbout.bind(this), this.onAbout.bind(this));
 
@@ -2876,7 +2876,7 @@ define('core/controller',['page',  'views/home', 'views/about'], function(page, 
             this.about.execute();
         };
         this.notFound = function(ctx, next) {
-            console.log('notFound');
+            console.log('notFound', ctx, next);
         };
     };
 

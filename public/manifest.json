@@ -4,7 +4,7 @@
     "background_color": "#ffffff",
     "name": "Portfolio of Ion Drimba Filho",
     "short_name": "Ion Drimba",
-    "start_url": "/index.html",
+    "start_url": "/",
     "theme_color": "#000000",
     "display": "standalone",
     "icons": [
