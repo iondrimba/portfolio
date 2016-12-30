@@ -13,6 +13,7 @@ define(['page',  'views/home', 'views/about'], function(page, Home, About) {
             this.about.init();
 
             page('/', this.onHome.bind(this));
+            page('/index.html', this.onHome.bind(this));
             page('/about', this.onPrerenderAbout.bind(this), this.onAbout.bind(this));
 
             page.exit('/', this.onExitHome.bind(this));
