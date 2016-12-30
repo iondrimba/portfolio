@@ -97,7 +97,7 @@ gulp.task('requirejs:dev', function () {
 
 //require production
 gulp.task('requirejs:prod', function () {
-    return require('./tasks/requirejs.js')(requirePaths, 'uglify');
+    return require('./tasks/requirejs.js')(requirePaths, 'none');
 });
 
 //browsersync task
@@ -145,5 +145,5 @@ gulp.task('watch', require('./tasks/watch.js'));
 
 gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy', 'requirejs:dev'], 'inject', 'browser-sync', 'watch'));
 
-gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod','clean'], 'copy', 'bump-minor', 'minifyjs','inject'));
+gulp.task('prod', gulpSequence(['eslint', 'scss-lint', 'sass', 'cssmin', 'requirejs:prod','clean'], 'copy', 'bump-minor', 'inject'));
 
