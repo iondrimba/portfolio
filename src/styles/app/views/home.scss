@@ -9,8 +9,10 @@
   background-repeat: no-repeat;
   background-size: cover;
   height: round(100vh);
+  opacity: 0;
   overflow: hidden;
   position: relative;
+  transition: opacity .4s .2s;
 
   h1 {
     color: $base-color;
@@ -63,4 +65,3 @@
     }
   }
 }
-
