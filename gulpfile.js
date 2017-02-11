@@ -113,7 +113,7 @@ gulp.task('service-worker', function (callback) {
             rootDir + '/**/main.1.40.0.{js,css}',
             rootDir + '/*.{png,jpg,gif}',
             rootDir + '/**/*.{png,jpg,gif}',
-            rootDir + '/**/*.{svg,eot,ttf,woff,woff2}',
+            rootDir + '/**/*.{svg,eot,ttf,woff,woff2}'
         ],
         stripPrefix: rootDir,
         cacheId: pckg.version,

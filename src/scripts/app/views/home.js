@@ -39,6 +39,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
       this.btnAbout.removeClass('hide-button-about');
     };
     this.gotoAbout = function () {
+      this.grid3D.paused = true;
       app.controller.navigate('/about');
     };
     this.hideLoader = function () {
@@ -106,14 +107,14 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
     };
 
     this.show = function () {
-      this.grid3D.pause = false;
+      this.grid3D.paused = false;
+      this.grid3D.animate();
 
       this.titleShow();
       this.showAboutButton();
       this.showSocialIcons();
     };
     this.hide = function () {
-      this.grid3D.pause = true;
       this.titleHide();
       this.hideSocialIcons();
     };

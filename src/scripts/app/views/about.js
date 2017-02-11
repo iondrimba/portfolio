@@ -34,7 +34,7 @@
             this.brandsShow();
             this.skillShow();
         };
- 
+
         this.hide = function () {
             this.$el.addClass('animate-out');
             TweenLite.delayedCall(.5, function () {

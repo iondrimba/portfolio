@@ -17,4 +17,3 @@
 
     window.app = new App();
 });
- 

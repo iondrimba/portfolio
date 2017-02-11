@@ -7,19 +7,16 @@
   background-position: center top;
   background-repeat: no-repeat;
   float: left;
-  opacity: 0;
   position: absolute;
-  top: -200vh;
-  transform: translateY(round(10vh)) translate3d(0, 0, 0);
-  transition: transform .3s $out-quint;
-  transition: opacity .3s;
+  transform: translateY(round(100vh)) translate3d(0, 0, 0) scale(1,0);
+  transition: transform .25s $out-quint;
   width: 100%;
+  will-change: transform;
   z-index: -1;
 
+
   &.animate {
-    opacity: 1;
-    top: 0;
-    transform: translateY(0) translate3d(0, 0, 0);
+    transform: translateY(-100vh) translate3d(0, 0, 0) scale(1,1);
     z-index: 2;
   }
 
