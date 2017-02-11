@@ -64,9 +64,7 @@ define(['views/animateColors'], function (AnimateColors) {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
-
     this.animate = function () {
-      console.log('animate', this.paused);
       if (this.paused === false) {
         requestAnimationFrame(this.animate.bind(this));
         this.render();
