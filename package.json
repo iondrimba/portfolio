@@ -7,6 +7,10 @@
     "start": "gulp",
     "deploy": "gulp prod"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iondrimba/Portifolio.git"
+  },
   "author": "Ion D. Filho",
   "license": "ISC",
   "devDependencies": {
