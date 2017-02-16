@@ -52,6 +52,7 @@
       transition-duration: .3s;
       transition-property: transform, opacity;
       transition-timing-function: $bounce;
+      will-change: transform;
     }
   }
 

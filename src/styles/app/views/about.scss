@@ -8,21 +8,18 @@
   background-repeat: no-repeat;
   float: left;
   position: absolute;
-  transform: translateY(round(100vh)) translate3d(0, 0, 0) scale(1,0);
+  transform: translateY(round(100vh)) translate3d(0, 0, 0) scale(1, 0);
   transition: transform .25s $out-quint;
   width: 100%;
   will-change: transform;
-  z-index: -1;
-
+  z-index: 2;
 
   &.animate {
-    transform: translateY(-100vh) translate3d(0, 0, 0) scale(1,1);
-    z-index: 2;
+    transform: translateY(-100vh) translate3d(0, 0, 0) scale(1, 1);
   }
 
   &.animate-out {
     transform: translateY(round(100vh)) translate3d(0, 0, 0);
-    z-index: 2;
   }
 
   .title {
@@ -35,6 +32,7 @@
     padding: 0;
     transform: translateY(round(50px)) translate3d(0, 0, 0);
     transition: all .3s $out-quint;
+    will-change: transform;
   }
 
   .first-block,
@@ -45,24 +43,28 @@
     opacity: 0;
     transform: translateY(round(50px)) translate3d(0, 0, 0);
     transition: all .3s $out-quint;
+    will-change: transform;
   }
 
   .block-animate-in {
     opacity: 1;
     transform: translateY(0) translate3d(0, 0, 0);
     transition: all .3s .1s $bounce;
+    will-change: transform;
   }
 
   .icon-animate-in {
     opacity: 1;
     transform: translateY(0) translate3d(0, 0, 0);
     transition: all .2s .05s $bounce;
+    will-change: transform;
   }
 
   .title-animate-in {
     opacity: 1;
     transform: translateY(0) translate3d(0, 0, 0);
     transition: all .3s .3s $out-quint;
+    will-change: transform;
   }
 
   .intro {

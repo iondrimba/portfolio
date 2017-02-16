@@ -9,6 +9,7 @@ define(['views/animateColors'], function (AnimateColors) {
 
     this.initialize = function () {
 
+      this._mouseMove = this.onMouseMove.bind(this);
       this.camera;
       this.scene;
       this.renderer;
@@ -64,6 +65,13 @@ define(['views/animateColors'], function (AnimateColors) {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
+    this.removeMouseMove = function () {
+      window.removeEventListener('mousemove', this._mouseMove);
+    }
+
+    this.addMouseMove = function () {
+      window.addEventListener('mousemove', this._mouseMove, false);
+    }
     this.animate = function () {
       if (this.paused === false) {
         requestAnimationFrame(this.animate.bind(this));
@@ -82,7 +90,7 @@ define(['views/animateColors'], function (AnimateColors) {
 
     this.initGrid = function () {
       if (window.innerWidth > 1024) {
-        window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
+        this.addMouseMove();
       }
 
       window.addEventListener('resize', this.onWindowResize.bind(this), false);

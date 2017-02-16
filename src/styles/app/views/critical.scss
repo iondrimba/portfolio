@@ -29,6 +29,7 @@ article {
   top: 46%;
   transform: translateX(-50%) translateY(-10%) translate3d(0, 0, 0);
   width: 320px;
+  will-change: transform;
   z-index: 1;
 }
 
