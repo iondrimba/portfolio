@@ -1,4 +1,4 @@
-# Portfolio 
+# Portfolio (PWA)
 
 [![Travis build status](https://travis-ci.org/iondrimba/portfolio.svg?branch=v2)](https://travis-ci.org/iondrimba/portfolio) [![Build status](https://ci.appveyor.com/api/projects/status/pi88njogtqgxx5ep/branch/master?svg=true)](https://ci.appveyor.com/project/iondrimba/portfolio/branch/master)
 
