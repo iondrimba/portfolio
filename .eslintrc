@@ -9,7 +9,7 @@
     },
     "rules": {
         "camelcase": 1,
-        "comma-dangle": 2,
+        "comma-dangle": 1,
         "eqeqeq": 1,
         "curly": 2,
         "quotes": [
