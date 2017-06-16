@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "1.53.0",
+  "version": "1.54.0",
   "description": "portfolio",
   "main": "gulpfile.js",
   "scripts": {
@@ -39,10 +39,11 @@
     "npm": "^3.10.9",
     "rename-me": "^1.2.4",
     "semver": "^5.3.0",
-    "sw-precache": "^4.2.1",
+    "sw-precache": "^5",
     "sw-toolbox": "^3.4.0"
   },
   "dependencies": {
+    "gulp": "^3.9.1",
     "handlebars": "^4.0.5",
     "nojquery": "^1.0.8",
     "page": "^1.7.1"
