@@ -1,19 +1,20 @@
 ﻿require([
-    'noJquery',
-    'core/controller',
-    'vendors/three',
-    'vendors/OrbitControls',
-    'vendors/TweenLite',
-    'handlebars'
+  'noJquery',
+  'core/controller',
+  'vendors/three',
+  'vendors/OrbitControls',
+  'vendors/TweenLite',
+  'vendors/Modernizr',
+  'handlebars'
 
-], function (NoJQuery, Controller, THREE, OrbitControls,  TweenLite, handlebars) {
+], function (NoJQuery, Controller, THREE, OrbitControls, TweenLite, Modernizr, handlebars) {
 
-    var App = function () {
-        this.handlebars = handlebars;
-        this.$$ = NoJQuery;
-        this.controller = new Controller(this);
-        this.controller.start();
-    }
+  var App = function () {
+    this.handlebars = handlebars;
+    this.$$ = NoJQuery;
+    this.controller = new Controller(this);
+    this.controller.start();
+  }
 
-    window.app = new App();
+  window.app = new App();
 });

@@ -70,7 +70,7 @@ define(['views/animateColors'], function (AnimateColors) {
     }
 
     this.addMouseMove = function () {
-      window.addEventListener('mousemove', this._mouseMove, false);
+      window.addEventListener('mousemove', this._mouseMove, { passive: true });
     }
     this.animate = function () {
       if (this.paused === false) {
@@ -84,8 +84,8 @@ define(['views/animateColors'], function (AnimateColors) {
     };
 
     this.render = function () {
-      this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
-      this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
+      //this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
+      //this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
     };
 
     this.initGrid = function () {
@@ -93,7 +93,7 @@ define(['views/animateColors'], function (AnimateColors) {
         this.addMouseMove();
       }
 
-      window.addEventListener('resize', this.onWindowResize.bind(this), false);
+      window.addEventListener('resize', this.onWindowResize.bind(this), { passive: true });
 
       this.container = document.getElementsByClassName(this.el)[0];
 

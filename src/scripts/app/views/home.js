@@ -109,7 +109,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
 
     this.show = function () {
       this.grid3D.paused = false;
-      this.grid3D.addMouseMove();
+      //this.grid3D.addMouseMove();
       this.grid3D.animate();
 
       this.titleShow();

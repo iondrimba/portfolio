@@ -1,59 +1,68 @@
 @import '../variables';
 
 @mixin icon() {
-  width: 80px;
-  height: 80px;
   background-image: url('/images/logosv2.png');
   background-repeat: no-repeat;
   display: block;
-  position: relative;
+  height: 80px;
   margin-left: 10px;
   margin-right: 10px;
   opacity: 0;
+  position: relative;
   transform: translateY(50px) translate3d(0, 0, 0);
+  width: 80px;
 }
 
 .ibope {
   @include icon();
+
   background-position: 0 0;
 }
 
 .lg {
   @include icon();
+
   background-position: -106px 0;
 }
 
 .bauducco {
   @include icon();
+
   background-position: -212px 0;
 }
 
 .kia {
   @include icon();
+
   background-position: -318px -1px;
 }
 
 .pfizer {
   @include icon();
+
   background-position: -423px 0;
 }
 
 .mcdonalds {
   @include icon();
+
   background-position: -2px -101px;
 }
 
 .nestle {
   @include icon();
+
   background-position: -107px -101px;
 }
 
 .natura {
   @include icon();
+
   background-position: -212px -100px;
 }
 
 .johnsons {
   @include icon();
+
   background-position: -318px -100px;
 }

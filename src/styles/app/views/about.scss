@@ -3,23 +3,36 @@
 @import '../controls/brands-icons';
 
 .about {
-  background-color: $base-color;
   background-position: center top;
   background-repeat: no-repeat;
-  float: left;
+  display: block;
+  height: 100vh;
   position: absolute;
-  transform: translateY(round(100vh)) translate3d(0, 0, 0) scale(1, 0);
-  transition: transform .25s $out-quint;
+  top: 0;
   width: 100%;
-  will-change: transform;
-  z-index: 2;
+  z-index: -1;
 
   &.animate {
-    transform: translateY(-100vh) translate3d(0, 0, 0) scale(1, 1);
+    display: block;
+    z-index: 2;
   }
 
-  &.animate-out {
+  &__content {
+    background-color: $base-color;
+    display: none;
+    position: absolute;
     transform: translateY(round(100vh)) translate3d(0, 0, 0);
+    width: 100%;
+    will-change: transform;
+
+    &.animate {
+      animation: aboutShow .25s 1 forwards $out-quint;
+      display: block;
+    }
+
+    &.animate-out {
+      animation: aboutHide .25s 1 forwards $out-quint;
+    }
   }
 
   .title {
@@ -93,42 +106,49 @@
     opacity: 0;
     padding: 0;
     transform: translateY(round(50px)) translate3d(0, 0, 0);
-    transition: all .3s $bounce;
+    transition: opacity .3s .3s $bounce, transform .3s .3s $bounce;
+
+    &.animate-in {
+      opacity: 1;
+      transform: translateY(0) translate3d(0, 0, 0);
+    }
   }
 
   .primary,
   .secondary {
     opacity: 0;
     transform: translateY(round(50px)) translate3d(0, 0, 0);
-    transition: all .3s $bounce;
+    transition: transform .3s .3s $bounce, opacity .3s .3s $bounce;
   }
 
-  .primary-animate-in {
-    opacity: 1;
-    transform: translateY(0) translate3d(0, 0, 0);
-    transition: all .3s .35s $bounce;
+  .primary {
+    &.animate-in {
+      opacity: 1;
+      transform: translateY(0) translate3d(0, 0, 0);
+    }
   }
 
-  .secondary-animate-in {
-    opacity: 1;
-    transform: translateY(0) translate3d(0, 0, 0);
-    transition: all .3s .40s $bounce;
-  }
-
-  .skills-animate-in {
-    opacity: 1;
-    transform: translateY(0) translate3d(0, 0, 0);
-    transition: all .3s .3s $bounce;
+  .secondary {
+    &.animate-in {
+      opacity: 1;
+      transform: translateY(0) translate3d(0, 0, 0);
+    }
   }
 
   .group-list {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 100px;
+    opacity: 0;
+    transition: opacity .3s .3s $bounce;
 
     div {
       margin-bottom: 30px;
       width: 50%;
+    }
+
+    &.animate-in {
+      opacity: 1;
     }
   }
 
@@ -149,5 +169,29 @@
     margin: 0 auto;
     max-width: 600px;
     padding-top: 64px;
+  }
+}
+
+@keyframes aboutShow {
+  from {
+    display: block;
+    transform: translateY(round(100vh)) translate3d(0, 0, 0);
+  }
+
+  to {
+    display: block;
+    transform: translateY(0) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes aboutHide {
+  0% {
+    display: block;
+    transform: translateY(round(-100vh)) translate3d(0, 0, 0);
+  }
+
+  100% {
+    display: none;
+    transform: translateY(100vh) translate3d(0, 0, 0);
   }
 }

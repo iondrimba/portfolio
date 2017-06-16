@@ -1,8 +1,14 @@
 @import '../variables';
 
 @media only screen and (max-width: 1024px) {
+  .no-webp {
+    .home {
+      background-image: url('../images/mobile-bg.jpg');
+    }
+  }
+
   .home {
-    background-image: url('../images/mobile-bg.jpg');
+    background-image: url('../images/mobile-bg.webp');
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -13,8 +19,14 @@
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+  .no-webp {
+    .home {
+      background-image: url('../images/mobile-bg.jpg');
+    }
+  }
+
   .home {
-    background-image: url('../images/mobile-bg.jpg');
+    background-image: url('../images/mobile-bg.webp');
     background-repeat: no-repeat;
     background-size: cover;
 
@@ -22,12 +34,17 @@
       font-size: 48pt;
     }
   }
-
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+  .no-webp {
+    .home {
+      background-image: url('../images/mobile-bg.jpg');
+    }
+  }
+
   .home {
-    background-image: url('../images/mobile-bg.jpg');
+    background-image: url('../images/mobile-bg.webp');
     background-repeat: no-repeat;
     background-size: cover;
 

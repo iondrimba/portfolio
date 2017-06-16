@@ -1688,7 +1688,7 @@ define('views/grid3d',['views/animateColors'], function (AnimateColors) {
     }
 
     this.addMouseMove = function () {
-      window.addEventListener('mousemove', this._mouseMove, false);
+      window.addEventListener('mousemove', this._mouseMove, { passive: true });
     }
     this.animate = function () {
       if (this.paused === false) {
@@ -1702,8 +1702,8 @@ define('views/grid3d',['views/animateColors'], function (AnimateColors) {
     };
 
     this.render = function () {
-      this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
-      this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
+      //this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
+      //this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
     };
 
     this.initGrid = function () {
@@ -1711,7 +1711,7 @@ define('views/grid3d',['views/animateColors'], function (AnimateColors) {
         this.addMouseMove();
       }
 
-      window.addEventListener('resize', this.onWindowResize.bind(this), false);
+      window.addEventListener('resize', this.onWindowResize.bind(this), { passive: true });
 
       this.container = document.getElementsByClassName(this.el)[0];
 
@@ -2602,7 +2602,7 @@ define('text',['module'], function (module) {
 });
 
 
-define('text!src/templates/home.html',[],function () { return '<div class="initial-state">\n  <h1 class="hero-title">Ion Drimba F.<span>Front-End Developer</span></h1>\n  <div class="grid3d"></div>\n  <a href="/about" class="link"><span>about</span></a>\n  <div class="social">\n    <a target="_blank" rel="noopener noreferrer" href="https://www.npmjs.com/~iondrimba" class="npm" title="NPM">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 78 81.41">\n        <title>Ativo 1</title>\n        <g id="788fbb26-bb10-4479-b1c0-075cdf44506c" data-name="Camada 2">\n          <g id="30fec25c-1ddb-4fc5-bc7c-86d83dd5b977" data-name="svg2">\n            <path d="M0,0V81.41H78V0ZM64.86,66.59H51.79V27.84H38.73V66.59H13.14V14.82H64.86Z" fill="#fff" />\n          </g>\n        </g>\n      </svg>\n    </a>\n    <a target="_blank" rel="noopener noreferrer" href="https://github.com/iondrimba" class="github" title="Github">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 32.58 31.77">\n        <path d="M16.29 0a16.29 16.29 0 0 0-5.15 31.75c.81.15 1.11-.35 1.11-.79v-2.77C7.7 29.18 6.74 26 6.74 26a4.31 4.31 0 0 0-1.81-2.38c-1.48-1 .11-1 .11-1a3.42 3.42 0 0 1 2.5 1.68 3.47 3.47 0 0 0 4.74 1.35 3.48 3.48 0 0 1 1-2.18c-3.58-.39-7.38-1.79-7.38-8.03a6.3 6.3 0 0 1 1.68-4.37 5.86 5.86 0 0 1 .16-4.31s1.37-.44 4.48 1.67a15.44 15.44 0 0 1 8.16 0c3.11-2.11 4.48-1.67 4.48-1.67a5.85 5.85 0 0 1 .14 4.31 6.29 6.29 0 0 1 1.67 4.37c0 6.26-3.81 7.63-7.44 8a3.89 3.89 0 0 1 1.11 3v4.47s.29.94 1.12.78A16.29 16.29 0 0 0 16.29 0z"\n          fill="#fff" fill-rule="evenodd" data-name="Layer 1" />\n      </svg>\n    </a>\n    <a target="_blank" rel="noopener noreferrer" href="https://coderwall.com/iondrimba" class="coderwall" title="Coderwall">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">\n        <circle cx="5" cy="5" r="1.414" fill="#fff" />\n        <circle cx="10" cy="5" r="1.414" fill="#fff" />\n        <circle cx="15" cy="5" r="1.414" fill="#fff" />\n        <circle cx="10" cy="10" r="1.414" fill="#fff" />\n        <circle cx="15" cy="10" r="1.414" fill="#fff" />\n        <circle cx="15" cy="15" r="1.414" fill="#fff" />\n      </svg>\n    </a>\n    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/iondrimbafilho" class="linkedin" title="LinkedIn">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 25.77 25.72">\n        <path fill="#fff" d="M5.77 25.72H.42V8.54h5.35zM3.1 6.19A3.1 3.1 0 1 1 6.19 3.1 3.1 3.1 0 0 1 3.1 6.19zm22.67 19.53h-5.34v-8.35c0-2 0-4.56-2.78-4.56s-3.2 2.17-3.2 4.41v8.5H9.12V8.54h5.12v2.35h.07a5.61 5.61 0 0 1 5.05-2.77c5.41 0 6.4 3.56 6.4 8.18z"\n          data-name="Layer 1" />\n      </svg>\n    </a>\n  </div>\n</div>\n';});
+define('text!src/templates/home.html',[],function () { return '<div class="initial-state">\n  <h1 class="hero-title">Ion Drimba F.<span>Front-End Developer</span></h1>\n  <div class="grid3d"></div>\n  <a href="/about" class="link"><span>about</span></a>\n  <div class="social">\n    <a target="_blank" rel="noopener noreferrer" href="https://www.npmjs.com/~iondrimba" class="npm" title="NPM">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 78 81.41">\n        <g id="788fbb26-bb10-4479-b1c0-075cdf44506c" data-name="Camada 2">\n          <g id="30fec25c-1ddb-4fc5-bc7c-86d83dd5b977" data-name="svg2">\n            <path d="M0,0V81.41H78V0ZM64.86,66.59H51.79V27.84H38.73V66.59H13.14V14.82H64.86Z" fill="#fff" />\n          </g>\n        </g>\n      </svg>\n    </a>\n    <a target="_blank" rel="noopener noreferrer" href="https://github.com/iondrimba" class="github" title="Github">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 32.58 31.77">\n        <path d="M16.29 0a16.29 16.29 0 0 0-5.15 31.75c.81.15 1.11-.35 1.11-.79v-2.77C7.7 29.18 6.74 26 6.74 26a4.31 4.31 0 0 0-1.81-2.38c-1.48-1 .11-1 .11-1a3.42 3.42 0 0 1 2.5 1.68 3.47 3.47 0 0 0 4.74 1.35 3.48 3.48 0 0 1 1-2.18c-3.58-.39-7.38-1.79-7.38-8.03a6.3 6.3 0 0 1 1.68-4.37 5.86 5.86 0 0 1 .16-4.31s1.37-.44 4.48 1.67a15.44 15.44 0 0 1 8.16 0c3.11-2.11 4.48-1.67 4.48-1.67a5.85 5.85 0 0 1 .14 4.31 6.29 6.29 0 0 1 1.67 4.37c0 6.26-3.81 7.63-7.44 8a3.89 3.89 0 0 1 1.11 3v4.47s.29.94 1.12.78A16.29 16.29 0 0 0 16.29 0z"\n          fill="#fff" fill-rule="evenodd" data-name="Layer 1" />\n      </svg>\n    </a>\n    <a target="_blank" rel="noopener noreferrer" href="https://coderwall.com/iondrimba" class="coderwall" title="Coderwall">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">\n        <circle cx="5" cy="5" r="1.414" fill="#fff" />\n        <circle cx="10" cy="5" r="1.414" fill="#fff" />\n        <circle cx="15" cy="5" r="1.414" fill="#fff" />\n        <circle cx="10" cy="10" r="1.414" fill="#fff" />\n        <circle cx="15" cy="10" r="1.414" fill="#fff" />\n        <circle cx="15" cy="15" r="1.414" fill="#fff" />\n      </svg>\n    </a>\n    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/iondrimbafilho" class="linkedin" title="LinkedIn">\n      <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 25.77 25.72">\n        <path fill="#fff" d="M5.77 25.72H.42V8.54h5.35zM3.1 6.19A3.1 3.1 0 1 1 6.19 3.1 3.1 3.1 0 0 1 3.1 6.19zm22.67 19.53h-5.34v-8.35c0-2 0-4.56-2.78-4.56s-3.2 2.17-3.2 4.41v8.5H9.12V8.54h5.12v2.35h.07a5.61 5.61 0 0 1 5.05-2.77c5.41 0 6.4 3.56 6.4 8.18z"\n          data-name="Layer 1" />\n      </svg>\n    </a>\n  </div>\n</div>\n';});
 
 /* global Detector */
 /* global TweenLite */
@@ -2715,7 +2715,7 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
 
     this.show = function () {
       this.grid3D.paused = false;
-      this.grid3D.addMouseMove();
+      //this.grid3D.addMouseMove();
       this.grid3D.animate();
 
       this.titleShow();
@@ -2732,114 +2732,131 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
 });
 
 
-define('text!src/templates/about.html',[],function () { return '<a href="/" class="close">&#10005;</a>\n<section class="content">\n  <h1 class="title">ABOUT ME</h1>\n  <article class="intro">\n    <p class="first-block">My name is Ion Drimba Filho, I\'m a Front-End Developer based in Brazil.<br>I’m passionate about developing highly interactive\n      interfaces\n      <br>with front-end technologies (JS, CSS, HTML, Canvas).</p><br>\n    <p class="second-block">I consider myself a\n      <u>framework agnostic developer</u>, meaning I can adapt to any front-end stack. Not 100% dependent on third-party libs\n      or plugins to get things done, good understanding of\n      <u>current</u> best practices for web performance/rendering.</p><br>\n    <p class="third-block">I also have 5+ years of C# development using .NET Stack.</p><br>\n    <p class="fourth-block">Over the past 10 years woking in the industry, I helped the development of<br>Websites/Hotsites, Casual games, SPA, Mobile\n      Apps,\n      <br>Enterprise Applications and API’s for companies like:</p>\n\n    <div class="brands">\n      <div class="ibope">\n      </div>\n      <div class="lg">\n      </div>\n      <div class="bauducco">\n      </div>\n      <div class="kia">\n      </div>\n      <div class="pfizer">\n      </div>\n      <div class="mcdonalds">\n      </div>\n      <div class="nestle">\n      </div>\n      <div class="natura">\n      </div>\n      <div class="johnsons">\n      </div>\n    </div>\n  </article>\n  <h4 class="skills">SKILLS & EXPERTISE</h4>\n  <div class="group-list">\n    <div class="primary">\n      <h3 class="skills-title">PRIMARY</h3>\n      <ul class="list">\n        <li>Javascript(ES6)</li>\n        <li>Canvas</li>\n        <li>CSS(3)</li>\n        <li>HTML(5)</li>\n        <li>Backbone/React/Redux</li>\n        <li>Sass/Less</li>\n        <li>Tests(Karma/Jasmine)</li>\n        <li>NodeJS</li>\n        <li>Handlebars</li>\n        <li>Gulp/Webpack/Grunt/npm</li>\n        <li>Bootstrap/Foundation/MDL</li>\n      </ul>\n    </div>\n    <div class="secondary">\n      <h3 class="skills-title">SECONDARY</h3>\n      <ul class="list">\n        <li>C#</li>\n        <li>PHP</li>\n        <li>ASP.NET MVC</li>\n        <li>WebGL(ThreeJs)</li>\n        <li>API’s</li>\n        <li>SQL Server/MySQL</li>\n        <li>AWS</li>\n      </ul>\n    </div>\n    <div class="passive">\n      <h3 class="skills-title">PASSIVE</h3>\n      <ul class="list">\n        <li>Loves to code</li>\n        <li>Enjoys new technologies</li>\n        <li>Fast learner</li>\n      </ul>\n    </div>\n    <div class="tools">\n      <h3 class="skills-title">TOOLS</h3>\n      <ul class="list">\n        <li>VS Code</li>\n        <li>Sublime Text</li>\n        <li>Visual Studio</li>\n        <li>Photoshop/Animate CC(Flash)</li>\n        <li>GitHub</li>\n        <li>CI (Travis/Appveyor)</li>\n        <li>Coverage (Coveralls)</li>\n      </ul>\n    </div>\n  </div>\n</section>\n';});
+define('text!src/templates/about.html',[],function () { return '<a href="/" class="close">&#10005;</a>\n<section class="content">\n  <h1 class="title">ABOUT ME</h1>\n  <article class="intro">\n    <p class="first-block">My name is Ion Drimba Filho, I\'m a Front-End Developer based in Brazil.<br>I’m passionate about developing highly interactive\n      interfaces\n      <br>with front-end technologies (JS, CSS, HTML, Canvas).</p><br>\n    <p class="second-block">I consider myself a\n      <u>framework agnostic developer</u>, meaning I can adapt to any front-end stack. Not 100% dependent on third-party libs\n      or plugins to get things done, good understanding of\n      <u>current</u> best practices for web performance/rendering, SPA\'s, PWA\'s & AMP\'s</p><br>\n    <p class="third-block">I also have 5+ years of C# development using .NET Stack.</p><br>\n    <p class="fourth-block">Over the past 10 years woking in the industry, I helped the development of<br>Websites/Hotsites, Casual games, SPA, Mobile\n      Apps,\n      <br>Enterprise Applications and API’s for companies like:</p>\n\n    <div class="brands">\n      <div class="ibope">\n      </div>\n      <div class="lg">\n      </div>\n      <div class="bauducco">\n      </div>\n      <div class="kia">\n      </div>\n      <div class="pfizer">\n      </div>\n      <div class="mcdonalds">\n      </div>\n      <div class="nestle">\n      </div>\n      <div class="natura">\n      </div>\n      <div class="johnsons">\n      </div>\n    </div>\n  </article>\n  <h4 class="skills">SKILLS & EXPERTISE</h4>\n  <div class="group-list">\n    <div class="primary">\n      <h3 class="skills-title">PRIMARY</h3>\n      <ul class="list">\n        <li>Javascript(ES6)</li>\n        <li>Canvas</li>\n        <li>CSS(3)</li>\n        <li>HTML(5)</li>\n        <li>Backbone/React/Redux</li>\n        <li>Sass/Less</li>\n        <li>Tests(Karma/Jasmine)</li>\n        <li>NodeJS</li>\n        <li>Handlebars</li>\n        <li>Gulp/Webpack/Grunt/npm</li>\n        <li>Bootstrap/Foundation/MDL</li>\n      </ul>\n    </div>\n    <div class="secondary">\n      <h3 class="skills-title">SECONDARY</h3>\n      <ul class="list">\n        <li>C#</li>\n        <li>PHP</li>\n        <li>ASP.NET MVC</li>\n        <li>WebGL(ThreeJs)</li>\n        <li>API’s</li>\n        <li>SQL Server/MySQL</li>\n        <li>AWS</li>\n      </ul>\n    </div>\n    <div class="passive">\n      <h3 class="skills-title">PASSIVE</h3>\n      <ul class="list">\n        <li>Loves to code</li>\n        <li>Enjoys new technologies</li>\n        <li>Fast learner</li>\n      </ul>\n    </div>\n    <div class="tools">\n      <h3 class="skills-title">TOOLS</h3>\n      <ul class="list">\n        <li>VS Code</li>\n        <li>Sublime Text</li>\n        <li>Visual Studio</li>\n        <li>Photoshop/Animate CC(Flash)</li>\n        <li>GitHub</li>\n        <li>CI (Travis/Appveyor)</li>\n        <li>Coverage (Coveralls)</li>\n      </ul>\n    </div>\n  </div>\n</section>\n';});
 
 define('views/about',['text!src/templates/about.html'], function (template) {
-    var About = function (app) {
-        this.el = '.about';
-        this.$$ = app.$$;
-        this.view = function () {
-            var view = app.handlebars.compile(template),
-                html = view();
+  var About = function (app) {
+    this.el = '.about';
+    this.$$ = app.$$;
+    this.view = function () {
+      var view = app.handlebars.compile(template),
+        html = view();
 
-            return html;
+      return html;
 
-        };
-
-        this.init = function () {
-            this.setup();
-        };
-
-        this.setup = function () {
-            this.$el = this.$$(this.el);
-            this.$el.html(this.view());
-        };
-
-        this.execute = function () {
-            var timeOut = setTimeout(function () {
-                clearTimeout(timeOut);
-                this.animateIn();
-            }.bind(this), 100);
-        };
-
-        this.animateIn = function () {
-            this.$el.addClass('animate');
-            this.buttonCloseShow();
-            this.titleShow();
-            this.introTextShow();
-            this.brandsShow();
-            this.skillShow();
-        };
-
-        this.hide = function () {
-            this.$el.addClass('animate-out');
-            TweenLite.delayedCall(.5, function () {
-                this.$el.removeClass('animate');
-                this.$el.removeClass('animate-out');
-            }.bind(this));
-
-            this.buttonCloseHide();
-            this.titleHide();
-            this.introTextHide();
-            this.brandsHide();
-            this.skillsHide();
-        };
-
-        this.buttonCloseShow = function () {
-            this.$$('.close').addClass('close-animate-in');
-        };
-
-        this.buttonCloseHide = function () {
-            this.$$('.close').removeClass('close-animate-in');
-        };
-
-        this.titleShow = function () {
-            this.$$('.title').addClass('title-animate-in');
-        };
-
-        this.titleHide = function () {
-            this.$$('.title').removeClass('title-animate-in');
-        };
-
-        this.skillShow = function () {
-            this.$$('.skills').addClass('skills-animate-in');
-            this.$$('.primary').addClass('primary-animate-in');
-            this.$$('.secondary').addClass('secondary-animate-in');
-        };
-        this.skillsHide = function () {
-            this.$$('.skills').removeClass('skills-animate-in');
-            this.$$('.primary').removeClass('primary-animate-in');
-            this.$$('.secondary').removeClass('secondary-animate-in');
-        };
-
-        this.introTextShow = function () {
-            this.$$('.intro').find('p').each(function (elmt, index) {
-                TweenLite.delayedCall(.13 + (index * .13), function () {
-                    this.$$(elmt).addClass('block-animate-in');
-                }.bind(this));
-            }.bind(this));
-        };
-        this.introTextHide = function () {
-            this.$$('.intro').find('p').each(function (elmt, index) {
-                this.$$(elmt).removeClass('block-animate-in');
-            }.bind(this));
-        };
-
-        this.brandsShow = function () {
-            this.$$('.brands').find('div').each(function (elmt, index) {
-                TweenLite.delayedCall(.2 + (index * .05), function () {
-                    this.$$(elmt).addClass('icon-animate-in');
-                }.bind(this));
-            }.bind(this));
-        };
-
-        this.brandsHide = function () {
-            this.$$('.brands').find('div').each(function (elmt, index) {
-                this.$$(elmt).removeClass('icon-animate-in');
-            }.bind(this));
-        };
     };
-    return About;
+
+    this.init = function () {
+      this.setup();
+    };
+
+    this.setup = function () {
+      this.$el = this.$$('.about__content');
+      this.$el.html(this.view());
+    };
+
+    this.execute = function () {
+      var timeOut = setTimeout(function () {
+        clearTimeout(timeOut);
+        this.animateIn();
+      }.bind(this), 100);
+    };
+
+    this.animateIn = function () {
+      this.$$('.about').addClass('animate');
+      this.$el.addClass('animate');
+      this.buttonCloseShow();
+      this.titleShow();
+      this.introTextShow();
+      this.brandsShow();
+      this.skillShow();
+    };
+
+    this.hide = function () {
+      this.$el.addClass('animate-out');
+      this.$$('.about').addClass('animate-out');
+      TweenLite.delayedCall(.5, function () {
+        this.$$('.about').removeClass('animate-out');
+        this.$$('.about').removeClass('animate');
+        this.$el.removeClass('animate');
+        this.$el.removeClass('animate-out');
+      }.bind(this));
+
+      this.buttonCloseHide();
+      this.titleHide();
+      this.introTextHide();
+      this.brandsHide();
+      this.skillsHide();
+    };
+
+    this.buttonCloseShow = function () {
+      requestAnimationFrame(function () {
+        this.$$('.close').addClass('close-animate-in');
+      }.bind(this));
+    };
+
+    this.buttonCloseHide = function () {
+      requestAnimationFrame(function () {
+        this.$$('.close').removeClass('close-animate-in');
+      }.bind(this));
+    };
+
+    this.titleShow = function () {
+      requestAnimationFrame(function () {
+        this.$$('.title').addClass('title-animate-in');
+      }.bind(this));
+    };
+
+    this.titleHide = function () {
+      this.$$('.title').removeClass('title-animate-in');
+    };
+
+    this.skillShow = function () {
+      requestAnimationFrame(function () {
+        this.$$('.skills').addClass('animate-in');
+        this.$$('.primary').addClass('animate-in');
+        this.$$('.secondary').addClass('animate-in');
+        this.$$('.group-list').addClass('animate-in');
+      }.bind(this));
+
+    };
+    this.skillsHide = function () {
+      this.$$('.skills').removeClass('animate-in');
+      this.$$('.primary').removeClass('animate-in');
+      this.$$('.secondary').removeClass('animate-in');
+      this.$$('.group-list').removeClass('animate-in');
+    };
+
+    this.introTextShow = function () {
+      this.$$('.intro').find('p').each(function (elmt, index) {
+        TweenLite.delayedCall(.13 + (index * .13), function () {
+          requestAnimationFrame(function () {
+            this.$$(elmt).addClass('block-animate-in');
+          }.bind(this));
+        }.bind(this));
+      }.bind(this));
+    };
+    this.introTextHide = function () {
+      this.$$('.intro').find('p').each(function (elmt, index) {
+        this.$$(elmt).removeClass('block-animate-in');
+      }.bind(this));
+    };
+
+    this.brandsShow = function () {
+      this.$$('.brands').find('div').each(function (elmt, index) {
+        TweenLite.delayedCall(.2 + (index * .05), function () {
+          this.$$(elmt).addClass('icon-animate-in');
+        }.bind(this));
+      }.bind(this));
+    };
+
+    this.brandsHide = function () {
+      this.$$('.brands').find('div').each(function (elmt, index) {
+        this.$$(elmt).removeClass('icon-animate-in');
+      }.bind(this));
+    };
+  };
+  return About;
 });
 
 define('core/controller',['page', 'views/home', 'views/about'], function (page, Home, About) {
@@ -40678,6 +40695,12 @@ define("vendors/OrbitControls", function(){});
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenLite");
 define("vendors/TweenLite", function(){});
 
+/*! modernizr 3.5.0 (Custom Build) | MIT *
+ * https://modernizr.com/download/?-webp-setclasses !*/
+!function(e,n,A){function o(e,n){return typeof e===n}function t(){var e,n,A,t,a,i,l;for(var f in r)if(r.hasOwnProperty(f)){if(e=[],n=r[f],n.name&&(e.push(n.name.toLowerCase()),n.options&&n.options.aliases&&n.options.aliases.length))for(A=0;A<n.options.aliases.length;A++)e.push(n.options.aliases[A].toLowerCase());for(t=o(n.fn,"function")?n.fn():n.fn,a=0;a<e.length;a++)i=e[a],l=i.split("."),1===l.length?Modernizr[l[0]]=t:(!Modernizr[l[0]]||Modernizr[l[0]]instanceof Boolean||(Modernizr[l[0]]=new Boolean(Modernizr[l[0]])),Modernizr[l[0]][l[1]]=t),s.push((t?"":"no-")+l.join("-"))}}function a(e){var n=u.className,A=Modernizr._config.classPrefix||"";if(c&&(n=n.baseVal),Modernizr._config.enableJSClass){var o=new RegExp("(^|\\s)"+A+"no-js(\\s|$)");n=n.replace(o,"$1"+A+"js$2")}Modernizr._config.enableClasses&&(n+=" "+A+e.join(" "+A),c?u.className.baseVal=n:u.className=n)}function i(e,n){if("object"==typeof e)for(var A in e)f(e,A)&&i(A,e[A]);else{e=e.toLowerCase();var o=e.split("."),t=Modernizr[o[0]];if(2==o.length&&(t=t[o[1]]),"undefined"!=typeof t)return Modernizr;n="function"==typeof n?n():n,1==o.length?Modernizr[o[0]]=n:(!Modernizr[o[0]]||Modernizr[o[0]]instanceof Boolean||(Modernizr[o[0]]=new Boolean(Modernizr[o[0]])),Modernizr[o[0]][o[1]]=n),a([(n&&0!=n?"":"no-")+o.join("-")]),Modernizr._trigger(e,n)}return Modernizr}var s=[],r=[],l={_version:"3.5.0",_config:{classPrefix:"",enableClasses:!0,enableJSClass:!0,usePrefixes:!0},_q:[],on:function(e,n){var A=this;setTimeout(function(){n(A[e])},0)},addTest:function(e,n,A){r.push({name:e,fn:n,options:A})},addAsyncTest:function(e){r.push({name:null,fn:e})}},Modernizr=function(){};Modernizr.prototype=l,Modernizr=new Modernizr;var f,u=n.documentElement,c="svg"===u.nodeName.toLowerCase();!function(){var e={}.hasOwnProperty;f=o(e,"undefined")||o(e.call,"undefined")?function(e,n){return n in e&&o(e.constructor.prototype[n],"undefined")}:function(n,A){return e.call(n,A)}}(),l._l={},l.on=function(e,n){this._l[e]||(this._l[e]=[]),this._l[e].push(n),Modernizr.hasOwnProperty(e)&&setTimeout(function(){Modernizr._trigger(e,Modernizr[e])},0)},l._trigger=function(e,n){if(this._l[e]){var A=this._l[e];setTimeout(function(){var e,o;for(e=0;e<A.length;e++)(o=A[e])(n)},0),delete this._l[e]}},Modernizr._q.push(function(){l.addTest=i}),Modernizr.addAsyncTest(function(){function e(e,n,A){function o(n){var o=n&&"load"===n.type?1==t.width:!1,a="webp"===e;i(e,a&&o?new Boolean(o):o),A&&A(n)}var t=new Image;t.onerror=o,t.onload=o,t.src=n}var n=[{uri:"data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=",name:"webp"},{uri:"data:image/webp;base64,UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAABBxAR/Q9ERP8DAABWUDggGAAAADABAJ0BKgEAAQADADQlpAADcAD++/1QAA==",name:"webp.alpha"},{uri:"data:image/webp;base64,UklGRlIAAABXRUJQVlA4WAoAAAASAAAAAAAAAAAAQU5JTQYAAAD/////AABBTk1GJgAAAAAAAAAAAAAAAAAAAGQAAABWUDhMDQAAAC8AAAAQBxAREYiI/gcA",name:"webp.animation"},{uri:"data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA=",name:"webp.lossless"}],A=n.shift();e(A.name,A.uri,function(A){if(A&&"load"===A.type)for(var o=0;o<n.length;o++)e(n[o].name,n[o].uri)})}),t(),a(s),delete l.addTest,delete l.addAsyncTest;for(var p=0;p<Modernizr._q.length;p++)Modernizr._q[p]();e.Modernizr=Modernizr}(window,document);
+
+define("vendors/Modernizr", function(){});
+
 /*!
 
  handlebars v4.0.5
@@ -45287,23 +45310,24 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 require([
-    'noJquery',
-    'core/controller',
-    'vendors/three',
-    'vendors/OrbitControls',
-    'vendors/TweenLite',
-    'handlebars'
+  'noJquery',
+  'core/controller',
+  'vendors/three',
+  'vendors/OrbitControls',
+  'vendors/TweenLite',
+  'vendors/Modernizr',
+  'handlebars'
 
-], function (NoJQuery, Controller, THREE, OrbitControls,  TweenLite, handlebars) {
+], function (NoJQuery, Controller, THREE, OrbitControls, TweenLite, Modernizr, handlebars) {
 
-    var App = function () {
-        this.handlebars = handlebars;
-        this.$$ = NoJQuery;
-        this.controller = new Controller(this);
-        this.controller.start();
-    }
+  var App = function () {
+    this.handlebars = handlebars;
+    this.$$ = NoJQuery;
+    this.controller = new Controller(this);
+    this.controller.start();
+  }
 
-    window.app = new App();
+  window.app = new App();
 });
 
 define("src/scripts/app/main", function(){});
