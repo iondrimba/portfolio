@@ -1,11 +1,11 @@
 {
   "lang": "pt-br",
   "orientation": "portrait",
-  "background_color": "#ff1633",
+  "background_color": "#333333",
   "name": "Portfolio of Ion Drimba Filho",
   "short_name": "Ion Drimba",
   "start_url": "/",
-  "theme_color": "#ff1633",
+  "theme_color": "#021228",
   "display": "standalone",
   "icons": [
     {
