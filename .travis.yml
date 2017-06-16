@@ -9,9 +9,8 @@ before_install:
 - gem install sass
 - rvm install ruby-2.0.0-p598
 - gem install scss_lint
+- npm install gulp
 - npm install -g npm
 - npm install promise
-before_script:
-- npm install -g gulp
 script:
 - gulp prod
