@@ -1627,7 +1627,6 @@ define('views/grid3d',['views/animateColors'], function (AnimateColors) {
     this.paused = false;
 
     this.initialize = function () {
-
       this._mouseMove = this.onMouseMove.bind(this);
       this.camera;
       this.scene;
@@ -1684,13 +1683,14 @@ define('views/grid3d',['views/animateColors'], function (AnimateColors) {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
+    this.addMouseMove = function () {
+      window.addEventListener('mousemove', this._mouseMove, { passive: true });
+    }
+
     this.removeMouseMove = function () {
       window.removeEventListener('mousemove', this._mouseMove);
     }
 
-    this.addMouseMove = function () {
-      window.addEventListener('mousemove', this._mouseMove, { passive: true });
-    }
     this.animate = function () {
       if (this.paused === false) {
         requestAnimationFrame(this.animate.bind(this));
@@ -1703,15 +1703,11 @@ define('views/grid3d',['views/animateColors'], function (AnimateColors) {
     };
 
     this.render = function () {
-      //this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
-      //this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
+      this.camera.position.x = (this.mouseX - this.camera.position.x) * 0.02;
+      this.camera.position.y = (-this.mouseY - this.camera.position.y) * 0.05;
     };
 
     this.initGrid = function () {
-      if (window.innerWidth > 1024) {
-        this.addMouseMove();
-      }
-
       window.addEventListener('resize', this.onWindowResize.bind(this), { passive: true });
 
       this.container = document.getElementsByClassName(this.el)[0];
@@ -2716,7 +2712,7 @@ define('views/home',['views/grid3d', 'text!src/templates/home.html'], function (
 
     this.show = function () {
       this.grid3D.paused = false;
-      //this.grid3D.addMouseMove();
+      this.grid3D.addMouseMove();
       this.grid3D.animate();
 
       this.titleShow();
