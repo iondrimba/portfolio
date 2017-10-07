@@ -14,7 +14,12 @@ engines:
       - javascript:
 ratings:
   paths:
-  - src/**
+  - src/scripts/app
 exclude_paths:
-- public/**/*
+- public
+- tasks
+- PSD
+- prototype
+- portfolio
+- fonts
 - "**/vendors/**/*"
