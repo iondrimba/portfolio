@@ -32,7 +32,7 @@
     "gulp-uglify": "2.1.2",
     "gulp-watch": "4.3.11",
     "injectme": "0.1.4",
-    "install": "0.8.9",
+    "install": "0.10.1",
     "node-sass": "3.13.1",
     "npm": "3.10.10",
     "rename-me": "1.2.4",
