@@ -29,7 +29,7 @@
     "gulp-sass": "2.3.2",
     "gulp-scss-lint": "0.4.0",
     "gulp-sequence": "0.4.6",
-    "gulp-uglify": "2.1.2",
+    "gulp-uglify": "3.0.0",
     "gulp-watch": "4.3.11",
     "injectme": "0.1.4",
     "install": "0.8.9",
