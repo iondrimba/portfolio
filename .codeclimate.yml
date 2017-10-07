@@ -1,0 +1,25 @@
+engines:
+  rubocop:
+    enabled: false
+  brakeman:
+    enabled: false
+  eslint:
+    enabled: false
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript:
+ratings:
+  paths:
+  - src/scripts/app
+exclude_paths:
+- public
+- tasks
+- PSD
+- prototype
+- portfolio
+- fonts
+- "**/vendors/**/*"

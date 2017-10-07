@@ -1,7 +1,7 @@
 sudo: required
 language: node_js
 node_js:
-  - 4.4.7
+  - 6
 rvm:
   - 2.0.0
 
@@ -10,7 +10,6 @@ before_install:
 - rvm install ruby-2.0.0-p598
 - gem install scss_lint
 - npm install gulp
-- npm install -g npm
-- npm install promise
+- npm install
 script:
 - gulp prod

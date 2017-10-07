@@ -1,9 +1,8 @@
 init:
-  - git config --global core.autocrlf true
+  - git config --global core.autocrlf false
 environment:
   matrix:
-  - ruby_verison: 22-x64
-
+  - nodejs_version: "6"
 install:
   - set PATH=C:\Ruby22\bin;%PATH%
   - ps: Install-Product node $env:nodejs_version
@@ -12,11 +11,9 @@ install:
   - npm install -g npm
   - npm install gulp -g
   - npm install
-  - npm install promise
 test_script:
   - gulp prod
 build: off
 matrix:
   fast_finish: true
-cache:
-  - node_modules -> package.json
+

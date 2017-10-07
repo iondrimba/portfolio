@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "1.57.0",
+  "version": "1.58.0",
   "description": "portfolio",
   "main": "gulpfile.js",
   "scripts": {
@@ -16,7 +16,6 @@
   "devDependencies": {
     "autoprefixer": "^6.5.1",
     "commander": "^2.9.0",
-    "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-bump": "^2.4.0",
     "gulp-clean": "^0.3.2",
