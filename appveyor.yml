@@ -3,7 +3,6 @@ init:
 environment:
   matrix:
   - nodejs_version: "8"
-  - ruby_verison: 22-x64
 install:
   - set PATH=C:\Ruby22\bin;%PATH%
   - ps: Install-Product node $env:nodejs_version
