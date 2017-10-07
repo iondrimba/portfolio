@@ -11,5 +11,6 @@ before_install:
 - gem install scss_lint
 - npm install gulp
 - npm install -g npm
+- npm install
 script:
 - gulp prod
