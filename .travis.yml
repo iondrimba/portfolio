@@ -9,7 +9,7 @@ before_install:
 - gem install sass
 - rvm install ruby-2.0.0-p598
 - gem install scss_lint
-- npm install -g npm
+- npm install -g npm@5.0.0
 - npm cache clear --force
 - npm install gulp
 - npm install
