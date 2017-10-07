@@ -16,7 +16,7 @@
   "devDependencies": {
     "autoprefixer": "7.1.5",
     "commander": "2.11.0",
-    "gulp-autoprefixer": "3.1.1",
+    "gulp-autoprefixer": "4.0.0",
     "gulp-bump": "2.8.0",
     "gulp-clean": "0.3.2",
     "gulp-concat": "2.6.1",
