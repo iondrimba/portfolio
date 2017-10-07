@@ -33,7 +33,7 @@
     "gulp-watch": "4.3.11",
     "injectme": "0.1.4",
     "install": "0.8.9",
-    "node-sass": "3.13.1",
+    "node-sass": "4.5.3",
     "npm": "3.10.10",
     "rename-me": "1.2.4",
     "semver": "5.4.1",
