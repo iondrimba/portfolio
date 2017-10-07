@@ -14,7 +14,7 @@
   "author": "Ion D. Filho",
   "license": "ISC",
   "devDependencies": {
-    "autoprefixer": "6.7.7",
+    "autoprefixer": "7.1.5",
     "commander": "2.11.0",
     "gulp-autoprefixer": "3.1.1",
     "gulp-bump": "2.8.0",
