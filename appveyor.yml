@@ -12,7 +12,6 @@ install:
   - npm install -g npm
   - npm install gulp -g
   - npm install
-  - npm install promise
 test_script:
   - gulp prod
 build: off
