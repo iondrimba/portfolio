@@ -1,0 +1,20 @@
+engines:
+  rubocop:
+    enabled: false
+  brakeman:
+    enabled: true
+  eslint:
+    enabled: false
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript:
+ratings:
+  paths:
+  - src/**
+exclude_paths:
+- public/**/*
+- "**/vendors/**/*"
