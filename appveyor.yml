@@ -1,5 +1,5 @@
 init:
-  - git config --global core.autocrlf true
+  - git config --global core.autocrlf false
 environment:
   matrix:
   - ruby_verison: 22-x64
