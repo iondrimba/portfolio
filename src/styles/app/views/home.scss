@@ -12,7 +12,7 @@
   opacity: 0;
   overflow: hidden;
   position: relative;
-  transition: opacity .4s .2s;
+  transition: opacity .2s .1s;
 
   h1 {
     color: $base-color;
@@ -31,8 +31,8 @@
     text-transform: uppercase;
     top: round(50%);
     transform: translateX(round(-50%)) translateY(round(10%)) translate3d(0, 0, 0);
-    transition-delay: .2s;
-    transition-duration: .3s;
+    transition-delay: .1s;
+    transition-duration: .2s;
     transition-property: transform, opacity;
     transition-timing-function: $bounce;
     width: 500px;
@@ -48,8 +48,8 @@
       opacity: 0;
       text-align: center;
       transform: translateY(round(50px)) translate3d(0, 0, 0);
-      transition-delay: .4s;
-      transition-duration: .3s;
+      transition-delay: .2s;
+      transition-duration: .1s;
       transition-property: transform, opacity;
       transition-timing-function: $bounce;
       will-change: transform;

@@ -3,6 +3,7 @@
   src: url('../fonts/DINPro.woff2') format('woff2'), url('../fonts/DINPro.woff') format('woff');
   font-weight: 100;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -10,6 +11,7 @@
   src: url('../fonts/DINPro-CondMedium.woff2') format('woff2'), url('../fonts/DINPro-CondMedium.woff') format('woff');
   font-weight: 100;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -17,4 +19,5 @@
   src: url('../fonts/DINPro-CondBold.woff2') format('woff2'), url('../fonts/DINPro-CondBold.woff') format('woff');
   font-weight: 100;
   font-style: normal;
+  font-display: swap;
 }

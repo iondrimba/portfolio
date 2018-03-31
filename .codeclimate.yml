@@ -1,17 +1,3 @@
-engines:
-  rubocop:
-    enabled: false
-  brakeman:
-    enabled: false
-  eslint:
-    enabled: false
-  csslint:
-    enabled: true
-  duplication:
-    enabled: true
-    config:
-      languages:
-      - javascript:
 ratings:
   paths:
   - src/scripts/app
@@ -23,3 +9,6 @@ exclude_paths:
 - portfolio
 - fonts
 - "**/vendors/**/*"
+- "gulpfile.js"
+- "text.js"
+- "r.js"

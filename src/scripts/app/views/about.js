@@ -7,7 +7,6 @@
         html = view();
 
       return html;
-
     };
 
     this.init = function () {

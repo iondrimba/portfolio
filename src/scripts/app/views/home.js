@@ -99,11 +99,11 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
       this.$$('.loader').addClass('fade-out');
       this.$$('.loader-text').addClass('fade-out');
 
-      var iinterval = setTimeout(function () {
+      var interval = setTimeout(function () {
+        clearTimeout(interval);
         this.$$('.loader-wrapper').remove();
         this.$el.addClass('fade-in');
-        clearTimeout(iinterval);
-      }.bind(this), 300);
+      }.bind(this), 100);
 
     };
 
