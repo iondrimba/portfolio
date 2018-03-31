@@ -12,9 +12,7 @@ body {
   -webkit-tap-highlight-color: $seconday-color;
 }
 
-div,
-section,
-article {
+div, section, article {
   box-sizing: border-box;
 }
 
@@ -52,6 +50,6 @@ article {
   opacity: 0;
 }
 
-div.fade-in {
+section.fade-in {
   opacity: 1;
 }
