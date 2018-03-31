@@ -8,7 +8,7 @@ rvm:
 before_install:
 - gem install sass
 - rvm install ruby-2.0.0-p598
-- gem install scss_lint
+- gem install scss_lint -v 0.56.0
 - npm install gulp
 - npm install
 script:
