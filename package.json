@@ -41,7 +41,7 @@
     "sw-toolbox": "3.6.0"
   },
   "dependencies": {
-    "browser-sync": "^2.18.12",
+    "browser-sync": "^2.26.3",
     "gulp": "^3.9.1",
     "handlebars": "^4.0.5",
     "nojquery": "^1.0.8",
