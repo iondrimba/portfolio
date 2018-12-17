@@ -43,7 +43,7 @@
   "dependencies": {
     "browser-sync": "^2.18.12",
     "gulp": "^3.9.1",
-    "handlebars": "^4.0.5",
+    "handlebars": "^4.0.12",
     "nojquery": "^1.0.8",
     "page": "^1.7.1"
   }
