@@ -17,10 +17,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
       this.$el.html(this.view());
       this.btnAbout = this.$$('.link');
 
-      //display 3d grid only if WGL supported
-      if (this.webglSupport()) {
-        this.grid3D = new Grid3D(app);
-      }
+      this.grid3D = new Grid3D(app);
 
       //about click
       this.btnAbout.on('click', this.onAboutClick.bind(this));
