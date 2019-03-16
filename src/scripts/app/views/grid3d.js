@@ -527,6 +527,8 @@ define(['views/animateColors'], function (AnimateColors) {
     };
 
     this.execute = function () {
+      console.log('this.grid3D execute');
+
       this.initGrid();
 
       this.animate();

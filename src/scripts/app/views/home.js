@@ -78,7 +78,9 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
         return false;
       }
     };
+
     this.execute = function () {
+      console.log('home execute');
       if (this.webglSupport()) {
         if (this.grid3D.executed === false) {
           this.grid3D.execute();
