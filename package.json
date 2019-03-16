@@ -43,6 +43,6 @@
   "dependencies": {
     "handlebars": "^4.1.0",
     "nojquery": "^1.0.8",
-    "page": "^1.7.1"
+    "page": "^1.11.3"
   }
 }
