@@ -66,25 +66,7 @@ define(['views/grid3d', 'text!src/templates/home.html'], function (Grid3D, templ
       }.bind(this));
     };
 
-    this.webglSupport = function () {
-      try {
-        var canvas = document.createElement('canvas');
-        return !!window.WebGLRenderingContext && (
-          canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
-      } catch (e) {
-        return false;
-      }
-    };
-
     this.execute = function () {
-      console.log('home execute');
-      console.log('this.grid3D', this.grid3D);
-      console.log('this.grid3D.execute', this.grid3D.execute);
-      if (this.webglSupport()) {
-        if (this.grid3D.executed === false) {
-          this.grid3D.execute();
-        }
-      }
       if (this.grid3D.executed === false) {
         this.grid3D.execute();
       }

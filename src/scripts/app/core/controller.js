@@ -56,7 +56,6 @@ define(['page', 'views/home', 'views/about'], function (page, Home, About) {
     };
 
     this.onHome = function (ctx, next) {
-      console.log(this.home, this.home.execute)
       this.home.execute();
     };
     this.onAbout = function (ctx, next) {

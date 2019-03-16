@@ -118,7 +118,7 @@ define(['views/animateColors'], function (AnimateColors) {
 
       this.materialsAux = [];
 
-      this.materials.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
+      this.materials.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, flatShading: THREE.FlatShading, side: THREE.DoubleSide }));
 
       this.objPlain = this.addPlainObj(this.scene, this.materials);
 
@@ -480,7 +480,7 @@ define(['views/animateColors'], function (AnimateColors) {
         auxmeshDown,
         auxDown;
 
-      this.materialsAux.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, shading: THREE.FlatShading, side: THREE.DoubleSide }));
+      this.materialsAux.push(new THREE.MeshPhongMaterial({ color: this.materialColor, specular: this.specularColor, shininess: 30, flatShading: THREE.FlatShading, side: THREE.DoubleSide }));
 
       triangleGeometry = this.positionVertices([new THREE.Vector3(50, 0, 0), new THREE.Vector3(-50, 0, 0), new THREE.Vector3(0, 51, 0)]);
       auxmesh = new THREE.Mesh(triangleGeometry, this.materialsAux[0]);
@@ -527,8 +527,6 @@ define(['views/animateColors'], function (AnimateColors) {
     };
 
     this.execute = function () {
-      console.log('this.grid3D execute');
-
       this.initGrid();
 
       this.animate();
