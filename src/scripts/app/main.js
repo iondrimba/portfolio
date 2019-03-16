@@ -4,7 +4,7 @@
   'vendors/three',
   'vendors/OrbitControls',
   'vendors/TweenLite',
-  'vendors/Modernizr',
+  'vendors/modernizr',
   'handlebars'
 
 ], function (NoJQuery, Controller, THREE, OrbitControls, TweenLite, Modernizr, handlebars) {
