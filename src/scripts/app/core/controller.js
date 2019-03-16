@@ -1,9 +1,10 @@
 define(['page', 'views/home', 'views/about'], function (page, Home, About) {
 
   var Controller = function Controller(app) {
+    this.app = app;
     this.setup = function () {
-      this.home = new Home(app);
-      this.about = new About(app);
+      this.home = new Home(this.app);
+      this.about = new About(this.app);
       this.previous;
     };
 
@@ -55,6 +56,7 @@ define(['page', 'views/home', 'views/about'], function (page, Home, About) {
     };
 
     this.onHome = function (ctx, next) {
+      console.log(this)
       this.home.execute();
     };
     this.onAbout = function (ctx, next) {

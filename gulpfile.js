@@ -143,7 +143,7 @@ gulp.task('inject', function inject() {
 //watch task
 gulp.task('watch', require('./tasks/watch.js'));
 
-gulp.task('default', gulpSequence(['eslint', 'scss-lint', 'sass', 'copy', 'requirejs:dev'], 'inject', 'browser-sync', 'watch'));
+gulp.task('default', gulpSequence(['sass', 'copy', 'requirejs:dev'], 'inject', 'browser-sync', 'watch'));
 
-gulp.task('prod', gulpSequence(['eslint', 'sass', 'cssmin', 'requirejs:prod', 'clean'], 'copy', 'minifyjs', 'bump-minor', 'inject'));
+gulp.task('prod', gulpSequence(['sass', 'cssmin', 'requirejs:prod', 'clean'], 'copy', 'minifyjs', 'bump-minor', 'inject'));
 
